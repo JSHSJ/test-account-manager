@@ -1,0 +1,15 @@
+{
+    "name": "Quirion Test Logins",
+    "version": "0.0.1",
+    "description": "Use Test Logins to test the Quirion Apps",
+    "manifest_version": 3,
+    "author": "Joshua Stübner",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "Quirion Test Logins"
+    },
+    "permissions": ["activeTab", "scripting"],
+    "background": {
+        "service_worker": "background.js"
+    }
+}
