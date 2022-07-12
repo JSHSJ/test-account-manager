@@ -40,7 +40,15 @@ const displayLogins = () => {
     })
 }
 
+const initUpload = () => {
+    const uploadInput = document.querySelector("#upload")
+    uploadInput.onchange = (event) => {
+        console.log(uploadInput.files)
+    }
+}
+
 displayLogins()
+initUpload()
 
 const copyToClipboard = (text) => {
     const type = "text/plain";
@@ -60,9 +68,9 @@ const copyToClipboard = (text) => {
 }
 
 const autoFillLogin = async ({
-    tab,
-    username,
-    password
+                                 tab,
+                                 username,
+                                 password
                              }) => {
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -75,13 +83,16 @@ const attemptAutoFill = (username, password) => {
     const usernameInput = document.querySelector("[autocomplete='username']")
     const passwordInput = document.querySelector("[autocomplete='current-password']")
 
-    console.log(usernameInput)
-
     usernameInput.value = username
     passwordInput.value = password
 }
 
 // get active tab
-chrome.tabs.query({active : true}).then(tabs => {
+chrome.tabs.query({active: true}).then(tabs => {
     activeTab = tabs[0];
 })
+
+
+// @todo: save/import functionality
+// @todo: loader while tab / sync
+// @todo: make more failsafe

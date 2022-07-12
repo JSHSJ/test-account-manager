@@ -73,6 +73,12 @@
       fill: currentColor;
     }
 
+    input[type="file"] {
+      position: sticky;
+      bottom: 0;
+      inset-inline: 0;
+    }
+
   </style>
   <title>Document</title>
 </head>
@@ -96,6 +102,7 @@
       </button>
     </li>
   </template>
+  <input type="file" accept=".json" id="upload">
   <script async defer src="script.js"></script>
 </body>
 </html>

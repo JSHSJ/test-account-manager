@@ -8,8 +8,5 @@
         "default_popup": "index.html",
         "default_title": "Quirion Test Logins"
     },
-    "permissions": ["activeTab", "scripting"],
-    "background": {
-        "service_worker": "background.js"
-    }
+    "permissions": ["activeTab", "scripting", "storage"]
 }
