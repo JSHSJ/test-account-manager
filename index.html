@@ -5,36 +5,89 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            box-sizing: border-box;
+        @import "https://unpkg.com/open-props";
+        @import "https://unpkg.com/open-props/normalize.min.css";
+        @import "https://unpkg.com/open-props/buttons.min.css";
+
+
+        :is(h1, h2, h3) {
+            margin: 0 0 var(--space-sm);
+            padding: 0;
         }
 
+
         html {
-            --color-primary: hsl(228, 100%, 56%);
-            --color-primary-hover: hsl(228, 100%, 40%);
-            --color-text: hsl(258, 100%, 13%);
-            --color-text-2: hsl(258, 34%, 30%);
-            --color-border: hsl(258, 16%, 91%);
-            --color-surface: hsl(258, 100%, 98%);
-            --color-surface-2: hsl(258, 15%, 85%);
-            --space-sm: 0.25rem;
-            --space-md: 0.5rem;
-            --size-md: 3rem;
-            --size-sm: 2rem;
+            --size-xl: var(--size-9);
+            --size-lg: var(--size-8);
+            --size-md: var(--size-5);
+            --size-sm: var(--size-3);
+            --size-xs: var(--size-2);
+            --size-xxs: var(--size-1);
+            --border-color: var(--surface-3);
+            --icon-size: var(--size-md);
         }
 
         body {
-            color: var(--color-text);
-            background: var(--color-surface);
             width: 375px !important;
             height: 600px !important;
             position: relative;
             padding: 0;
             margin: 0;
-            display: grid;
-            grid-template-rows: auto 1fr auto;
             gap: 0;
             overflow: hidden;
+            display: grid;
+            grid-template:
+                    "page" 1fr
+                    "nav" auto
+            / 1fr;
+        }
+
+        nav {
+            /*border-top: 1px solid var(--color-border);*/
+            grid-area: nav;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 25%);
+            border-top: var(--border-size-1) solid var(--border-color);
+            background: var(--surface-2);
+            padding: var(--size-xs);
+            gap: var(--size-xs);
+        }
+
+        .navlink {
+            display: grid;
+            place-content: center;
+            place-items: center;
+            gap: 0.5ch;
+            text-decoration: none;
+            padding: 0.5ch;
+            margin: 0;
+        }
+
+        .navlink[data-active="true"] {
+            color: var(--link-visited);
+        }
+
+        svg {
+            width: var(--size-md);
+            height: var(--size-md);
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            min-width: 0;
+            grid-area: page;
+            visibility: hidden;
+            z-index: 0;
+        }
+
+        .page:target {
+            visibility: visible;
+            z-index: 1;
+        }
+
+        :where(p,ul,ol,dl,h6) {
+            font-size: var(--font-size-1);
         }
 
         .login-container {
@@ -47,25 +100,31 @@
             margin: 0;
             padding: 0;
             display: grid;
-            gap: var(--space-sm);
         }
 
-        li {
+        .login-container li {
             padding: 0;
+            padding-inline: var(--size-xs);
             display: grid;
-            grid-template-columns: 1fr 48px 48px 48px;
-            height: var(--size-md);
+            grid-template-columns: 1fr var(--size-lg) var(--size-lg) var(--size-lg);
+            gap: var(--size-xs);
+            align-items: center;
         }
 
-        li:not(:last-child) {
-            border-bottom: 1px solid var(--color-border);
+        .login-container button {
+            padding: 0;
+            block-size: var(--size-lg);
+        }
+
+        .login-container li:not(:last-child) {
+            border-bottom: 1px solid var(--border-color);
         }
 
         .login-details {
             display: flex;
             flex-flow: column nowrap;
-            gap: 0.25rem;
-            padding: var(--space-sm) var(--space-md);
+            gap: var(--size-xxs);
+            padding-block: var(--size-sm);
             align-items: flex-start;
             justify-content: center;
             overflow: hidden;
@@ -80,57 +139,24 @@
             max-width: 100%;
         }
 
-        .description {
-            font-weight: bold;
-        }
-
         .username {
-            color: var(--color-text-2);
+            color: var(--text-2);
         }
 
-        .password {
-            display: none;
-        }
-
-        button {
-            background: none;
-            color: var(--color-primary);
-            border: none;
-            width: 3rem;
-            height: 3rem;
-            padding: var(--space-md);
-            margin: 0;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            color: var(--color-primary-hover);
-        }
-
-        svg {
-            display: block;
+        .search-container {
             width: 100%;
-            height: 100%;
-            fill: currentColor;
-        }
-
-
-        .search-container, .footer {
-            width: 100%;
-            padding: var(--space-sm);
             display: grid;
             align-items: flex-start;;
-            background: var(--color-surface-2);
+            position: relative;
         }
 
         .search-container label {
             display: grid;
-            grid-template: "icon search" 1fr /  24px 1fr;
+            grid-template: "icon search" 1fr /  var(--icon-size) 1fr;
             width: 100%;
             min-width: 0;
-            gap: var(--space-sm);
+            gap: var(--size-xs);
+            padding: var(--size-xs);
         }
 
         .search-icon {
@@ -138,51 +164,145 @@
             place-self: center;
         }
 
-        #search {
+        input {
             display: block;
             width: 100%;
-            padding: var(--space-sm);
         }
 
+        #options {
+            display: grid;
+            align-content: flex-start;
+        }
 
+        #options section {
+            padding: var(--space-md) var(--space-sm);
+        }
+
+        #options section:not(:last-child) {
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .dropzone {
+            outline: 2px dashed var(--color-text-2);
+            outline-offset: calc(var(--space-sm) * -1);
+            height: var(--size-md);
+            display: grid;
+            place-items: center;
+            font-weight: bold;
+            grid-template: "content"    1fr / 1fr;
+        }
+
+        .dropzone.-dragged {
+            outline-color: var(--color-primary-hover);
+            color: var(--color-primary-hover);
+        }
+
+        .dropzone:hover {
+            color: var(--color-primary-hover);
+            cursor: pointer;
+        }
+
+        .dropzone span {
+            grid-area: content;
+        }
+
+        #upload {
+            width: 1px;
+            height: 1px;
+            visibility: hidden;
+            grid-area: content;
+        }
+
+        #delete-custom-logins {
+            font-size: 0.75rem;
+            color: orangered;
+            height: max-content;
+            width: max-content;
+        }
+
+        .checkbox {
+            display: grid;
+            grid-template: "label check" 1fr / 1fr auto;
+            cursor: pointer;
+            gap: var(--size-sm);
+        }
+
+        .checkbox span {
+            grid-area: label;
+            font-weight: bold;
+        }
+
+        .checkbox input {
+            grid-area: check;
+            width: 1rem;
+            height: 1rem;
+        }
     </style>
     <title>Document</title>
 </head>
 <body>
-<section class="search-container">
-    <label>
-        <svg class="search-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-            <path d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z"/>
+<nav>
+    <button class="navlink" data-target="logins">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 16 8 C 13.25 8 11 10.25 11 13 C 11 14.515625 11.707031 15.863281 12.78125 16.78125 C 10.53125 17.949219 9 20.300781 9 23 L 11 23 C 11 20.226563 13.226563 18 16 18 C 18.773438 18 21 20.226563 21 23 L 23 23 C 23 20.300781 21.46875 17.949219 19.21875 16.78125 C 20.292969 15.863281 21 14.515625 21 13 C 21 10.25 18.75 8 16 8 Z M 16 10 C 17.667969 10 19 11.332031 19 13 C 19 14.667969 17.667969 16 16 16 C 14.332031 16 13 14.667969 13 13 C 13 11.332031 14.332031 10 16 10 Z"/>
         </svg>
-        <input type="text" id="search" placeholder="Suche nach Keywords...">
-    </label>
-</section>
-<section class="login-container">
-    <ul id="logins">
-    </ul>
-</section>
-<section class="footer">
-    <input type="file" accept=".json" id="upload">
-</section>
+        <small>Logins</small>
+    </button>
+    <button class="navlink" data-target="options">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            <path d="M 13.1875 3 L 13.03125 3.8125 L 12.4375 6.78125 C 11.484375 7.15625 10.625 7.683594 9.84375 8.3125 L 6.9375 7.3125 L 6.15625 7.0625 L 5.75 7.78125 L 3.75 11.21875 L 3.34375 11.9375 L 3.9375 12.46875 L 6.1875 14.4375 C 6.105469 14.949219 6 15.460938 6 16 C 6 16.539063 6.105469 17.050781 6.1875 17.5625 L 3.9375 19.53125 L 3.34375 20.0625 L 3.75 20.78125 L 5.75 24.21875 L 6.15625 24.9375 L 6.9375 24.6875 L 9.84375 23.6875 C 10.625 24.316406 11.484375 24.84375 12.4375 25.21875 L 13.03125 28.1875 L 13.1875 29 L 18.8125 29 L 18.96875 28.1875 L 19.5625 25.21875 C 20.515625 24.84375 21.375 24.316406 22.15625 23.6875 L 25.0625 24.6875 L 25.84375 24.9375 L 26.25 24.21875 L 28.25 20.78125 L 28.65625 20.0625 L 28.0625 19.53125 L 25.8125 17.5625 C 25.894531 17.050781 26 16.539063 26 16 C 26 15.460938 25.894531 14.949219 25.8125 14.4375 L 28.0625 12.46875 L 28.65625 11.9375 L 28.25 11.21875 L 26.25 7.78125 L 25.84375 7.0625 L 25.0625 7.3125 L 22.15625 8.3125 C 21.375 7.683594 20.515625 7.15625 19.5625 6.78125 L 18.96875 3.8125 L 18.8125 3 Z M 14.8125 5 L 17.1875 5 L 17.6875 7.59375 L 17.8125 8.1875 L 18.375 8.375 C 19.511719 8.730469 20.542969 9.332031 21.40625 10.125 L 21.84375 10.53125 L 22.40625 10.34375 L 24.9375 9.46875 L 26.125 11.5 L 24.125 13.28125 L 23.65625 13.65625 L 23.8125 14.25 C 23.941406 14.820313 24 15.402344 24 16 C 24 16.597656 23.941406 17.179688 23.8125 17.75 L 23.6875 18.34375 L 24.125 18.71875 L 26.125 20.5 L 24.9375 22.53125 L 22.40625 21.65625 L 21.84375 21.46875 L 21.40625 21.875 C 20.542969 22.667969 19.511719 23.269531 18.375 23.625 L 17.8125 23.8125 L 17.6875 24.40625 L 17.1875 27 L 14.8125 27 L 14.3125 24.40625 L 14.1875 23.8125 L 13.625 23.625 C 12.488281 23.269531 11.457031 22.667969 10.59375 21.875 L 10.15625 21.46875 L 9.59375 21.65625 L 7.0625 22.53125 L 5.875 20.5 L 7.875 18.71875 L 8.34375 18.34375 L 8.1875 17.75 C 8.058594 17.179688 8 16.597656 8 16 C 8 15.402344 8.058594 14.820313 8.1875 14.25 L 8.34375 13.65625 L 7.875 13.28125 L 5.875 11.5 L 7.0625 9.46875 L 9.59375 10.34375 L 10.15625 10.53125 L 10.59375 10.125 C 11.457031 9.332031 12.488281 8.730469 13.625 8.375 L 14.1875 8.1875 L 14.3125 7.59375 Z M 16 11 C 13.25 11 11 13.25 11 16 C 11 18.75 13.25 21 16 21 C 18.75 21 21 18.75 21 16 C 21 13.25 18.75 11 16 11 Z M 16 13 C 17.667969 13 19 14.332031 19 16 C 19 17.667969 17.667969 19 16 19 C 14.332031 19 13 17.667969 13 16 C 13 14.332031 14.332031 13 16 13 Z"/>
+        </svg>
+        <small>Optionen</small>
+    </button>
+</nav>
+<div class="page" id="logins">
+    <section class="search-container">
+        <label>
+            <svg class="search-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                <path d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z"/>
+            </svg>
+            <input type="text" id="search" placeholder="Suche nach Keywords...">
+        </label>
+    </section>
+    <section class="login-container">
+        <ul id="login-root">
+        </ul>
+    </section>
+</div>
+<div class="page" id="options">
+    <section>
+        <label class="checkbox">
+            <span>Automatisch einloggen</span>
+            <input type="checkbox" id="auto-login">
+        </label>
+    </section>
+    <section>
+        <h3>Accounts</h3>
+        <label for="upload" class="dropzone">
+            <span>Neue Accounts hinzufügen</span>
+            <input type="file" accept=".json" id="upload">
+        </label>
+        <button id="delete-custom-logins">Eigene Logins löschen</button>
+    </section>
+</div>
 
 <template id="login-template">
     <li>
         <div class="login-details">
-            <span class="description"></span>
-            <span class="username"></span>
-            <span class="password"></span>
+            <span><b class="description"></b></span>
+            <span><small class="username"></small></span>
         </div>
-        <button class="copy-username" aria-label="Copy username">
+        <button class="copy-username" aria-label="Username kopieren" title="Username kopieren">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                 <path d="M 16 5 C 12.144531 5 9 8.144531 9 12 C 9 14.410156 10.230469 16.550781 12.09375 17.8125 C 8.527344 19.34375 6 22.882813 6 27 L 8 27 C 8 22.570313 11.570313 19 16 19 C 20.429688 19 24 22.570313 24 27 L 26 27 C 26 22.882813 23.472656 19.34375 19.90625 17.8125 C 21.769531 16.550781 23 14.410156 23 12 C 23 8.144531 19.855469 5 16 5 Z M 16 7 C 18.773438 7 21 9.226563 21 12 C 21 14.773438 18.773438 17 16 17 C 13.226563 17 11 14.773438 11 12 C 11 9.226563 13.226563 7 16 7 Z"/>
             </svg>
         </button>
-        <button class="copy-password" aria-label="Copy password">
+        <button class="copy-password" aria-label="Passwort kopieren" title="Passwort kopieren">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                 <path d="M 20 3 C 15.054688 3 11 7.054688 11 12 C 11 12.519531 11.085938 12.976563 11.15625 13.4375 L 3.28125 21.28125 L 3 21.59375 L 3 29 L 10 29 L 10 26 L 13 26 L 13 23 L 16 23 L 16 20.03125 C 17.179688 20.609375 18.554688 21 20 21 C 24.945313 21 29 16.945313 29 12 C 29 7.054688 24.945313 3 20 3 Z M 20 5 C 23.855469 5 27 8.144531 27 12 C 27 15.855469 23.855469 19 20 19 C 18.789063 19 17.542969 18.644531 16.59375 18.125 L 16.34375 18 L 14 18 L 14 21 L 11 21 L 11 24 L 8 24 L 8 27 L 5 27 L 5 22.4375 L 12.90625 14.5 L 13.28125 14.15625 L 13.1875 13.625 C 13.085938 13.023438 13 12.488281 13 12 C 13 8.144531 16.144531 5 20 5 Z M 22 8 C 20.894531 8 20 8.894531 20 10 C 20 11.105469 20.894531 12 22 12 C 23.105469 12 24 11.105469 24 10 C 24 8.894531 23.105469 8 22 8 Z"/>
             </svg>
         </button>
-        <button class="auto-fill" aria-label="Autofill">
+        <button class="auto-fill" aria-label="Ausfüllen" title="Ausfüllen">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                 <path d="M 16 4 C 10.421875 4 5.742188 7.832031 4.40625 13 L 6.46875 13 C 7.746094 8.945313 11.53125 6 16 6 C 21.515625 6 26 10.484375 26 16 C 26 21.515625 21.515625 26 16 26 C 11.53125 26 7.746094 23.054688 6.46875 19 L 4.40625 19 C 5.742188 24.167969 10.421875 28 16 28 C 22.617188 28 28 22.617188 28 16 C 28 9.382813 22.617188 4 16 4 Z M 15.34375 11.28125 L 13.90625 12.71875 L 16.1875 15 L 4 15 L 4 17 L 16.1875 17 L 13.90625 19.28125 L 15.34375 20.71875 L 19.34375 16.71875 L 20.03125 16 L 19.34375 15.28125 Z"/>
             </svg>

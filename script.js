@@ -27,6 +27,13 @@ let customLogins = [];
 let activeTab;
 
 /**
+ * Options
+ */
+let options = {
+    autoLogin: false,
+}
+
+/**
  * Create a new entry for a login
  */
 const createEntry = (login) => {
@@ -35,18 +42,18 @@ const createEntry = (login) => {
     const clone = template.content.cloneNode(true)
 
     const tUsername = clone.querySelector(".username")
-    const tPassword = clone.querySelector(".password")
+    // const tPassword = clone.querySelector(".password")
     const tDescription = clone.querySelector(".description")
     const copyUsernameButton = clone.querySelector(".copy-username")
     const copyPasswordButton = clone.querySelector(".copy-password")
     const autoFillButton = clone.querySelector(".auto-fill")
 
     tUsername.innerText = login.username;
-    tPassword.innerText = login.password;
+    // tPassword.innerText = login.password;
     tDescription.innerText = login.description;
     tDescription.title = login.description;
     copyUsernameButton.onclick = () => copyToClipboard(login.username)
-    copyPasswordButton.onclick = () => copyToClipboard(login.username)
+    copyPasswordButton.onclick = () => copyToClipboard(login.password)
     autoFillButton.onclick = () => autoFillLogin({
         tab: activeTab,
         username: login.username,
@@ -61,7 +68,7 @@ const createEntry = (login) => {
  * Renders the list of logins.
  */
 const updateDisplay = () => {
-    const root = document.querySelector("#logins")
+    const root = document.querySelector("#login-root")
     // clear inner HTML
     root.innerHTML = ""
 
@@ -69,18 +76,18 @@ const updateDisplay = () => {
     logins
         .filter(login => login.username.includes(search) || login.description.includes(search))
         .forEach(login => {
-        const clone = createEntry(login)
-        root.appendChild(clone);
-    })
+            const clone = createEntry(login)
+            root.appendChild(clone);
+        })
 
     // render custom logins
     if (customLogins.length > 0) {
         customLogins
             .filter(login => login.username.includes(search) || login.description.includes(search))
             .forEach(login => {
-            const clone = createEntry(login)
-            root.appendChild(clone);
-        })
+                const clone = createEntry(login)
+                root.appendChild(clone);
+            })
     }
 }
 
@@ -103,14 +110,52 @@ const initSearch = () => {
  * https://developer.chrome.com/docs/extensions/reference/storage/
  */
 const initUpload = () => {
+
     const uploadInput = document.querySelector("#upload")
-    uploadInput.onchange = (event) => {
+    const deleteCustomLogins = document.querySelector("#delete-custom-logins")
+    deleteCustomLogins.onclick = () => {
+        chrome.storage.sync.remove("qLoginCreds")
+        customLogins = []
+        updateDisplay()
+    }
+
+    // Init drop zone
+    const dropzone = document.querySelector(".dropzone");
+    dropzone.ondrop = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        dropzone.classList.remove("dragover")
+        uploadInput.files = event.dataTransfer.files;
+        const fileChangeEvent = new Event("change", {bubbles: true})
+        uploadInput.dispatchEvent(fileChangeEvent)
+    }
+
+    dropzone.ondragover = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        dropzone.classList.add("-dragged")
+    }
+
+    dropzone.ondragleave = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        dropzone.classList.remove("-dragged")
+    }
+
+    // Handle file upload
+    uploadInput.onchange = () => {
         try {
             const reader = new FileReader();
             reader.addEventListener('load', (event) => {
                 const json = JSON.parse(event.target.result)
                 if (json && Array.isArray(json)) {
-                    customLogins = json
+                    customLogins = [...customLogins, ...json];
+                    // upload for persistence
+                    chrome.storage.sync.set({
+                        qLoginCreds: customLogins
+                    }, () => {
+                        console.log('saved custom logins')
+                    })
                     updateDisplay()
                 }
             });
@@ -122,10 +167,50 @@ const initUpload = () => {
     }
 }
 
-// init
-updateDisplay()
-initUpload()
-initSearch()
+const initAutoLogin = () => {
+    const autoLogin = document.querySelector("#auto-login")
+    autoLogin.checked = options.autoLogin;
+    autoLogin.onchange = (event) => {
+        options.autoLogin = event.target.checked
+        saveOptions()
+    }
+}
+
+const saveOptions = async () => {
+    await chrome.storage.sync.set({
+            qLoginOptions: options
+        }, () => {
+            console.log('saved options')
+        }
+        )
+}
+
+const loadOptions = async () => {
+    const result = await chrome.storage.sync.get(['qLoginOptions']);
+    console.log(result)
+        if (result.qLoginOptions) {
+            options = result.qLoginOptions
+        }
+}
+
+const loadCustomLogins = async () => {
+    const result = await chrome.storage.sync.get(['qLoginCreds']);
+    if (result.qLoginCreds) {
+            customLogins = result.qLoginCreds
+    }
+}
+
+const init = async () => {
+    await loadCustomLogins()
+    await loadOptions()
+    updateDisplay()
+    initUpload()
+    initSearch()
+    initAutoLogin()
+    initNavigateButtons()
+}
+
+init()
 
 /**
  * Copy text to clipboard
@@ -158,7 +243,7 @@ const autoFillLogin = async ({
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
         func: attemptAutoFill,
-        args: [username, password]
+        args: [username, password, options]
     })
 }
 
@@ -167,7 +252,7 @@ const autoFillLogin = async ({
  *
  * @todo: Can be extended to allow more inputs.
  */
-const attemptAutoFill = (username, password) => {
+const attemptAutoFill = (username, password, opts) => {
     const usernameInput = document.querySelector("[autocomplete='username']")
     const passwordInput = document.querySelector("[autocomplete='current-password']")
 
@@ -179,6 +264,11 @@ const attemptAutoFill = (username, password) => {
 
     usernameInput.dispatchEvent(usernameInputEvent)
     passwordInput.dispatchEvent(passwordInputEvent)
+
+    if (opts.autoLogin) {
+        const submitButton = document.querySelector("[type='submit']")
+        submitButton.click()
+    }
 }
 
 // get active tab
@@ -186,7 +276,31 @@ chrome.tabs.query({active: true}).then(tabs => {
     activeTab = tabs[0];
 })
 
+const initNavigateButtons = () => {
+    const navLinks = document.querySelectorAll(".navlink");
 
-// @todo: save/import functionality
+    navLinks.forEach(
+        link => {
+            link.onclick = () => {
+                const linkTarget = link.getAttribute("data-target");
+                navLinks.forEach(otherLink => {
+                    otherLink.removeAttribute("data-active")
+                });
+                link.setAttribute("data-active", "true")
+                window.location.hash = linkTarget
+            }
+        }
+    )
+
+    navLinks[0].click()
+}
+
+/**
+ * Ideas:
+ *
+ * Sync logins with json in S3
+ * Filters for different settings
+ * Delete single custom login
+ */
 // @todo: loader while tab / sync
 // @todo: make more failsafe
