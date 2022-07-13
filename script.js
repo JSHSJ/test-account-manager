@@ -2,12 +2,12 @@ const logins = [
     {
         username: "owner5@mlvv.de",
         password: "Berlin.123",
-        description: "Nett"
+        description: "Einzel, 2 BPs, mit Geld"
     },
     {
         username: "sebastian-test@mailinator.com",
         password: "Berlin.1234567",
-        description: "Nett"
+        description: "Einzel, viele ThemenVVs, PREMIUM"
     }
 ];
 
@@ -36,12 +36,15 @@ const createEntry = (login) => {
 
     const tUsername = clone.querySelector(".username")
     const tPassword = clone.querySelector(".password")
+    const tDescription = clone.querySelector(".description")
     const copyUsernameButton = clone.querySelector(".copy-username")
     const copyPasswordButton = clone.querySelector(".copy-password")
     const autoFillButton = clone.querySelector(".auto-fill")
 
     tUsername.innerText = login.username;
     tPassword.innerText = login.password;
+    tDescription.innerText = login.description;
+    tDescription.title = login.description;
     copyUsernameButton.onclick = () => copyToClipboard(login.username)
     copyPasswordButton.onclick = () => copyToClipboard(login.username)
     autoFillButton.onclick = () => autoFillLogin({
@@ -72,11 +75,6 @@ const updateDisplay = () => {
 
     // render custom logins
     if (customLogins.length > 0) {
-        const divider = document.createElement("hr")
-        root.appendChild(divider);
-        const customTitle = document.createElement("h3")
-        customTitle.innerText = "Custom Logins"
-        root.appendChild(customTitle)
         customLogins
             .filter(login => login.username.includes(search) || login.description.includes(search))
             .forEach(login => {
@@ -111,7 +109,6 @@ const initUpload = () => {
             const reader = new FileReader();
             reader.addEventListener('load', (event) => {
                 const json = JSON.parse(event.target.result)
-                console.log(json)
                 if (json && Array.isArray(json)) {
                     customLogins = json
                     updateDisplay()
@@ -174,8 +171,14 @@ const attemptAutoFill = (username, password) => {
     const usernameInput = document.querySelector("[autocomplete='username']")
     const passwordInput = document.querySelector("[autocomplete='current-password']")
 
+    const usernameInputEvent = new Event("input", {bubbles: true})
+    const passwordInputEvent = new Event("input", {bubbles: true})
+
     usernameInput.value = username
     passwordInput.value = password
+
+    usernameInput.dispatchEvent(usernameInputEvent)
+    passwordInput.dispatchEvent(passwordInputEvent)
 }
 
 // get active tab

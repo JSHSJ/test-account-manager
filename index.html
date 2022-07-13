@@ -13,7 +13,8 @@
             --color-primary: hsl(228, 100%, 56%);
             --color-primary-hover: hsl(228, 100%, 40%);
             --color-text: hsl(258, 100%, 13%);
-            --color-text-2: hsl(258, 16%, 91%);
+            --color-text-2: hsl(258, 34%, 30%);
+            --color-border: hsl(258, 16%, 91%);
             --color-surface: hsl(258, 100%, 98%);
             --color-surface-2: hsl(258, 15%, 85%);
             --space-sm: 0.25rem;
@@ -47,31 +48,54 @@
             padding: 0;
             display: grid;
             gap: var(--space-sm);
-            overflow-x: scroll;
         }
 
         li {
             padding: 0;
             display: grid;
             grid-template-columns: 1fr 48px 48px 48px;
-            height: 3rem;
+            height: var(--size-md);
         }
 
         li:not(:last-child) {
-            border-bottom: 1px solid var(--color-text-2);
+            border-bottom: 1px solid var(--color-border);
         }
 
         .login-details {
-            display: grid;
-            gap: 0.125rem;
+            display: flex;
+            flex-flow: column nowrap;
+            gap: 0.25rem;
             padding: var(--space-sm) var(--space-md);
+            align-items: flex-start;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .login-details > span {
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .description {
+            font-weight: bold;
+        }
+
+        .username {
+            color: var(--color-text-2);
+        }
+
+        .password {
+            display: none;
         }
 
         button {
             background: none;
             color: var(--color-primary);
             border: none;
-            border-radius: 0.1em;
             width: 3rem;
             height: 3rem;
             padding: var(--space-md);
@@ -134,7 +158,6 @@
     </label>
 </section>
 <section class="login-container">
-    <h2>Logins</h2>
     <ul id="logins">
     </ul>
 </section>
@@ -145,6 +168,7 @@
 <template id="login-template">
     <li>
         <div class="login-details">
+            <span class="description"></span>
             <span class="username"></span>
             <span class="password"></span>
         </div>
