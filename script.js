@@ -400,8 +400,7 @@ const initCategories = () => {
         select.appendChild(label);
 
         select.addEventListener('change', (e) => {
-            const { value } = e.target;
-            const { name } = e.target;
+            const { name, value } = e.target;
             if (!value) {
                 delete activeFilters[name];
             } else {
