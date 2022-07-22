@@ -135,12 +135,13 @@ const initSearch = () => {
  * Initialize the navigation buttons.
  */
 const initNavigateButtons = () => {
-    /** @type {NodeListOf<HTMLButtonElement> | null} */
+    /** @type {NodeListOf<HTMLAnchorElement> | null} */
     const navLinks = document.querySelectorAll(".navlink");
 
     navLinks.forEach(
         link => {
-            link.onclick = () => {
+            link.onclick = (e) => {
+                e.preventDefault();
                 const linkTarget = link.getAttribute("data-target");
                 navLinks.forEach(otherLink => {
                     otherLink.removeAttribute("data-active")

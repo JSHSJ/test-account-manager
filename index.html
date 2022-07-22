@@ -49,8 +49,8 @@
             grid-template-columns: repeat(auto-fit, 25%);
             border-top: var(--border-size-1) solid var(--border-color);
             background: var(--surface-2);
-            padding: var(--size-xs);
-            gap: var(--size-xs);
+            padding: 0;
+            gap: 0;
         }
 
         .navlink {
@@ -59,12 +59,27 @@
             place-items: center;
             gap: 0.5ch;
             text-decoration: none;
-            padding: 0.5ch;
+            padding: var(--size-xs);
             margin: 0;
+            color: var(--text-2);
+            position: relative;
+        }
+
+        .navlink:hover {
+            color: var(--text-1);
         }
 
         .navlink[data-active="true"] {
             color: var(--link-visited);
+        }
+
+        .navlink[data-active="true"]:before {
+            content: '';
+            width: 100%;
+            position: absolute;
+            inset: calc(var(--border-size-1) * -1) 0 auto;
+            background-color: var(--link-visited);
+            height: var(--border-size-1);
         }
 
         svg {
@@ -205,13 +220,13 @@
 </head>
 <body>
 <nav>
-    <button class="navlink" data-target="logins">
+    <a class="navlink" data-target="logins" href="#logins">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10.13 10.13 0 0 0 2 12a10 10 0 0 0 4 7.92V20h.1a9.7 9.7 0 0 0 11.8 0h.1v-.08A10 10 0 0 0 22 12 10.13 10.13 0 0 0 12 2zM8.07 18.93A3 3 0 0 1 11 16.57h2a3 3 0 0 1 2.93 2.36 7.75 7.75 0 0 1-7.86 0zm9.54-1.29A5 5 0 0 0 13 14.57h-2a5 5 0 0 0-4.61 3.07A8 8 0 0 1 4 12a8.1 8.1 0 0 1 8-8 8.1 8.1 0 0 1 8 8 8 8 0 0 1-2.39 5.64z"/><path d="M12 6a3.91 3.91 0 0 0-4 4 3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4 3.91 3.91 0 0 0-4-4zm0 6a1.91 1.91 0 0 1-2-2 1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2 1.91 1.91 0 0 1-2 2z"/></svg>
         <small>Logins</small>
-    </button>
-    <button class="navlink" data-target="options">
+    </a>
+    <a class="navlink" data-target="options" href="#options">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/></svg>        <small>Optionen</small>
-    </button>
+    </a>
 </nav>
 <div class="page" id="logins">
     <section class="search-container">
