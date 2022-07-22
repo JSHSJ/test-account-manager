@@ -277,7 +277,7 @@ const loadCustomLogins = async () => {
 const init = async () => {
     await loadCustomLogins()
     await loadOptions()
-    initRemoteLogins()
+    await initRemoteLogins()
     updateDisplay()
     initUpload()
     initSearch()
@@ -382,6 +382,7 @@ const getCategories = () => {
     let categoryCollection = {};
 
     const allLogins = [...customLogins, ...remoteLogins];
+    console.log(allLogins);
 
     allLogins.forEach(({ categories }) => {
         Object.entries(categories).forEach(([key, value]) => {
@@ -441,7 +442,7 @@ const initCategories = () => {
     });
 }
 
-const initRemoteLogins = () => {
+const initRemoteLogins = async () => {
     /** @type {HTMLInputElement | null} */
     const input = document.querySelector('#remote-url');
     const syncButton = document.querySelector('#sync-remote');
@@ -451,10 +452,10 @@ const initRemoteLogins = () => {
 
     if (options.remoteUrl) {
         input.value = options.remoteUrl;
-        syncFromRemoteUrl(options.remoteUrl)
+        await syncFromRemoteUrl(options.remoteUrl)
     }
 
-    syncButton.addEventListener('click', () => {
+    syncButton.addEventListener('click', async () => {
         const url = input.value;
         if (!url) {
             return;
@@ -462,7 +463,7 @@ const initRemoteLogins = () => {
 
         options.remoteUrl = url;
         saveOptions();
-        syncFromRemoteUrl(url)
+        await syncFromRemoteUrl(url)
     })
 
 }
