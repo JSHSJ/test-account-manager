@@ -336,6 +336,12 @@ const categories = {
     ],
 };
 
+/**
+ * Mounts select elements to categories track.
+ * This happens based on a key value pair of categories.
+ * A select change triggers updateDisplay and filters
+ * for the selected categories.
+ */
 const initCategories = () => {
     const tab = document.querySelector('.categories__track');
 
