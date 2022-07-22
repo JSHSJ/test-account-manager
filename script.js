@@ -42,10 +42,18 @@ let options = {
 }
 
 /**
+ * Shows a list of active filters to be filtered
+ * in the list of test accounts.
+ * 
+ * @type {Record<string, string>}
+ */
+const activeFilters = {};
+
+/**
  * Create a new entry for a login
  */
 const createEntry = (login) => {
-    const template = document.querySelector("#login-template")
+    const template = document.querySelector("#login-template");
 
     const clone = template.content.cloneNode(true)
 
