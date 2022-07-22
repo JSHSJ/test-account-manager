@@ -1,13 +1,19 @@
 {
-    "name": "Quirion Test Logins",
+    "name": "Password Manager",
     "version": "0.0.1",
-    "description": "Use Test Logins to test the Quirion Apps",
+    "description": "Simple password manager (like the ones you already use) for Chromium based browsers.",
     "manifest_version": 3,
-    "author": "Joshua Stübner",
+    "author": "Joshua Stübner & Lukas Koeller",
     "action":{
-        "default_popup": "index.html#logins",
-        "default_title": "Quirion Test Logins"
+        "default_popup": "index.html",
+        "default_title": "Password Manager",
+        "default_icon": {
+            "16": "images/icon_16.png",
+            "24": "images/icon_24.png",
+            "32": "images/icon_32.png"
+        }
     },
+    "options_page": "index.html#options",
     "permissions": ["activeTab", "scripting", "storage"],
     "host_permissions": [
       "https://*/"
