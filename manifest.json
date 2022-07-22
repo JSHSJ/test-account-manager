@@ -5,7 +5,7 @@
     "manifest_version": 3,
     "author": "Joshua Stübner",
     "action":{
-        "default_popup": "index.html",
+        "default_popup": "index.html#logins",
         "default_title": "Quirion Test Logins"
     },
     "permissions": ["activeTab", "scripting", "storage"]
