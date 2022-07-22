@@ -100,7 +100,6 @@ const isMatchingActiveFilters = (login) => {
         matches.push(login.categories?.[key] === value)
     });
     const isMatch = !matches.includes(false);
-    console.log(isMatch, matches);
     return isMatch;
 }
 
@@ -360,9 +359,11 @@ const attemptAutoFill = (username, password, opts) => {
 
 // get active tab
 // @ts-ignore-next-line
-chrome.tabs.query({active: true}).then(tabs => {
-    activeTab = tabs[0];
-})
+chrome.tabs
+    .query({ active: true, currentWindow: true })
+    .then(tabs => {
+        activeTab = tabs[0];
+    });
 
 /**
  * Ideas:
@@ -383,11 +384,9 @@ const getCategories = () => {
     let categoryCollection = {};
 
     const allLogins = [...customLogins, ...remoteLogins];
-    console.log(allLogins);
 
     allLogins.forEach(({ categories }) => {
         Object.entries(categories).forEach(([key, value]) => {
-            console.log({ key, categoryCollection });
             if (key in categoryCollection) {
                 categoryCollection[key].push(value);
                 return;
