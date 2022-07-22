@@ -30,7 +30,7 @@ const createEntry = (login) => {
     }
 
     /** @type {HTMLElement} */
-    // @ts-ignore
+    // @ts-ignore seems to not be solvable in ts-check
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
     /** @type {HTMLSpanElement | null} */
