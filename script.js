@@ -336,6 +336,36 @@ const categories = {
     ],
 };
 
-const CategoriesTab = () => {
+const initCategories = () => {
+    const tab = document.querySelector('.categories__track');
+
+    Object.entries(categories).forEach(([ key, value ]) => {
+        const select = document.createElement('select');
+        select.name = key;
+        tab.appendChild(select);
+        const label = document.createElement('option');
+        label.text = key;
+        label.value = '';
+        // label.disabled = true;
+        label.selected = true;
+        select.appendChild(label);
+
+        select.addEventListener('change', (e) => {
+            const { value } = e.target;
+            const { name } = e.target;
+            if (!value) {
+                delete activeFilters[name];
+            } else {
+                activeFilters[name] = value;
+            }
+            updateDisplay();
+        });
     
+        value.forEach((value) => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.text = value;
+            select.appendChild(option);
+        });
+    });
 }
