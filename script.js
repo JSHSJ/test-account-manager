@@ -1,5 +1,4 @@
 // @ts-check
-
 const logins = [];
 
 /**
@@ -18,6 +17,14 @@ let activeTab;
 let options = {
     autoLogin: false,
 }
+
+/**
+ * Shows a list of active filters to be filtered
+ * in the list of test accounts.
+ * 
+ * @type {Record<string, string>}
+ */
+const activeFilters = {};
 
 /**
  * Create a new entry for a login
@@ -62,6 +69,20 @@ const createEntry = (login) => {
     return clone
 }
 
+const isMatchingActiveFilters = (login) => {
+    /**
+     * Lists if each filters key value pair is included in login categories.
+     * @type {boolean[]}
+     */
+    const matches = [];
+    Object.entries(activeFilters).forEach(([key, value]) => {
+        matches.push(login.categories?.[key] === value)
+    });
+    const isMatch = !matches.includes(false);
+    console.log(isMatch, matches);
+    return isMatch;
+}
+
 /**
  * Main function to update the display.
  * Renders the list of logins.
@@ -80,6 +101,7 @@ const updateDisplay = () => {
     // render predefined logins
     logins
         .filter(login => login.username.includes(search) || login.description.includes(search))
+        .filter(isMatchingActiveFilters)
         .forEach(login => {
             const clone = createEntry(login)
             if (clone) {
@@ -249,6 +271,7 @@ const init = async () => {
     initSearch()
     initAutoLogin()
     initNavigateButtons()
+    initCategories()
 }
 
 init()
@@ -277,11 +300,11 @@ const copyToClipboard = (text) => {
  * Trigger auto fill function in DOM.
  */
 const autoFillLogin = async ({
-                                 tab,
-                                 username,
-                                 password
-                             }) => {
-                               // @ts-ignore-next-line
+    tab,
+    username,
+    password
+}) => {
+    // @ts-ignore-next-line
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
         func: attemptAutoFill,
@@ -337,3 +360,60 @@ chrome.tabs.query({active: true}).then(tabs => {
  */
 // @todo: loader while tab / sync
 // @todo: make more failsafe
+
+const categories = {
+    accountType: [
+        'singleAccount',
+        'jointAccount',
+        'childSingleAccount',
+        'childJointAccount',
+    ],
+    entrypointId: [
+        'NEW_CUSTOMER__NEW_BP__VV',
+        'NEW_CUSTOMER__NEW_BP__TOPICS',
+        'NEW_CUSTOMER__NEW_BP__TANGIBLE_ASSETS',
+        'EXISTING_CUSTOMER__NEW_IPS__VV',
+        'EXISTING_CUSTOMER__NEW_BP__VV',
+        'EXISTING_CUSTOMER__NEW_IPS__TOPICS',
+        'EXISTING_CUSTOMER__UPDATE_BP',
+    ],
+};
+
+/**
+ * Mounts select elements to categories track.
+ * This happens based on a key value pair of categories.
+ * A select change triggers updateDisplay and filters
+ * for the selected categories.
+ */
+const initCategories = () => {
+    const tab = document.querySelector('.categories__track');
+
+    Object.entries(categories).forEach(([ key, value ]) => {
+        const select = document.createElement('select');
+        select.name = key;
+        tab.appendChild(select);
+        const label = document.createElement('option');
+        label.text = key;
+        label.value = '';
+        // label.disabled = true;
+        label.selected = true;
+        select.appendChild(label);
+
+        select.addEventListener('change', (e) => {
+            const { name, value } = e.target;
+            if (!value) {
+                delete activeFilters[name];
+            } else {
+                activeFilters[name] = value;
+            }
+            updateDisplay();
+        });
+
+        value.forEach((value) => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.text = value;
+            select.appendChild(option);
+        });
+    });
+}
