@@ -2,12 +2,20 @@ const logins = [
     {
         username: "owner5@mlvv.de",
         password: "Berlin.123",
-        description: "Einzel, 2 BPs, mit Geld"
+        description: "Einzel, 2 BPs, mit Geld",
+        categories: {
+            entrypointId: 'NEW_CUSTOMER__NEW_BP__TANGIBLE_ASSETS',
+            accountType: 'childSingleAccount',
+        }
     },
     {
         username: "sebastian-test@mailinator.com",
         password: "Berlin.1234567",
-        description: "Einzel, viele ThemenVVs, PREMIUM"
+        description: "Einzel, viele ThemenVVs, PREMIUM",
+        categories: {
+            entrypointId: 'NEW_CUSTOMER__NEW_BP__VV',
+            accountType: 'singleAccount',
+        }
     }
 ];
 
