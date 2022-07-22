@@ -377,10 +377,22 @@ chrome.tabs.query({active: true}).then(tabs => {
 // @todo: loader while tab / sync
 // @todo: make more failsafe
 
+/**
+ * Get all categories for a given set of logins.
+ * @returns {Categories} Returns all categories from logins
+ */
 const getCategories = () => {
-    const categories = {};
+    /** @type {Categories} */
+    let categoryCollection = {};
     
-    logins.forEach(({ categories }))
+    logins.forEach(({ categories }) => {
+        categoryCollection = {
+            ...categoryCollection,
+            ...categories,
+        };
+    });
+
+    return categoryCollection;
 };
 
 /**
@@ -392,7 +404,7 @@ const getCategories = () => {
 const initCategories = () => {
     const tab = document.querySelector('.categories__track');
 
-    const categories
+    const categories = getCategories();
 
     Object.entries(categories).forEach(([ key, value ]) => {
         const select = document.createElement('select');
