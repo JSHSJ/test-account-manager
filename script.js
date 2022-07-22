@@ -1,3 +1,4 @@
+// @ts-check
 const logins = [
     {
         username: "owner5@mlvv.de",
@@ -25,11 +26,6 @@ const logins = [
 let search = "";
 
 /**
- * Custom logins. May be updated through upaloading a json file.
- */
-let customLogins = [];
-
-/**
  * Active tab
  */
 let activeTab;
@@ -55,17 +51,30 @@ const activeFilters = {};
 const createEntry = (login) => {
     const template = document.querySelector("#login-template");
 
-    const clone = template.content.cloneNode(true)
+    if (!template) {
+        return null;
+    }
 
+    /** @type {HTMLElement} */
+    // @ts-ignore seems to not be solvable in ts-check
+    const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
+
+    /** @type {HTMLSpanElement | null} */
     const tUsername = clone.querySelector(".username")
-    // const tPassword = clone.querySelector(".password")
+    /** @type {HTMLSpanElement | null} */
     const tDescription = clone.querySelector(".description")
+    /** @type {HTMLButtonElement | null} */
     const copyUsernameButton = clone.querySelector(".copy-username")
+    /** @type {HTMLButtonElement | null} */
     const copyPasswordButton = clone.querySelector(".copy-password")
+    /** @type {HTMLButtonElement | null} */
     const autoFillButton = clone.querySelector(".auto-fill")
 
+    if (!tUsername || !tDescription || !copyUsernameButton || !copyPasswordButton || !autoFillButton) {
+        return null;
+    }
+
     tUsername.innerText = login.username;
-    // tPassword.innerText = login.password;
     tDescription.innerText = login.description;
     tDescription.title = login.description;
     copyUsernameButton.onclick = () => copyToClipboard(login.username)
@@ -98,7 +107,13 @@ const isMatchingActiveFilters = (login) => {
  * Renders the list of logins.
  */
 const updateDisplay = () => {
+    /** @type {HTMLUListElement | null} */
     const root = document.querySelector("#login-root")
+
+    if (!root) {
+        return;
+    }
+
     // clear inner HTML
     root.innerHTML = ""
 
@@ -108,7 +123,9 @@ const updateDisplay = () => {
         .filter(isMatchingActiveFilters)
         .forEach(login => {
             const clone = createEntry(login)
-            root.appendChild(clone);
+            if (clone) {
+                root.appendChild(clone);
+            }
         })
 
     // render custom logins
@@ -117,7 +134,9 @@ const updateDisplay = () => {
             .filter(login => login.username.includes(search) || login.description.includes(search))
             .forEach(login => {
                 const clone = createEntry(login)
-                root.appendChild(clone);
+                if (clone) {
+                    root.appendChild(clone);
+                }
             })
     }
 }
@@ -126,10 +145,16 @@ const updateDisplay = () => {
  * Initialize the search input
  */
 const initSearch = () => {
+    /** @type {HTMLInputElement | null} */
     const searchInput = document.querySelector("#search")
+    if (!searchInput) {
+        return
+    }
     searchInput.oninput = (event) => {
-        search = event.target.value
-        updateDisplay()
+        if (event.target) {
+            search = /** @type {HTMLInputElement} */(event.target).value
+            updateDisplay()
+        }
     }
 }
 
@@ -137,17 +162,19 @@ const initSearch = () => {
  * Initialize the navigation buttons.
  */
 const initNavigateButtons = () => {
+    /** @type {NodeListOf<HTMLAnchorElement> | null} */
     const navLinks = document.querySelectorAll(".navlink");
 
     navLinks.forEach(
         link => {
-            link.onclick = () => {
+            link.onclick = (e) => {
+                e.preventDefault();
                 const linkTarget = link.getAttribute("data-target");
                 navLinks.forEach(otherLink => {
                     otherLink.removeAttribute("data-active")
                 });
                 link.setAttribute("data-active", "true")
-                window.location.hash = linkTarget
+                window.location.hash = linkTarget || ''
             }
         }
     )
@@ -163,10 +190,17 @@ const initNavigateButtons = () => {
  * https://developer.chrome.com/docs/extensions/reference/storage/
  */
 const initUpload = () => {
-
+    /** @type {HTMLInputElement | null} */
     const uploadInput = document.querySelector("#upload")
+    /** @type {HTMLButtonElement | null} */
     const deleteCustomLogins = document.querySelector("#delete-custom-logins")
+
+    if (!uploadInput || !deleteCustomLogins) {
+        return;
+    }
+
     deleteCustomLogins.onclick = () => {
+        // @ts-ignore-next-line
         chrome.storage.sync.remove("qLoginCreds")
         customLogins = []
         updateDisplay()
@@ -178,10 +212,14 @@ const initUpload = () => {
         try {
             const reader = new FileReader();
             reader.addEventListener('load', (event) => {
-                const json = JSON.parse(event.target.result)
+                if (!event || !event.target || !event.target.result) {
+                    return;
+                }
+                const json = JSON.parse(event.target.result.toString())
                 if (json && Array.isArray(json)) {
                     customLogins = [...customLogins, ...json];
                     // upload for persistence
+                    // @ts-ignore-next-line
                     chrome.storage.sync.set({
                         qLoginCreds: customLogins
                     }, () => {
@@ -190,7 +228,9 @@ const initUpload = () => {
                     updateDisplay()
                 }
             });
-            reader.readAsText(uploadInput.files[0]);
+            if (uploadInput.files && uploadInput.files.length > 0) {
+                reader.readAsText(uploadInput.files[0]);
+            }
         } catch (e) {
             // @todo: improve error handling
             console.log(e)
@@ -199,15 +239,24 @@ const initUpload = () => {
 }
 
 const initAutoLogin = () => {
+    /** @type {HTMLInputElement | null} */
     const autoLogin = document.querySelector("#auto-login")
+
+    if (!autoLogin) {
+        return;
+    }
+
     autoLogin.checked = options.autoLogin;
     autoLogin.onchange = (event) => {
-        options.autoLogin = event.target.checked
-        saveOptions()
+        if (event.target) {
+            options.autoLogin = /** @type {HTMLInputElement} */(event.target).checked
+            saveOptions()
+        }
     }
 }
 
 const saveOptions = async () => {
+    // @ts-ignore-next-line
     await chrome.storage.sync.set({
             qLoginOptions: options
         }, () => {
@@ -217,6 +266,7 @@ const saveOptions = async () => {
 }
 
 const loadOptions = async () => {
+    // @ts-ignore-next-line
     const result = await chrome.storage.sync.get(['qLoginOptions']);
     console.log(result)
         if (result.qLoginOptions) {
@@ -225,6 +275,7 @@ const loadOptions = async () => {
 }
 
 const loadCustomLogins = async () => {
+    // @ts-ignore-next-line
     const result = await chrome.storage.sync.get(['qLoginCreds']);
     if (result.qLoginCreds) {
             customLogins = result.qLoginCreds
@@ -272,6 +323,7 @@ const autoFillLogin = async ({
     username,
     password
 }) => {
+    // @ts-ignore-next-line
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
         func: attemptAutoFill,
@@ -285,8 +337,14 @@ const autoFillLogin = async ({
  * @todo: Can be extended to allow more inputs.
  */
 const attemptAutoFill = (username, password, opts) => {
+    /** @type {HTMLInputElement | null} */
     const usernameInput = document.querySelector("[autocomplete='username']")
+    /** @type {HTMLInputElement | null} */
     const passwordInput = document.querySelector("[autocomplete='current-password']")
+
+    if (!usernameInput || !passwordInput) {
+        return
+    }
 
     const usernameInputEvent = new Event("input", {bubbles: true})
     const passwordInputEvent = new Event("input", {bubbles: true})
@@ -298,12 +356,16 @@ const attemptAutoFill = (username, password, opts) => {
     passwordInput.dispatchEvent(passwordInputEvent)
 
     if (opts.autoLogin) {
+    /** @type {HTMLButtonElement | null} */
         const submitButton = document.querySelector("[type='submit']")
-        submitButton.click()
+        if (submitButton) {
+            submitButton.click()
+        }
     }
 }
 
 // get active tab
+// @ts-ignore-next-line
 chrome.tabs.query({active: true}).then(tabs => {
     activeTab = tabs[0];
 })
