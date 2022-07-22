@@ -12,10 +12,14 @@
  *  description: string;
  *  categories: Categories;
  * }} Login
- * 
+ *
  * @type {Login[]}
  */
-const logins = [];
+let remoteLogins = [];
+/**
+ * @type {Login[]}
+ */
+let customLogins = []
 
 /**
  * Search variable. Updated through the search input.
@@ -32,12 +36,13 @@ let activeTab;
  */
 let options = {
     autoLogin: false,
+    remoteUrl: ''
 }
 
 /**
  * Shows a list of active filters to be filtered
  * in the list of test accounts.
- * 
+ *
  * @type {Record<string, string>}
  */
 const activeFilters = {};
@@ -114,8 +119,10 @@ const updateDisplay = () => {
     // clear inner HTML
     root.innerHTML = ""
 
+    const allLogins = [...remoteLogins, ...customLogins];
+
     // render predefined logins
-    logins
+    allLogins
         .filter(login => login.username.includes(search) || login.description.includes(search))
         .filter(isMatchingActiveFilters)
         .forEach(login => {
@@ -124,18 +131,6 @@ const updateDisplay = () => {
                 root.appendChild(clone);
             }
         })
-
-    // render custom logins
-    if (customLogins.length > 0) {
-        customLogins
-            .filter(login => login.username.includes(search) || login.description.includes(search))
-            .forEach(login => {
-                const clone = createEntry(login)
-                if (clone) {
-                    root.appendChild(clone);
-                }
-            })
-    }
 }
 
 /**
@@ -198,7 +193,7 @@ const initUpload = () => {
 
     deleteCustomLogins.onclick = () => {
         // @ts-ignore-next-line
-        chrome.storage.sync.remove("qLoginCreds")
+        chrome.storage.sync.remove("pwmLoginCreds")
         customLogins = []
         updateDisplay()
     }
@@ -218,7 +213,7 @@ const initUpload = () => {
                     // upload for persistence
                     // @ts-ignore-next-line
                     chrome.storage.sync.set({
-                        qLoginCreds: customLogins
+                        pwmLoginCreds: customLogins
                     }, () => {
                         console.log('saved custom logins')
                     })
@@ -255,7 +250,7 @@ const initAutoLogin = () => {
 const saveOptions = async () => {
     // @ts-ignore-next-line
     await chrome.storage.sync.set({
-            qLoginOptions: options
+            pwmLoginOptions: options
         }, () => {
             console.log('saved options')
         }
@@ -264,24 +259,25 @@ const saveOptions = async () => {
 
 const loadOptions = async () => {
     // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['qLoginOptions']);
+    const result = await chrome.storage.sync.get(['pwmLoginOptions']);
     console.log(result)
-        if (result.qLoginOptions) {
-            options = result.qLoginOptions
+        if (result.pwmLoginOptions) {
+            options = result.pwmLoginOptions
         }
 }
 
 const loadCustomLogins = async () => {
     // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['qLoginCreds']);
-    if (result.qLoginCreds) {
-            customLogins = result.qLoginCreds
+    const result = await chrome.storage.sync.get(['pwmLoginCreds']);
+    if (result.pwmLoginCreds) {
+            customLogins = result.pwmLoginCreds
     }
 }
 
 const init = async () => {
     await loadCustomLogins()
     await loadOptions()
+    initRemoteLogins()
     updateDisplay()
     initUpload()
     initSearch()
@@ -384,8 +380,10 @@ chrome.tabs.query({active: true}).then(tabs => {
 const getCategories = () => {
     /** @type {Categories} */
     let categoryCollection = {};
-    
-    logins.forEach(({ categories }) => {
+
+    const allLogins = [...customLogins, ...remoteLogins]
+
+    allLogins.forEach(({ categories }) => {
         categoryCollection = {
             ...categoryCollection,
             ...categories,
@@ -439,4 +437,37 @@ const initCategories = () => {
             select.appendChild(option);
         });
     });
+}
+
+const initRemoteLogins = () => {
+    const input = document.querySelector('#remote-url');
+    const syncButton = document.querySelector('#sync-remote');
+
+    if (options.remoteUrl) {
+        input.value = options.remoteUrl;
+        syncFromRemoteUrl(options.remoteUrl)
+    }
+
+    syncButton.addEventListener('click', () => {
+        const url = input.value;
+        if (!url) {
+            return;
+        }
+
+        options.remoteUrl = url;
+        saveOptions();
+        syncFromRemoteUrl(url)
+    })
+
+}
+
+const syncFromRemoteUrl = async (url) => {
+    try {
+        const response = await fetch(url);
+        const json = await response.json();
+        remoteLogins = json;
+        updateDisplay()
+    } catch (e) {
+        console.log('remote-sync failed', e);
+    }
 }
