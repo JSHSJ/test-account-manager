@@ -5,7 +5,7 @@
  */
 
 /**
- * @typedef {Record<string, string[]>} Categories 
+ * @typedef {Record<string, string[]>} Categories
  * @typedef {{
  *  username: string;
  *  password: string;
@@ -79,8 +79,8 @@ const createEntry = (login) => {
     tUsername.innerText = login.username;
     tDescription.innerText = login.description;
     tDescription.title = login.description;
-    copyUsernameButton.onclick = () => copyToClipboard(login.username)
-    copyPasswordButton.onclick = () => copyToClipboard(login.password)
+    copyUsernameButton.onclick = () => copyToClipboard(login.username, 'Username')
+    copyPasswordButton.onclick = () => copyToClipboard(login.password, 'Password')
     autoFillButton.onclick = () => autoFillLogin({
         tab: activeTab,
         username: login.username,
@@ -284,6 +284,7 @@ const init = async () => {
     initAutoLogin()
     initNavigateButtons()
     initCategories()
+    addToastNotification("Hi there, handsome!", "success")
 }
 
 init()
@@ -291,7 +292,7 @@ init()
 /**
  * Copy text to clipboard
  */
-const copyToClipboard = (text) => {
+const copyToClipboard = (text, itemText) => {
     const type = "text/plain";
     const blob = new Blob([text], {type});
     const data = [new ClipboardItem({[type]: blob})];
@@ -299,11 +300,11 @@ const copyToClipboard = (text) => {
     navigator.clipboard.write(data).then(
         function () {
             /* success */
-            console.log(text, "copied to clipboard")
+            addToastNotification(`${itemText} copied to clipboard!`, "success")
         },
         function () {
             /* failure */
-            console.log("failed to copy to clipboard")
+            console.log(`Could not copy ${itemText} to clipboard!`, "error")
         }
     );
 }
@@ -463,14 +464,16 @@ const initRemoteLogins = async () => {
 
         options.remoteUrl = url;
         saveOptions();
-        await syncFromRemoteUrl(url)
+        await syncFromRemoteUrl(url);
+        addToastNotification("Loaded accounts from remote URL!", "success");
+        window.location.hash = 'logins';
     })
 
 }
 
 /**
  * Fetches data from remote url and sets remoteLogins.
- * @param {string} url 
+ * @param {string} url
  */
 const syncFromRemoteUrl = async (url) => {
     try {
@@ -479,6 +482,66 @@ const syncFromRemoteUrl = async (url) => {
         remoteLogins = json;
         updateDisplay();
     } catch (e) {
-        console.log('remote-sync failed', e);
+        addToastNotification("Remote sync failed!", "error")
     }
+}
+
+/**
+ * Shows a toast notification.
+ * @param {string} message
+ * @param {"success" | "error"}type
+ */
+const addToastNotification = (message, type) => {
+    /** @type {HTMLTemplateElement | null} */
+    const template = document.querySelector("#toast-template");
+    /** @type {HTMLDivElement | null} */
+    const root = document.querySelector("#toast-root");
+
+    if (!template || !root) {
+        return null;
+    }
+
+    /** @type {HTMLElement} */
+    // @ts-ignore seems to not be solvable in ts-check
+    const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
+
+    /** @type {HTMLOutputElement | null} */
+    const container = clone.querySelector(".toast")
+    /** @type {HTMLSpanElement | null} */
+    const toastText = clone.querySelector(".toast-text")
+
+    // remove unused icon from DOM
+    if (type === "success") {
+        /** @type {SVGElement | null} */
+        const errorIcon = clone.querySelector(".toast-icon--error");
+        if (errorIcon) {
+            errorIcon.remove();
+        }
+    } else {
+        /** @type {SVGElement | null} */
+        const successIcon = clone.querySelector(".toast-icon--success");
+        if (successIcon) {
+            successIcon.remove();
+        }
+    }
+
+    if (!container || !toastText) {
+        return null;
+    }
+
+    toastText.innerText = message;
+
+    const removeToast = () => {
+        container.classList.add("--animate-out");
+        container.addEventListener('animationend', () => {
+            container.remove();
+        })
+    }
+
+    container.onclick = removeToast;
+    setTimeout(() => {
+        removeToast();
+    }, 3000);
+
+    root.appendChild(clone);
 }

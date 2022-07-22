@@ -271,6 +271,71 @@
             gap: var(--size-xxs);
         }
 
+        #toast-root {
+            position: fixed;
+            bottom: calc(var(--size-xl) + var(--size-sm));
+            inset-inline: 0;
+            padding: 0 var(--size-xs);
+            display: grid;
+            gap: var(--size-xs);
+            z-index: 2;
+        }
+
+        .toast {
+            --timing-duration: 250ms;
+
+            border: var(--border-size-1) solid var(--border-color);
+            background: var(--surface-1);
+            color: var(--text-1);
+            padding: var(--size-xs);
+            border-radius: var(--radius-2);
+            display: grid;
+            grid-template: "icon message" 1fr / var(--icon-size) 1fr;
+            gap: var(--size-xs);
+            animation: animate-toast-in forwards var(--timing-duration) var(--ease-squish-3);
+            cursor: pointer;
+            will-change: transform;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .toast {
+                --timing-duration: 1ms;
+            }
+        }
+
+        .toast.--animate-out {
+            animation: animate-toast-out forwards var(--timing-duration) var(--ease-squish-3);
+        }
+
+        .toast-text {
+            display: flex;
+            align-items: center;
+            min-block-size: var(--icon-size);
+            font-weight: var(--font-weight-6);
+        }
+
+        @keyframes animate-toast-in {
+            0% {
+                opacity: 0;
+                transform: translateY(var(--size-sm));
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes animate-toast-out {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(var(--size-sm) * -1)); ;
+            }
+        }
+
     </style>
     <title>Password Manager</title>
 </head>
@@ -343,6 +408,7 @@
 
     </section>
 </div>
+<div id="toast-root"></div>
 
 <template id="login-template">
     <li>
@@ -360,6 +426,15 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-4.625 0-8.442 3.507-8.941 8.001H10v-3l5 4-5 4v-3H3.06C3.56 17.494 7.376 21 12 21c4.963 0 9-4.037 9-9s-4.037-9-9-9z"/></svg>
         </button>
     </li>
+</template>
+<template id="toast-template">
+    <output class="toast">
+        <div class="toast-icon">
+            <svg class="toast-icon--success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"/></svg>
+            <svg class="toast-icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM13 17h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <span class="toast-text"></span>
+    </output>
 </template>
 <script async defer src="script.js"></script>
 </body>
