@@ -1,27 +1,11 @@
 // @ts-check
 
-const logins = [
-    {
-        username: "owner5@mlvv.de",
-        password: "Berlin.123",
-        description: "Einzel, 2 BPs, mit Geld"
-    },
-    {
-        username: "sebastian-test@mailinator.com",
-        password: "Berlin.1234567",
-        description: "Einzel, viele ThemenVVs, PREMIUM"
-    }
-];
+const logins = [];
 
 /**
  * Search variable. Updated through the search input.
  */
 let search = "";
-
-/**
- * Custom logins. May be updated through upaloading a json file.
- */
-let customLogins = [];
 
 /**
  * Active tab
@@ -45,6 +29,8 @@ const createEntry = (login) => {
         return null;
     }
 
+    /** @type {HTMLElement} */
+    // @ts-ignore
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
     /** @type {HTMLSpanElement | null} */
