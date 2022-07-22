@@ -105,6 +105,7 @@ const updateDisplay = () => {
     // render predefined logins
     logins
         .filter(login => login.username.includes(search) || login.description.includes(search))
+        .filter(isMatchingActiveFilters)
         .forEach(login => {
             const clone = createEntry(login)
             root.appendChild(clone);
