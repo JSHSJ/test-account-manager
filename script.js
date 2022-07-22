@@ -467,12 +467,16 @@ const initRemoteLogins = () => {
 
 }
 
+/**
+ * Fetches data from remote url and sets remoteLogins.
+ * @param {string} url 
+ */
 const syncFromRemoteUrl = async (url) => {
     try {
         const response = await fetch(url);
         const json = await response.json();
         remoteLogins = json;
-        updateDisplay()
+        updateDisplay();
     } catch (e) {
         console.log('remote-sync failed', e);
     }
