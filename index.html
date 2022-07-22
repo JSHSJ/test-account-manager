@@ -11,13 +11,7 @@
 
     </style>
     <style>
-               :is(h1, h2, h3) {
-            margin: 0 0 var(--space-sm);
-            padding: 0;
-        }
-
-
-        html {
+                html {
             --size-xl: var(--size-9);
             --size-lg: var(--size-8);
             --size-md: var(--size-5);
@@ -28,8 +22,9 @@
             --icon-size: var(--size-md);
         }
 
-        header {
-            min-width: 0;
+        :is(h1, h2, h3) {
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -100,8 +95,6 @@
             grid-area: page;
             visibility: hidden;
             z-index: 0;
-            display: grid;
-            grid-template-rows: auto 1fr;
         }
 
         .page:target {
@@ -116,7 +109,6 @@
         .login-container {
             overflow-y: auto;
             overflow-x: hidden;
-            grid-area: "main";
         }
 
         ul {
@@ -213,6 +205,7 @@
             grid-template: "label check" 1fr / 1fr auto;
             cursor: pointer;
             gap: var(--size-xs);
+            align-items: center;
         }
 
         .checkbox span {
@@ -234,6 +227,30 @@
             padding: 8px;
             overflow-x: scroll;
         }
+
+        .accounts-list {
+            display: grid;
+            gap: var(--size-md);
+        }
+
+        .accounts-list-item {
+            display: grid;
+            gap: var(--size-sm);
+            border: var(--border-size-1) solid var(--border-color);
+            padding: var(--size-sm);
+            border-radius: var(--radius-2);
+        }
+
+        .options-box {
+            display: grid;
+            gap: var(--size-xs);
+        }
+
+        .input-field {
+            display: grid;
+            gap: var(--size-xxs);
+        }
+
     </style>
     <title>Document</title>
 </head>
@@ -277,8 +294,28 @@
     </section>
     <section>
         <h3>Accounts</h3>
-        <input type="file" accept=".json" id="upload">
-        <button id="delete-custom-logins" type="reset">Eigene Logins löschen</button>
+        <ul class="accounts-list">
+        <li class="accounts-list-item">
+            <h6>Eigene Accounts</h6>
+            <div class="options-box">
+                <input type="file" accept=".json" id="upload">
+                <button id="delete-custom-logins" type="reset">Eigene Logins löschen</button>
+            </div>
+        </li>
+        <li class="accounts-list-item">
+            <h6>Remote Accounts</h6>
+        <div
+            class="options-box"
+        >
+        <div class="input-field">
+            <label>Remote Url</label>
+            <input type="text" name="remote-url" id="remote-url" placeholder="https://...">
+         </div>
+            <button type="button" id="sync-remote">Sync</button>
+        </div>
+        </li>
+        </ul>
+
     </section>
 </div>
 
