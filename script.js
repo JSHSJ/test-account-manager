@@ -284,3 +284,25 @@ chrome.tabs.query({active: true}).then(tabs => {
  */
 // @todo: loader while tab / sync
 // @todo: make more failsafe
+
+const categories = {
+    accountType: [
+        'singleAccount',
+        'jointAccount',
+        'childSingleAccount',
+        'childJointAccount',
+    ],
+    entrypointId: [
+        'NEW_CUSTOMER__NEW_BP__VV',
+        'NEW_CUSTOMER__NEW_BP__TOPICS',
+        'NEW_CUSTOMER__NEW_BP__TANGIBLE_ASSETS',
+        'EXISTING_CUSTOMER__NEW_IPS__VV',
+        'EXISTING_CUSTOMER__NEW_BP__VV',
+        'EXISTING_CUSTOMER__NEW_IPS__TOPICS',
+        'EXISTING_CUSTOMER__UPDATE_BP',
+    ],
+};
+
+const CategoriesTab = () => {
+    
+}
