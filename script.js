@@ -5,7 +5,7 @@
  */
 
 /**
- * @typedef {Record<string, string>} Categories 
+ * @typedef {Record<string, string[]>} Categories 
  * @typedef {{
  *  username: string;
  *  password: string;
