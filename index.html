@@ -26,6 +26,10 @@
             --icon-size: var(--size-md);
         }
 
+        header {
+            min-width: 0;
+        }
+
         body {
             width: 375px !important;
             height: 600px !important;
@@ -80,6 +84,8 @@
             grid-area: page;
             visibility: hidden;
             z-index: 0;
+            display: grid;
+            grid-template-rows: auto 1fr;
         }
 
         .page:target {
@@ -207,8 +213,15 @@
         }
 
         .categories {
+            background-color: var(--gray-7);
+            max-inline-size: 100%;
+        }
+
+        .categories__track {
+            display: flex;
+            gap: var(--size-2);
             padding: 8px;
-            background-color: palevioletred;
+            overflow-x: scroll;
         }
     </style>
     <title>Document</title>
@@ -234,7 +247,9 @@
             </label>
         </section>
         <section class="categories">
-            <!-- Categories go here -->
+            <div class="categories__track">
+
+            </div>
         </section>
     </header>
     <section class="login-container">

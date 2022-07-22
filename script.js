@@ -268,10 +268,10 @@ const copyToClipboard = (text) => {
  * Trigger auto fill function in DOM.
  */
 const autoFillLogin = async ({
-                                 tab,
-                                 username,
-                                 password
-                             }) => {
+    tab,
+    username,
+    password
+}) => {
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
         func: attemptAutoFill,
@@ -360,7 +360,7 @@ const initCategories = () => {
             }
             updateDisplay();
         });
-    
+
         value.forEach((value) => {
             const option = document.createElement('option');
             option.value = value;
