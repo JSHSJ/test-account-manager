@@ -79,6 +79,20 @@ const createEntry = (login) => {
     return clone
 }
 
+const isMatchingActiveFilters = (login) => {
+    /**
+     * Lists if each filters key value pair is included in login categories.
+     * @type {boolean[]}
+     */
+    const matches = [];
+    Object.entries(activeFilters).forEach(([key, value]) => {
+        matches.push(login.categories?.[key] === value)
+    });
+    const isMatch = !matches.includes(false);
+    console.log(isMatch, matches);
+    return isMatch;
+}
+
 /**
  * Main function to update the display.
  * Renders the list of logins.
