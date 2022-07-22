@@ -10,7 +10,7 @@
  *  username: string;
  *  password: string;
  *  description: string;
- *  categories: Categories;
+ *  categories: Record<string, string>;
  * }} Login
  *
  * @type {Login[]}
@@ -381,13 +381,17 @@ const getCategories = () => {
     /** @type {Categories} */
     let categoryCollection = {};
 
-    const allLogins = [...customLogins, ...remoteLogins]
+    const allLogins = [...customLogins, ...remoteLogins];
 
     allLogins.forEach(({ categories }) => {
-        categoryCollection = {
-            ...categoryCollection,
-            ...categories,
-        };
+        Object.entries(categories).forEach(([key, value]) => {
+            console.log({ key, categoryCollection });
+            if (key in categoryCollection) {
+                categoryCollection[key].push(value);
+                return;
+            }
+            categoryCollection[key] = [value];
+        });
     });
 
     return categoryCollection;
@@ -422,11 +426,9 @@ const initCategories = () => {
 
         select.addEventListener('change', (e) => {
             const { name, value } = /** @type {HTMLSelectElement} */ (e.target);
-            if (!value) {
-                delete activeFilters[name];
-            } else {
-                activeFilters[name] = value;
-            }
+            if (!value) delete activeFilters[name]
+            else activeFilters[name] = value;
+
             updateDisplay();
         });
 
