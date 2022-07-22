@@ -5,18 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        @import "https://unpkg.com/open-props";
+        @import "https://unpkg.com/open-props/normalize.min.css";
+        @import "https://unpkg.com/open-props/buttons.min.css";
 
-        :focus {
-            outline: none;
-        }
-
-        :focus-visible {
-            outline: 2px solid var(--color-primary-hover);
-            outline-offset: -2px;
-        }
 
         :is(h1, h2, h3) {
             margin: 0 0 var(--space-sm);
@@ -25,27 +17,17 @@
 
 
         html {
-            --color-primary: hsl(228, 100%, 56%);
-            --color-primary-hover: hsl(228, 100%, 40%);
-            --color-text: hsl(258, 100%, 13%);
-            --color-text-2: hsl(258, 34%, 30%);
-            --color-border: hsl(258, 16%, 91%);
-            --color-surface: hsl(258, 100%, 98%);
-            --color-surface-2: hsl(258, 15%, 85%);
-            --color-surface-3: hsl(228, 100%, 97%);
-            --space-xs: 0.125rem;
-            --space-sm: 0.25rem;
-            --space-md: 0.5rem;
-            --size-sm: 2rem;
-            --size-md: 3rem;
-            --size-lg: 4rem;
-
-            accent-color: var(--color-primary);
+            --size-xl: var(--size-9);
+            --size-lg: var(--size-8);
+            --size-md: var(--size-5);
+            --size-sm: var(--size-3);
+            --size-xs: var(--size-2);
+            --size-xxs: var(--size-1);
+            --border-color: var(--surface-3);
+            --icon-size: var(--size-md);
         }
 
         body {
-            color: var(--color-text);
-            background: var(--color-surface);
             width: 375px !important;
             height: 600px !important;
             position: relative;
@@ -56,38 +38,38 @@
             display: grid;
             grid-template:
                     "page" 1fr
-                    "nav" var(--size-md)
+                    "nav" auto
             / 1fr;
         }
 
         nav {
-            border-top: 1px solid var(--color-border);
+            /*border-top: 1px solid var(--color-border);*/
             grid-area: nav;
             display: grid;
             grid-template-columns: repeat(auto-fit, 25%);
-            background: var(--color-surface-2);
+            border-top: var(--border-size-1) solid var(--border-color);
+            background: var(--surface-2);
+            padding: var(--size-xs);
+            gap: var(--size-xs);
         }
 
         .navlink {
             display: grid;
             place-content: center;
-            gap: var(--space-xs);
+            place-items: center;
+            gap: 0.5ch;
             text-decoration: none;
-            width: 100% !important;
+            padding: 0.5ch;
+            margin: 0;
         }
 
-        .navlink span {
-            font-size: 10px;
-            font-weight: normal;
-            color: inherit;
+        .navlink[data-active="true"] {
+            color: var(--link-visited);
         }
 
-        .navlink:hover {
-            background: var(--color-surface-3);
-        }
-
-        .navlink:active {
-            color: red;
+        svg {
+            width: var(--size-md);
+            height: var(--size-md);
         }
 
         .page {
@@ -104,16 +86,8 @@
             z-index: 1;
         }
 
-        #logins {
-            display: grid;
-            grid-template:
-                "header" auto
-                "main" 1fr
-                / 1fr
-        }
-
-        header {
-            grid-area: "header"
+        :where(p,ul,ol,dl,h6) {
+            font-size: var(--font-size-1);
         }
 
         .login-container {
@@ -131,20 +105,27 @@
 
         .login-container li {
             padding: 0;
+            padding-inline: var(--size-xs);
             display: grid;
-            grid-template-columns: 1fr 48px 48px 48px;
-            height: var(--size-md);
+            grid-template-columns: 1fr var(--size-lg) var(--size-lg) var(--size-lg);
+            gap: var(--size-xs);
+            align-items: center;
+        }
+
+        .login-container button {
+            padding: 0;
+            block-size: var(--size-lg);
         }
 
         .login-container li:not(:last-child) {
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .login-details {
             display: flex;
             flex-flow: column nowrap;
-            gap: 0.25rem;
-            padding: var(--space-sm) var(--space-md);
+            gap: var(--size-xxs);
+            padding-block: var(--size-sm);
             align-items: flex-start;
             justify-content: center;
             overflow: hidden;
@@ -159,57 +140,24 @@
             max-width: 100%;
         }
 
-        .description {
-            font-weight: bold;
-        }
-
         .username {
-            color: var(--color-text-2);
-        }
-
-        .password {
-            display: none;
-        }
-
-        .navlink, button {
-            background: transparent;
-            color: var(--color-primary);
-            border: none;
-            width: 3rem;
-            height: 3rem;
-            padding: var(--space-md);
-            margin: 0;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .navlink:hover, button:hover {
-            color: var(--color-primary-hover);
-        }
-
-        svg {
-            display: block;
-            width: 100%;
-            height: 100%;
-            fill: currentColor;
+            color: var(--text-2);
         }
 
         .search-container {
             width: 100%;
-            padding: var(--space-sm);
             display: grid;
             align-items: flex-start;;
-            background: var(--color-surface-2);
             position: relative;
         }
 
         .search-container label {
             display: grid;
-            grid-template: "icon search" 1fr /  24px 1fr;
+            grid-template: "icon search" 1fr /  var(--icon-size) 1fr;
             width: 100%;
             min-width: 0;
-            gap: var(--space-sm);
+            gap: var(--size-xs);
+            padding: var(--size-xs);
         }
 
         .search-icon {
@@ -220,13 +168,6 @@
         input {
             display: block;
             width: 100%;
-            padding: var(--space-sm);
-            border: 1px solid var(--color-border);
-            background: var(--color-surface-3);
-        }
-
-        input:focus-within {
-            outline: 2px solid var(--color-primary-hover);
         }
 
         #options {
@@ -284,7 +225,7 @@
             display: grid;
             grid-template: "label check" 1fr / 1fr auto;
             cursor: pointer;
-            gap: var(--space-sm);
+            gap: var(--size-sm);
         }
 
         .checkbox span {
@@ -307,18 +248,18 @@
 </head>
 <body>
 <nav>
-    <a class="navlink" href="#logins">
+    <button class="navlink" data-target="logins">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
             <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 16 8 C 13.25 8 11 10.25 11 13 C 11 14.515625 11.707031 15.863281 12.78125 16.78125 C 10.53125 17.949219 9 20.300781 9 23 L 11 23 C 11 20.226563 13.226563 18 16 18 C 18.773438 18 21 20.226563 21 23 L 23 23 C 23 20.300781 21.46875 17.949219 19.21875 16.78125 C 20.292969 15.863281 21 14.515625 21 13 C 21 10.25 18.75 8 16 8 Z M 16 10 C 17.667969 10 19 11.332031 19 13 C 19 14.667969 17.667969 16 16 16 C 14.332031 16 13 14.667969 13 13 C 13 11.332031 14.332031 10 16 10 Z"/>
         </svg>
-        <span>Logins</span>
-    </a>
-    <a class="navlink" href="#options">
+        <small>Logins</small>
+    </button>
+    <button class="navlink" data-target="options">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
             <path d="M 13.1875 3 L 13.03125 3.8125 L 12.4375 6.78125 C 11.484375 7.15625 10.625 7.683594 9.84375 8.3125 L 6.9375 7.3125 L 6.15625 7.0625 L 5.75 7.78125 L 3.75 11.21875 L 3.34375 11.9375 L 3.9375 12.46875 L 6.1875 14.4375 C 6.105469 14.949219 6 15.460938 6 16 C 6 16.539063 6.105469 17.050781 6.1875 17.5625 L 3.9375 19.53125 L 3.34375 20.0625 L 3.75 20.78125 L 5.75 24.21875 L 6.15625 24.9375 L 6.9375 24.6875 L 9.84375 23.6875 C 10.625 24.316406 11.484375 24.84375 12.4375 25.21875 L 13.03125 28.1875 L 13.1875 29 L 18.8125 29 L 18.96875 28.1875 L 19.5625 25.21875 C 20.515625 24.84375 21.375 24.316406 22.15625 23.6875 L 25.0625 24.6875 L 25.84375 24.9375 L 26.25 24.21875 L 28.25 20.78125 L 28.65625 20.0625 L 28.0625 19.53125 L 25.8125 17.5625 C 25.894531 17.050781 26 16.539063 26 16 C 26 15.460938 25.894531 14.949219 25.8125 14.4375 L 28.0625 12.46875 L 28.65625 11.9375 L 28.25 11.21875 L 26.25 7.78125 L 25.84375 7.0625 L 25.0625 7.3125 L 22.15625 8.3125 C 21.375 7.683594 20.515625 7.15625 19.5625 6.78125 L 18.96875 3.8125 L 18.8125 3 Z M 14.8125 5 L 17.1875 5 L 17.6875 7.59375 L 17.8125 8.1875 L 18.375 8.375 C 19.511719 8.730469 20.542969 9.332031 21.40625 10.125 L 21.84375 10.53125 L 22.40625 10.34375 L 24.9375 9.46875 L 26.125 11.5 L 24.125 13.28125 L 23.65625 13.65625 L 23.8125 14.25 C 23.941406 14.820313 24 15.402344 24 16 C 24 16.597656 23.941406 17.179688 23.8125 17.75 L 23.6875 18.34375 L 24.125 18.71875 L 26.125 20.5 L 24.9375 22.53125 L 22.40625 21.65625 L 21.84375 21.46875 L 21.40625 21.875 C 20.542969 22.667969 19.511719 23.269531 18.375 23.625 L 17.8125 23.8125 L 17.6875 24.40625 L 17.1875 27 L 14.8125 27 L 14.3125 24.40625 L 14.1875 23.8125 L 13.625 23.625 C 12.488281 23.269531 11.457031 22.667969 10.59375 21.875 L 10.15625 21.46875 L 9.59375 21.65625 L 7.0625 22.53125 L 5.875 20.5 L 7.875 18.71875 L 8.34375 18.34375 L 8.1875 17.75 C 8.058594 17.179688 8 16.597656 8 16 C 8 15.402344 8.058594 14.820313 8.1875 14.25 L 8.34375 13.65625 L 7.875 13.28125 L 5.875 11.5 L 7.0625 9.46875 L 9.59375 10.34375 L 10.15625 10.53125 L 10.59375 10.125 C 11.457031 9.332031 12.488281 8.730469 13.625 8.375 L 14.1875 8.1875 L 14.3125 7.59375 Z M 16 11 C 13.25 11 11 13.25 11 16 C 11 18.75 13.25 21 16 21 C 18.75 21 21 18.75 21 16 C 21 13.25 18.75 11 16 11 Z M 16 13 C 17.667969 13 19 14.332031 19 16 C 19 17.667969 17.667969 19 16 19 C 14.332031 19 13 17.667969 13 16 C 13 14.332031 14.332031 13 16 13 Z"/>
         </svg>
-        <span>Optionen</span>
-    </a>
+        <small>Optionen</small>
+    </button>
 </nav>
 <div class="page" id="logins">
     <header>
@@ -359,9 +300,8 @@
 <template id="login-template">
     <li>
         <div class="login-details">
-            <span class="description"></span>
-            <span class="username"></span>
-            <span class="password"></span>
+            <span><b class="description"></b></span>
+            <span><small class="username"></small></span>
         </div>
         <button class="copy-username" aria-label="Username kopieren" title="Username kopieren">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">

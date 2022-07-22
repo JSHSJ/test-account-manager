@@ -42,14 +42,14 @@ const createEntry = (login) => {
     const clone = template.content.cloneNode(true)
 
     const tUsername = clone.querySelector(".username")
-    const tPassword = clone.querySelector(".password")
+    // const tPassword = clone.querySelector(".password")
     const tDescription = clone.querySelector(".description")
     const copyUsernameButton = clone.querySelector(".copy-username")
     const copyPasswordButton = clone.querySelector(".copy-password")
     const autoFillButton = clone.querySelector(".auto-fill")
 
     tUsername.innerText = login.username;
-    tPassword.innerText = login.password;
+    // tPassword.innerText = login.password;
     tDescription.innerText = login.description;
     tDescription.title = login.description;
     copyUsernameButton.onclick = () => copyToClipboard(login.username)
@@ -207,6 +207,7 @@ const init = async () => {
     initUpload()
     initSearch()
     initAutoLogin()
+    initNavigateButtons()
 }
 
 init()
@@ -274,6 +275,25 @@ const attemptAutoFill = (username, password, opts) => {
 chrome.tabs.query({active: true}).then(tabs => {
     activeTab = tabs[0];
 })
+
+const initNavigateButtons = () => {
+    const navLinks = document.querySelectorAll(".navlink");
+
+    navLinks.forEach(
+        link => {
+            link.onclick = () => {
+                const linkTarget = link.getAttribute("data-target");
+                navLinks.forEach(otherLink => {
+                    otherLink.removeAttribute("data-active")
+                });
+                link.setAttribute("data-active", "true")
+                window.location.hash = linkTarget
+            }
+        }
+    )
+
+    navLinks[0].click()
+}
 
 /**
  * Ideas:
