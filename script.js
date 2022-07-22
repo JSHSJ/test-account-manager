@@ -391,6 +391,11 @@ const initCategories = () => {
     Object.entries(categories).forEach(([ key, value ]) => {
         const select = document.createElement('select');
         select.name = key;
+
+        if (!tab) {
+            throw new Error('Could not find \'.categories__track\' in document.');
+        }
+
         tab.appendChild(select);
         const label = document.createElement('option');
         label.text = key;
@@ -400,7 +405,7 @@ const initCategories = () => {
         select.appendChild(label);
 
         select.addEventListener('change', (e) => {
-            const { name, value } = e.target;
+            const { name, value } = /** @type {HTMLSelectElement} */ (e.target);
             if (!value) {
                 delete activeFilters[name];
             } else {
