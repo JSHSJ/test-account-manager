@@ -442,8 +442,12 @@ const initCategories = () => {
 }
 
 const initRemoteLogins = () => {
+    /** @type {HTMLInputElement | null} */
     const input = document.querySelector('#remote-url');
     const syncButton = document.querySelector('#sync-remote');
+
+    if (input === null) throw new Error('Could not find selector \'#remote-url\'');
+    if (syncButton === null) throw new Error('Could not find selector \'#sync-remote\'');
 
     if (options.remoteUrl) {
         input.value = options.remoteUrl;
