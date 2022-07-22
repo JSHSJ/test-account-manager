@@ -40,16 +40,12 @@ let options = {
  */
 const createEntry = (login) => {
     const template = document.querySelector("#login-template");
-    
+
     if (!template) {
         return null;
     }
 
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
-
-    if (!(clone instanceof HTMLElement)) {
-        return null;
-    }
 
     /** @type {HTMLSpanElement | null} */
     const tUsername = clone.querySelector(".username")
@@ -217,7 +213,7 @@ const initUpload = () => {
 const initAutoLogin = () => {
     /** @type {HTMLInputElement | null} */
     const autoLogin = document.querySelector("#auto-login")
-    
+
     if (!autoLogin) {
         return;
     }
@@ -318,7 +314,7 @@ const attemptAutoFill = (username, password, opts) => {
     const passwordInput = document.querySelector("[autocomplete='current-password']")
 
     if (!usernameInput || !passwordInput) {
-        return 
+        return
     }
 
     const usernameInputEvent = new Event("input", {bubbles: true})
