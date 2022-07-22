@@ -239,6 +239,7 @@ const init = async () => {
     initSearch()
     initAutoLogin()
     initNavigateButtons()
+    initCategories()
 }
 
 init()
