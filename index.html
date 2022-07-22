@@ -11,7 +11,7 @@
 
     </style>
     <style>
-                html {
+        html {
             --size-xl: var(--size-9);
             --size-lg: var(--size-8);
             --size-md: var(--size-5);
@@ -107,8 +107,21 @@
         }
 
         .login-container {
+            min-block-size: 100%;
             overflow-y: auto;
             overflow-x: hidden;
+        }
+
+        .nothing {
+            inline-size: 100%;
+            block-size: 100%;
+            padding: var(--size-4);
+            display: grid;
+            place-items: center;
+        }
+
+        #login-root:not(:empty) + .nothing {
+            display: none;
         }
 
         ul {
@@ -228,6 +241,10 @@
             overflow-x: scroll;
         }
 
+        .categories__track > i:not(:only-child) {
+            display: none;
+        }
+
         .accounts-list {
             display: grid;
             gap: var(--size-md);
@@ -282,7 +299,11 @@
     </header>
     <section class="login-container">
         <ul id="login-root">
+            <!-- logins are placed here -->
         </ul>
+        <div class="nothing">
+            <div>No accounts found...</div>
+        </div>
     </section>
 </div>
 <div class="page" id="options">
