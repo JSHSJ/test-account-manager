@@ -103,6 +103,28 @@ const initSearch = () => {
 }
 
 /**
+ * Initialize the navigation buttons.
+ */
+const initNavigateButtons = () => {
+    const navLinks = document.querySelectorAll(".navlink");
+
+    navLinks.forEach(
+        link => {
+            link.onclick = () => {
+                const linkTarget = link.getAttribute("data-target");
+                navLinks.forEach(otherLink => {
+                    otherLink.removeAttribute("data-active")
+                });
+                link.setAttribute("data-active", "true")
+                window.location.hash = linkTarget
+            }
+        }
+    )
+
+    navLinks[0].click()
+}
+
+/**
  * Initialise the upload input.
  *
  * To be extended: improve design, maybe drop zone?
@@ -119,28 +141,6 @@ const initUpload = () => {
         updateDisplay()
     }
 
-    // Init drop zone
-    const dropzone = document.querySelector(".dropzone");
-    dropzone.ondrop = (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        dropzone.classList.remove("dragover")
-        uploadInput.files = event.dataTransfer.files;
-        const fileChangeEvent = new Event("change", {bubbles: true})
-        uploadInput.dispatchEvent(fileChangeEvent)
-    }
-
-    dropzone.ondragover = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        dropzone.classList.add("-dragged")
-    }
-
-    dropzone.ondragleave = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        dropzone.classList.remove("-dragged")
-    }
 
     // Handle file upload
     uploadInput.onchange = () => {
@@ -275,25 +275,6 @@ const attemptAutoFill = (username, password, opts) => {
 chrome.tabs.query({active: true}).then(tabs => {
     activeTab = tabs[0];
 })
-
-const initNavigateButtons = () => {
-    const navLinks = document.querySelectorAll(".navlink");
-
-    navLinks.forEach(
-        link => {
-            link.onclick = () => {
-                const linkTarget = link.getAttribute("data-target");
-                navLinks.forEach(otherLink => {
-                    otherLink.removeAttribute("data-active")
-                });
-                link.setAttribute("data-active", "true")
-                window.location.hash = linkTarget
-            }
-        }
-    )
-
-    navLinks[0].click()
-}
 
 /**
  * Ideas:
