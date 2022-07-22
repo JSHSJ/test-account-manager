@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -272,7 +272,7 @@
         }
 
     </style>
-    <title>Document</title>
+    <title>Password Manager</title>
 </head>
 <body>
 <nav>
@@ -281,7 +281,8 @@
         <small>Logins</small>
     </a>
     <a class="navlink" data-target="options" href="#options">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/></svg>        <small>Optionen</small>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/></svg>
+        <small>Options</small>
     </a>
 </nav>
 <div class="page" id="logins">
@@ -291,12 +292,12 @@
                 <svg class="search-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                     <path d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z"/>
                 </svg>
-                <input type="text" id="search" placeholder="Suche nach Keywords...">
+                <input type="text" id="search" placeholder="Search for a keyword..." aria-label="Search account">
             </label>
         </section>
         <section class="categories">
             <div class="categories__track">
-                <i>No categories found</i>
+                <i>No categories found.</i>
             </div>
         </section>
     </header>
@@ -305,29 +306,29 @@
             <!-- logins are placed here -->
         </ul>
         <div class="nothing">
-            <div>No accounts found...</div>
+            <div>No accounts found.</div>
         </div>
     </section>
 </div>
 <div class="page" id="options">
     <section>
         <label class="checkbox">
-            <span>Automatisch einloggen</span>
+            <span>Log in automatically</span>
             <input type="checkbox" id="auto-login">
         </label>
     </section>
     <section>
-        <h3>Accounts</h3>
+        <h4>Accounts</h4>
         <ul class="accounts-list">
         <li class="accounts-list-item">
-            <h6>Eigene Accounts</h6>
+            <h6>Uploaded accounts</h6>
             <div class="options-box">
                 <input type="file" accept=".json" id="upload">
-                <button id="delete-custom-logins" type="reset">Eigene Logins löschen</button>
+                <button id="delete-custom-logins" type="reset">Delete uploaded accounts</button>
             </div>
         </li>
         <li class="accounts-list-item">
-            <h6>Remote Accounts</h6>
+            <h6>Remote accounts</h6>
         <div
             class="options-box"
         >
@@ -349,13 +350,13 @@
             <span><strong class="description"></strong></span>
             <span><small class="username"></small></span>
         </div>
-        <button class="copy-username" aria-label="Username kopieren" title="Username kopieren">
+        <button class="copy-username" aria-label="Copy username" title="Copy username">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"/></svg>
         </button>
-        <button class="copy-password" aria-label="Passwort kopieren" title="Passwort kopieren">
+        <button class="copy-password" aria-label="Copy password" title="Copy password">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.433 17.325 3.079 19.8a1 1 0 0 0 1.131 1.131l2.475-.354C7.06 20.524 8 18 8 18s.472.405.665.466c.412.13.813-.274.948-.684L10 16.01s.577.292.786.335c.266.055.524-.109.707-.293a.988.988 0 0 0 .241-.391L12 14.01s.675.187.906.214c.263.03.519-.104.707-.293l1.138-1.137a5.502 5.502 0 0 0 5.581-1.338 5.507 5.507 0 0 0 0-7.778 5.507 5.507 0 0 0-7.778 0 5.5 5.5 0 0 0-1.338 5.581l-7.501 7.5a.994.994 0 0 0-.282.566zM18.504 5.506a2.919 2.919 0 0 1 0 4.122l-4.122-4.122a2.919 2.919 0 0 1 4.122 0z"/></svg>
         </button>
-        <button class="auto-fill" aria-label="Ausfüllen" title="Ausfüllen">
+        <button class="auto-fill" aria-label="Autofill / Login" title="Autofill / Login">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-4.625 0-8.442 3.507-8.941 8.001H10v-3l5 4-5 4v-3H3.06C3.56 17.494 7.376 21 12 21c4.963 0 9-4.037 9-9s-4.037-9-9-9z"/></svg>
         </button>
     </li>
