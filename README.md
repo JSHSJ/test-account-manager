@@ -1,4 +1,4 @@
-![TestAccountManager header image](tam-logo.jpg)
+![TestAccountManager header image](tam-logo.png)
 # Testaccount Manager
 
 Simple testaccount manager or password manager (like the ones you already use) for Chromium based browsers.
