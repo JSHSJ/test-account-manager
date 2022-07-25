@@ -43,9 +43,9 @@ let options = {
  * Shows a list of active filters to be filtered
  * in the list of test accounts.
  *
- * @type {Record<string, string>}
+ * @type {Map<string, string>}
  */
-const activeFilters = {};
+const activeFilters = new Map();
 
 /**
  * Create a new entry for a login
@@ -96,9 +96,9 @@ const isMatchingActiveFilters = (login) => {
      * @type {boolean[]}
      */
     const matches = [];
-    Object.entries(activeFilters).forEach(([key, value]) => {
-        matches.push(login.categories?.[key] === value)
-    });
+    for (const [key, value] of activeFilters) {
+        matches.push(login.categories?.[key] === value);
+    }
     const isMatch = !matches.includes(false);
     return isMatch;
 }
@@ -427,8 +427,8 @@ const initCategories = () => {
 
         select.addEventListener('change', (e) => {
             const { name, value } = /** @type {HTMLSelectElement} */ (e.target);
-            if (!value) delete activeFilters[name]
-            else activeFilters[name] = value;
+            if (!value) activeFilters.delete(name)
+            else activeFilters.set(name, value);
 
             updateDisplay();
         });
