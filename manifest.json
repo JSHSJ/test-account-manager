@@ -6,7 +6,7 @@
     "author": "Joshua Stübner & Lukas Koeller",
     "action":{
         "default_popup": "index.html",
-        "default_title": "Password Manager",
+        "default_title": "Testaccount Manager",
         "default_icon": {
             "16": "images/icon_16.png",
             "24": "images/icon_24.png",
