@@ -33,6 +33,12 @@ let activeTab;
 
 /**
  * Options
+ * 
+ * @typedef {{
+ *  autoLogin: boolean;
+ *  remoteUrl: string;
+ * }} Options
+ * @type {Options}
  */
 let options = {
     autoLogin: false,
@@ -49,6 +55,8 @@ const activeFilters = new Map();
 
 /**
  * Create a new entry for a login
+ * @param {Login} login 
+ * @returns Returns an login entry row as HTMLElement
  */
 const createEntry = (login) => {
     const template = document.querySelector("#login-template");
@@ -90,6 +98,11 @@ const createEntry = (login) => {
     return clone
 }
 
+/**
+ * Checks if a certain Login matches active filters.
+ * @param {Login} login 
+ * @returns {boolean} Returns true if Login is matching active filters.
+ */
 const isMatchingActiveFilters = (login) => {
     /**
      * Lists if each filters key value pair is included in login categories.
@@ -286,10 +299,12 @@ const init = async () => {
     addToastNotification("Hi there, handsome!", "success")
 }
 
-init()
+init();
 
 /**
  * Copy text to clipboard
+ * @param {string} text 
+ * @param {string} itemText 
  */
 const copyToClipboard = (text, itemText) => {
     const type = "text/plain";
@@ -325,9 +340,11 @@ const autoFillLogin = async ({
 }
 
 /**
- * Attempt to auto fill the login. Looks for autocomplete elements.
- *
- * @todo: Can be extended to allow more inputs.
+ * 
+ * @param {Login["username"]} username 
+ * @param {Login["password"]} password 
+ * @param {Options} opts
+ * @returns {undefined}
  */
 const attemptAutoFill = (username, password, opts) => {
     /** @type {HTMLInputElement | null} */
@@ -364,16 +381,6 @@ chrome.tabs
     .then(tabs => {
         activeTab = tabs[0];
     });
-
-/**
- * Ideas:
- *
- * Sync logins with json in S3
- * Filters for different settings
- * Delete single custom login
- */
-// @todo: loader while tab / sync
-// @todo: make more failsafe
 
 /**
  * Get all categories for a given set of logins.
@@ -488,7 +495,7 @@ const syncFromRemoteUrl = async (url) => {
 /**
  * Shows a toast notification.
  * @param {string} message
- * @param {"success" | "error"}type
+ * @param {"success" | "error"} type
  */
 const addToastNotification = (message, type) => {
     /** @type {HTMLTemplateElement | null} */
