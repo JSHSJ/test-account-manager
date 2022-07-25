@@ -33,7 +33,7 @@ let activeTab;
 
 /**
  * Options
- * 
+ *
  * @typedef {{
  *  autoLogin: boolean;
  *  remoteUrl: string;
@@ -55,7 +55,7 @@ const activeFilters = new Map();
 
 /**
  * Create a new entry for a login
- * @param {Login} login 
+ * @param {Login} login
  * @returns Returns an login entry row as HTMLElement
  */
 const createEntry = (login) => {
@@ -100,7 +100,7 @@ const createEntry = (login) => {
 
 /**
  * Checks if a certain Login matches active filters.
- * @param {Login} login 
+ * @param {Login} login
  * @returns {boolean} Returns true if Login is matching active filters.
  */
 const isMatchingActiveFilters = (login) => {
@@ -186,6 +186,15 @@ const initNavigateButtons = () => {
     navLinks[0].click()
 }
 
+const navigateToLogins = () => {
+    /** @type {HTMLAnchorElement | null} */
+    const loginLink = document.querySelector("[data-target='logins']");
+
+    if (loginLink) {
+        loginLink.click()
+    }
+}
+
 /**
  * Initialise the upload input.
  *
@@ -230,6 +239,7 @@ const initUpload = () => {
                         console.log('saved custom logins')
                     })
                     updateDisplay()
+                    navigateToLogins()
                 }
             });
             if (uploadInput.files && uploadInput.files.length > 0) {
@@ -272,19 +282,20 @@ const saveOptions = async () => {
 const loadOptions = async () => {
     // @ts-ignore-next-line
     const result = await chrome.storage.sync.get(['pwmLoginOptions']);
-    console.log(result)
-        if (result.pwmLoginOptions) {
-            options = result.pwmLoginOptions
-        }
+    if (result.pwmLoginOptions) {
+       options = result.pwmLoginOptions
+    }
 }
 
 const loadCustomLogins = async () => {
     // @ts-ignore-next-line
     const result = await chrome.storage.sync.get(['pwmLoginCreds']);
     if (result.pwmLoginCreds) {
-            customLogins = result.pwmLoginCreds
+        customLogins = result.pwmLoginCreds
     }
 }
+
+const names = ['handsome', 'friend', 'stranger', 'gorgeous']
 
 const init = async () => {
     await loadCustomLogins()
@@ -296,15 +307,17 @@ const init = async () => {
     initAutoLogin()
     initNavigateButtons()
     initCategories()
-    addToastNotification("Hi there, handsome!", "success")
+    if (Math.random() < 0.1) {
+        addToastNotification(`Hi there, ${names[Math.floor(Math.random()*names.length)]}!`, "success")
+    }
 }
 
 init();
 
 /**
  * Copy text to clipboard
- * @param {string} text 
- * @param {string} itemText 
+ * @param {string} text
+ * @param {string} itemText
  */
 const copyToClipboard = (text, itemText) => {
     const type = "text/plain";
@@ -318,7 +331,7 @@ const copyToClipboard = (text, itemText) => {
         },
         function () {
             /* failure */
-            console.log(`Could not copy ${itemText} to clipboard!`, "error")
+            addToastNotification(`Could not copy ${itemText} to clipboard!`, "error")
         }
     );
 }
@@ -340,9 +353,9 @@ const autoFillLogin = async ({
 }
 
 /**
- * 
- * @param {Login["username"]} username 
- * @param {Login["password"]} password 
+ *
+ * @param {Login["username"]} username
+ * @param {Login["password"]} password
  * @param {Options} opts
  * @returns {undefined}
  */
@@ -472,7 +485,7 @@ const initRemoteLogins = async () => {
         saveOptions();
         await syncFromRemoteUrl(url);
         addToastNotification("Loaded accounts from remote URL!", "success");
-        window.location.hash = 'logins';
+        navigateToLogins()
     })
 
 }
