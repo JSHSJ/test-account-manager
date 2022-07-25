@@ -1,6 +1,7 @@
-# Password Manager (Working title)
+![TestAccountManager header image](header.jpg)
+# Testaccount Manager
 
-Simple password manager (like the ones you already use) for Chromium based browsers. 
+Simple testaccount manager or password manager (like the ones you already use) for Chromium based browsers. 
 
 ## Features
 
