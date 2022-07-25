@@ -1,7 +1,7 @@
 ![TestAccountManager header image](header.jpg)
 # Testaccount Manager
 
-Simple testaccount manager or password manager (like the ones you already use) for Chromium based browsers. 
+Simple testaccount manager or password manager (like the ones you already use) for Chromium based browsers.
 
 ## Features
 
@@ -16,12 +16,16 @@ Simple testaccount manager or password manager (like the ones you already use) f
 
 ## Login Format
 
-{
- username: string;
- password: string;
- description: string;
- categories: Record<string, string>;
-}}
+```js
+/**
+ * @typedef {{
+ *  username: string;
+ *  password: string;
+ *  description: string;
+ *  categories: Record<string, string>;
+ * }} Login
+ */
+```
 
 An example would be:
 
