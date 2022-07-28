@@ -216,6 +216,7 @@ const initUpload = () => {
         // @ts-ignore-next-line
         chrome.storage.sync.remove("pwmLoginCreds")
         customLogins = []
+        addToastNotification("Uploaded accounts deleted!", "success")
         updateDisplay()
     }
 
@@ -365,18 +366,24 @@ const attemptAutoFill = (username, password, opts) => {
     /** @type {HTMLInputElement | null} */
     const passwordInput = document.querySelector("[autocomplete='current-password']")
 
-    if (!usernameInput || !passwordInput) {
-        return
+    /**
+     * Fill out the given field with the given value.
+     * @param input {HTMLInputElement}
+     * @param value {string}
+     */
+    const fillOutField = (input, value) => {
+        const inputEvent = new Event("input", {bubbles: true})
+        input.value = value
+        input.dispatchEvent(inputEvent)
     }
 
-    const usernameInputEvent = new Event("input", {bubbles: true})
-    const passwordInputEvent = new Event("input", {bubbles: true})
+    if (usernameInput) {
+        fillOutField(usernameInput, username)
+    }
 
-    usernameInput.value = username
-    passwordInput.value = password
-
-    usernameInput.dispatchEvent(usernameInputEvent)
-    passwordInput.dispatchEvent(passwordInputEvent)
+    if (passwordInput) {
+        fillOutField(passwordInput, password)
+    }
 
     if (opts.autoLogin) {
     /** @type {HTMLButtonElement | null} */
