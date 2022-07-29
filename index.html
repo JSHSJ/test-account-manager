@@ -1241,7 +1241,7 @@
             padding: var(--size-xs);
             display: grid;
             grid: 
-                "details more" auto
+                "details auto more" auto
                 / 1fr auto;
             grid-column-gap: var(--size-xs);
             grid-row-gap: var(--size-xs);
@@ -1252,14 +1252,23 @@
 
         .button-more {
             grid-area: more;
+            padding-inline: 0;
         }
 
-        .button-more > svg {
-            transition: transform 0.3s var(--ease-squish-4);
+        .auto-fill {
+            grid-area: auto;
+            color: var(--blue-6);
+            text-shadow: 0 1px 0 var(--blue-2);
+        }
+        
+        .auto-fill:hover {
+            background-color: var(--blue-1);
         }
 
-        .open > .button-more > svg {
-            transform: rotate(90deg);
+        @media (prefers-color-scheme: dark) {
+            .auto-fill:hover {
+                background-color: var(--gray-8);
+            }
         }
 
         .login-details {
@@ -1672,8 +1681,13 @@
             <span><strong class="description"></strong></span>
             <span><small class="username"></small></span>
         </div>
+        <button class="auto-fill" aria-label="Autofill / Login" title="Autofill / Login">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 3c-4.625 0-8.442 3.507-8.941 8.001H10v-3l5 4-5 4v-3H3.06C3.56 17.494 7.376 21 12 21c4.963 0 9-4.037 9-9s-4.037-9-9-9z"/>
+            </svg>
+        </button>
         <button class="button-more" aria-label="More" title="Show More">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M 12.96875 4.28125 L 11.53125 5.71875 L 21.8125 16 L 11.53125 26.28125 L 12.96875 27.71875 L 23.96875 16.71875 L 24.65625 16 L 23.96875 15.28125 Z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M 16 6 C 14.894531 6 14 6.894531 14 8 C 14 9.105469 14.894531 10 16 10 C 17.105469 10 18 9.105469 18 8 C 18 6.894531 17.105469 6 16 6 Z M 16 14 C 14.894531 14 14 14.894531 14 16 C 14 17.105469 14.894531 18 16 18 C 17.105469 18 18 17.105469 18 16 C 18 14.894531 17.105469 14 16 14 Z M 16 22 C 14.894531 22 14 22.894531 14 24 C 14 25.105469 14.894531 26 16 26 C 17.105469 26 18 25.105469 18 24 C 18 22.894531 17.105469 22 16 22 Z"/></svg>
         </button>
         <div class="login-footer">
             <div class="login-actions">
