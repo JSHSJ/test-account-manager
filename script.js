@@ -1,5 +1,5 @@
 // @ts-check
-
+'use strict';
 /**
  * @authors Joshua Stübner & Lukas Koeller
  */
@@ -13,6 +13,10 @@
  *  categories: Record<string, string>;
  * }} Login
  *
+ */
+
+
+/**
  * @type {Login[]}
  */
 let remoteLogins = [];
@@ -42,7 +46,7 @@ let activeTab;
  */
 let options = {
     autoLogin: false,
-    remoteUrl: ''
+    remoteUrl: '',
 }
 
 /**
@@ -56,7 +60,7 @@ const activeFilters = new Map();
 /**
  * Create a new entry for a login
  * @param {Login} login
- * @returns Returns an login entry row as HTMLElement
+ * @returns Returns a login entry row as HTMLElement
  */
 const createEntry = (login) => {
     const template = document.querySelector("#login-template");
@@ -66,7 +70,7 @@ const createEntry = (login) => {
     }
 
     /** @type {HTMLElement} */
-    // @ts-ignore seems to not be solvable in ts-check
+        // @ts-ignore seems to not be solvable in ts-check
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
     /** @type {HTMLSpanElement | null} */
@@ -112,8 +116,7 @@ const isMatchingActiveFilters = (login) => {
     for (const [key, value] of activeFilters) {
         matches.push(login.categories?.[key] === value);
     }
-    const isMatch = !matches.includes(false);
-    return isMatch;
+    return !matches.includes(false);
 }
 
 /**
@@ -135,8 +138,17 @@ const updateDisplay = () => {
 
     // render predefined logins
     allLogins
-        .filter(login => login.username.includes(search) || login.description.includes(search))
-        .filter(isMatchingActiveFilters)
+        .filter(login =>
+            // check username
+            login.username.toLowerCase().includes(search.toLowerCase())
+            // check description
+            || login.description.toLowerCase().includes(search.toLowerCase())
+            // check if any of the category values matches the search
+            || (login.categories
+                && Object.values(login.categories)
+                    .some(catValue =>
+                        catValue.toLowerCase().includes(search.toLowerCase())))
+        ).filter(isMatchingActiveFilters)
         .forEach(login => {
             const clone = createEntry(login)
             if (clone) {
@@ -234,7 +246,7 @@ const initUpload = () => {
 
     deleteCustomLogins.onclick = () => {
         // @ts-ignore-next-line
-        chrome.storage.sync.remove("pwmLoginCreds")
+        chrome.storage.sync.remove("tamLoginCreds")
         customLogins = []
         addToastNotification("Uploaded accounts deleted!", "success")
         updateDisplay()
@@ -255,10 +267,11 @@ const initUpload = () => {
                     // upload for persistence
                     // @ts-ignore-next-line
                     chrome.storage.sync.set({
-                        pwmLoginCreds: customLogins
+                        tamLoginCreds: customLogins
                     }, () => {
                         console.log('saved custom logins')
                     })
+                    initCategories()
                     updateDisplay()
                     navigateToLogins()
                 }
@@ -293,26 +306,49 @@ const initAutoLogin = () => {
 const saveOptions = async () => {
     // @ts-ignore-next-line
     await chrome.storage.sync.set({
-            pwmLoginOptions: options
+            tamLoginOptions: options
         }, () => {
             console.log('saved options')
         }
-        )
+    )
 }
 
 const loadOptions = async () => {
     // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['pwmLoginOptions']);
-    if (result.pwmLoginOptions) {
-       options = result.pwmLoginOptions
+    const result = await chrome.storage.sync.get(['tamLoginOptions']);
+    if (result.tamLoginOptions) {
+        options = result.tamLoginOptions
+    }
+}
+
+const saveFilters = async () => {
+    const filterValues = Object.fromEntries(activeFilters)
+    // @ts-ignore-next-line
+    await chrome.storage.sync.set({
+            tamFilters: filterValues
+        }, () => {
+            console.log('saved filters', filterValues)
+        }
+    )
+}
+
+const loadFilters = async () => {
+    // @ts-ignore-next-line
+    const result = await chrome.storage.sync.get(['tamFilters']);
+    if (result.tamFilters) {
+        console.log('loaded filters', result.tamFilters)
+        Object.entries(result.tamFilters).forEach(([key, value]) => {
+            activeFilters.set(key, value)
+            console.log(activeFilters)
+        })
     }
 }
 
 const loadCustomLogins = async () => {
     // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['pwmLoginCreds']);
-    if (result.pwmLoginCreds) {
-        customLogins = result.pwmLoginCreds
+    const result = await chrome.storage.sync.get(['tamLoginCreds']);
+    if (result.tamLoginCreds) {
+        customLogins = result.tamLoginCreds
     }
 }
 
@@ -322,15 +358,17 @@ const init = async () => {
     await loadCustomLogins()
     await loadOptions()
     await initRemoteLogins()
+    await loadFilters()
     updateDisplay()
     initUpload()
     initSearch()
     initAutoLogin()
     initNavigateButtons()
+    initCategoryMenu();
     initCategories()
     initItemToggle()
     if (Math.random() < 0.1) {
-        addToastNotification(`Hi there, ${names[Math.floor(Math.random()*names.length)]}!`, "success")
+        addToastNotification(`Hi there, ${names[Math.floor(Math.random() * names.length)]}!`, "success")
     }
 }
 
@@ -362,10 +400,10 @@ const copyToClipboard = (text, itemText) => {
  * Trigger auto fill function in DOM.
  */
 const autoFillLogin = async ({
-    tab,
-    username,
-    password
-}) => {
+                                 tab,
+                                 username,
+                                 password
+                             }) => {
     // @ts-ignore-next-line
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -406,7 +444,7 @@ const attemptAutoFill = (username, password, opts) => {
     }
 
     if (opts.autoLogin) {
-    /** @type {HTMLButtonElement | null} */
+        /** @type {HTMLButtonElement | null} */
         const submitButton = document.querySelector("[type='submit']")
         if (submitButton) {
             submitButton.click()
@@ -417,7 +455,7 @@ const attemptAutoFill = (username, password, opts) => {
 // get active tab
 // @ts-ignore-next-line
 chrome.tabs
-    .query({ active: true, currentWindow: true })
+    .query({active: true, currentWindow: true})
     .then(tabs => {
         activeTab = tabs[0];
     });
@@ -432,9 +470,9 @@ const getCategories = () => {
 
     const allLogins = [...customLogins, ...remoteLogins];
 
-    allLogins.forEach(({ categories }) => {
+    allLogins.forEach(({categories}) => {
         Object.entries(categories).forEach(([key, value]) => {
-            if (key in categoryCollection) {
+            if (key in categoryCollection && !categoryCollection[key].includes(value)) {
                 categoryCollection[key].push(value);
                 return;
             }
@@ -442,8 +480,102 @@ const getCategories = () => {
         });
     });
 
-    return categoryCollection;
+    return categoryCollection
 };
+
+const initCategoryMenu = () => {
+    /** @type {HTMLButtonElement | null} */
+    const categoryToggle = document.querySelector(".categories-toggle");
+    /** @type {HTMLDialogElement | null} */
+    const categoryDialog = document.querySelector(".categories-dialog");
+    /** @type {HTMLButtonElement | null} */
+    const categoryClose = document.getElementById("categories-close");
+
+    if (!categoryToggle || !categoryClose || !categoryDialog) {
+        return;
+    }
+
+    categoryToggle.onclick = () => {
+        categoryDialog.showModal();
+    }
+
+    categoryClose.onclick = () => {
+        categoryDialog.close('')
+    }
+
+    /** @type {HTMLButtonElement | null} */
+    const submitFilter = categoryDialog.querySelector("[type='submit']");
+    /** @type {HTMLButtonElement | null} */
+    const resetFilter = categoryDialog.querySelector("[type='reset']");;
+
+    if (!submitFilter || !resetFilter) {
+        return;
+    }
+
+    submitFilter.onclick = async () => {
+        await syncSelectsToActiveFilters();
+        updateDisplay();
+        categoryDialog.close('')
+    }
+
+    resetFilter.onclick = () => {
+        for (const key of activeFilters.keys()) {
+            activeFilters.delete(key)
+        }
+        syncActiveFiltersToSelects();
+        updateDisplay();
+    }
+}
+
+/**
+ * Create a category filter node.
+ *
+ * @param filterName {string}
+ * @param values {string[]}
+ */
+const createCategoryFilter = (filterName, values) => {
+        /** @type {HTMLTemplateElement | null} */
+    const template = document.getElementById("category-filter-template");
+
+    if (!template) {
+        return null;
+    }
+
+    /** @type {HTMLElement} */
+        // @ts-ignore seems to not be solvable in ts-check
+        const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
+
+        /** @type {HTMLSelectElement | null} */
+        const select = clone.querySelector("select")
+        /** @type {HTMLLabelElement | null} */
+        const label = clone.querySelector("label")
+
+        if (!select || !label) {
+            return null;
+        }
+
+        select.name = filterName;
+        select.id = `select-${filterName}`;
+        label.innerText = filterName;
+        label.htmlFor = `select-${filterName}`;;
+
+        // select.addEventListener('change', (e) => {
+        //     const {name, value} = /** @type {HTMLSelectElement} */ (e.target);
+        //     if (!value) activeFilters.delete(name)
+        //     else activeFilters.set(name, value);
+        //
+        //     updateDisplay();
+        // });
+
+        values.forEach((value) => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.text = value;
+            select.appendChild(option);
+        });
+
+        return clone;
+}
 
 /**
  * Mounts select elements to categories track.
@@ -452,41 +584,59 @@ const getCategories = () => {
  * for the selected categories.
  */
 const initCategories = () => {
-    const tab = document.querySelector('.categories__track');
+    /** @type {HTMLUListElement | null} */
+    const categoryList = document.querySelector(".categories-list");
+
+    if (!categoryList) {
+        return;
+    }
 
     const categories = getCategories();
 
-    Object.entries(categories).forEach(([ key, value ]) => {
-        const select = document.createElement('select');
-        select.name = key;
-
-        if (!tab) {
-            throw new Error('Could not find \'.categories__track\' in document.');
-        }
-
-        tab.appendChild(select);
-        const label = document.createElement('option');
-        label.text = key;
-        label.value = '';
-        // label.disabled = true;
-        label.selected = true;
-        select.appendChild(label);
-
-        select.addEventListener('change', (e) => {
-            const { name, value } = /** @type {HTMLSelectElement} */ (e.target);
-            if (!value) activeFilters.delete(name)
-            else activeFilters.set(name, value);
-
-            updateDisplay();
-        });
-
-        value.forEach((value) => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.text = value;
-            select.appendChild(option);
-        });
+    Object.entries(categories).forEach(([key, value]) => {
+        const selectElement = createCategoryFilter(key, value)
+        categoryList.appendChild(selectElement);
     });
+
+    syncActiveFiltersToSelects();
+}
+
+const syncActiveFiltersToSelects = () => {
+    /** @type {HTMLUListElement | null} */
+    const categoryList = document.querySelector(".categories-list");
+    /** @type {NodeListOf<HTMLSelectElement>} */
+    const categorySelects = categoryList.querySelectorAll("select");
+
+    if (!categorySelects.length) {
+        return;
+    }
+
+    categorySelects.forEach((select) => {
+        const {name, value} = /** @type {HTMLSelectElement} */ (select);
+        if (activeFilters.has(name)) {
+            select.value = activeFilters.get(name);
+        }
+    });
+}
+
+const syncSelectsToActiveFilters = async () => {
+    /** @type {HTMLUListElement | null} */
+    const categoryList = document.querySelector(".categories-list");
+    /** @type {NodeListOf<HTMLSelectElement>} */
+    const categorySelects = categoryList.querySelectorAll("select");
+
+    if (!categorySelects.length) {
+        return;
+    }
+
+    categorySelects.forEach((select) => {
+        const {name, value} = /** @type {HTMLSelectElement} */ (select);
+        if (value) {
+            activeFilters.set(name, value);
+        }
+    });
+
+    await saveFilters();
 }
 
 const initRemoteLogins = async () => {
@@ -524,8 +674,7 @@ const initRemoteLogins = async () => {
 const syncFromRemoteUrl = async (url) => {
     try {
         const response = await fetch(url);
-        const json = await response.json();
-        remoteLogins = json;
+        remoteLogins = await response.json();
         updateDisplay();
     } catch (e) {
         addToastNotification("Remote sync failed!", "error")
@@ -548,7 +697,7 @@ const addToastNotification = (message, type) => {
     }
 
     /** @type {HTMLElement} */
-    // @ts-ignore seems to not be solvable in ts-check
+        // @ts-ignore seems to not be solvable in ts-check
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
     /** @type {HTMLOutputElement | null} */
