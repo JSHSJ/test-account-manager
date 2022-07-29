@@ -1108,6 +1108,53 @@
             / 1fr;
         }
 
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+        }
+
+        svg {
+            fill: currentColor;
+            stroke: none;
+        }
+
+        header {
+            border-bottom: var(--border-size-1) solid var(--surface-4);
+            display: grid;
+            grid-template: "search filters" auto / 1fr auto;
+        }
+
+        /**
+         * Page
+         */
+
+        .page {
+            width: 100%;
+            height: 100%;
+            min-width: 0;
+            max-height: 100%;
+            overflow-y: auto;
+            grid-area: page;
+            visibility: hidden;
+            z-index: 0;
+            position: relative;
+        }
+
+        .page:target {
+            visibility: visible;
+            z-index: 1;
+        }
+
+        :where(p,ul,ol,dl,h6) {
+            font-size: var(--font-size-1);
+        }
+
+        /**
+         * Navigation
+         */
+
         nav {
             grid-area: nav;
             display: grid;
@@ -1147,37 +1194,9 @@
             height: var(--border-size-1);
         }
 
-        svg {
-            fill: currentColor;
-            stroke: none;
-        }
-
-        header {
-            border-bottom: var(--border-size-1) solid var(--surface-4);
-            display: grid;
-            grid-template: "search filters" auto / 1fr auto;
-        }
-
-        .page {
-            width: 100%;
-            height: 100%;
-            min-width: 0;
-            max-height: 100%;
-            overflow-y: auto;
-            grid-area: page;
-            visibility: hidden;
-            z-index: 0;
-            position: relative;
-        }
-
-        .page:target {
-            visibility: visible;
-            z-index: 1;
-        }
-
-        :where(p,ul,ol,dl,h6) {
-            font-size: var(--font-size-1);
-        }
+        /**
+         * Login Page
+         */
 
         .login-container {
             overflow-y: auto;
@@ -1207,13 +1226,6 @@
             display: grid;
             grid-template: "search filters" auto / 1fr auto;
             gap: var(--size-xs);
-        }
-
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
         }
 
         .login-container li:not(:last-child) {
@@ -1275,7 +1287,6 @@
         }
 
         .login-footer {
-            /* grid-area: footer; */
             display: none;
         }
 
@@ -1288,7 +1299,9 @@
             min-inline-size: var(--size-lg);
         }
 
-        /** --- */
+        /**
+         * Search
+         */
 
         .search-container {
             display: grid;
@@ -1307,36 +1320,9 @@
             height: 100%;
         }
 
-        #options {
-            display: grid;
-            align-content: flex-start;
-        }
-
-        #options section {
-            padding: var(--size-sm) var(--size-xs);
-            display: grid;
-            gap: var(--size-sm);
-        }
-
-        #options section:not(:last-child) {
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .checkbox {
-            display: grid;
-            grid-template: "label check" 1fr / 1fr auto;
-            cursor: pointer;
-            gap: var(--size-xs);
-            align-items: center;
-        }
-
-        .checkbox span {
-            grid-area: label;
-        }
-
-        .checkbox input {
-            grid-area: check;
-        }
+        /**
+         * Filter
+         */
 
         .categories-dialog {
             --category-inline-padding: var(--size-xs);
@@ -1445,17 +1431,53 @@
             padding: var(--category-inline-padding);
         }
 
-        .accounts-list {
+        /**
+         * Options
+         */
+
+        #options {
             display: grid;
-            gap: var(--size-md);
+            align-content: flex-start;
         }
 
-        .accounts-list-item {
+        #options section {
+            padding: var(--size-sm) var(--size-xs);
+            display: grid;
+            gap: var(--size-sm);
+        }
+
+        #options section:not(:last-child) {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .checkbox {
+            display: grid;
+            grid-template: "label check" 1fr / 1fr auto;
+            cursor: pointer;
+            gap: var(--size-xs);
+            align-items: center;
+        }
+
+        .checkbox span {
+            grid-area: label;
+        }
+
+        .checkbox input {
+            grid-area: check;
+        }
+
+
+        .options-section {
             display: grid;
             gap: var(--size-sm);
             border: var(--border-size-1) solid var(--border-color);
             padding: var(--size-sm);
             border-radius: var(--radius-2);
+        }
+
+        .options-section > :is(h1,h2,h3,h4,h5,h6) {
+            font-weight: var(--font-weight-6);
+            font-size: var(--font-size-1);
         }
 
         .options-box {
@@ -1467,6 +1489,10 @@
             display: grid;
             gap: var(--size-xxs);
         }
+        
+        /**
+         * Toast
+         */
 
         #toast-root {
             position: fixed;
@@ -1609,35 +1635,28 @@
 <!-- Option page start -->
 <div class="page" id="options">
     <section>
-        <label class="checkbox">
-            <span>Log in automatically</span>
-            <input type="checkbox" id="auto-login">
-        </label>
-    </section>
-    <section>
-        <h4>Accounts</h4>
-        <ul class="accounts-list">
-            <li class="accounts-list-item">
-                <h6>Uploaded accounts</h6>
-                <div class="options-box">
-                    <input type="file" accept=".json" id="upload">
-                    <button id="delete-custom-logins" type="reset">Delete uploaded accounts</button>
+        <div class="options-section">
+            <h4>Actions</h4>
+            <label class="checkbox">
+                <span>Log in automatically</span>
+                <input type="checkbox" id="auto-login">
+            </label>
+        </div>
+        <div class="options-section">
+            <h4>Accounts</h4>
+            <div class="options-box">
+                <label for="upload">Upload from file</label>
+                <input type="file" accept=".json" id="upload">
+                <button id="delete-custom-logins" type="reset">Delete uploaded accounts</button>
+            </div>
+            <div class="options-box">
+                <div class="input-field">
+                    <label for="remote-url">Upload from URL</label>
+                    <input type="text" name="remote-url" id="remote-url" placeholder="https://...">
                 </div>
-            </li>
-            <li class="accounts-list-item">
-                <h6>Remote accounts</h6>
-                <div
-                        class="options-box"
-                >
-                    <div class="input-field">
-                        <label>Remote Url</label>
-                        <input type="text" name="remote-url" id="remote-url" placeholder="https://...">
-                    </div>
-                    <button type="button" id="sync-remote">Sync</button>
-                </div>
-            </li>
-        </ul>
-
+                <button type="button" id="sync-remote">Sync</button>
+            </div>
+        </div>
     </section>
 </div>
 <!-- Option page end -->
