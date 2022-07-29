@@ -1240,7 +1240,7 @@
             padding: 0;
             padding: var(--size-xs);
             display: grid;
-            grid: 
+            grid:
                 "details auto more" auto
                 / 1fr auto;
             grid-column-gap: var(--size-xs);
@@ -1260,7 +1260,7 @@
             color: var(--blue-6);
             text-shadow: 0 1px 0 var(--blue-2);
         }
-        
+
         .auto-fill:hover {
             background-color: var(--blue-1);
         }
@@ -1498,7 +1498,7 @@
             display: grid;
             gap: var(--size-xxs);
         }
-        
+
         /**
          * Toast
          */
@@ -1603,6 +1603,7 @@
                 aria-haspopup="true"
                 aria-expanded="false"
                 aria-label="Toggle category filters"
+                title="Toggle category filters"
         >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M13 20v-4.586L20.414 8c.375-.375.586-.884.586-1.415V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2.585c0 .531.211 1.04.586 1.415L11 15.414V22l2-2z"/>
@@ -1624,19 +1625,15 @@
     <form method="dialog" class="categories-content">
         <header>
             <h3 id="category-label">Category filters</h3>
-            <button id="categories-close" class="button-round" type="button" aria-label="Close category filters">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"/>
-                </svg>
-            </button>
+            <button type="reset">Reset</button>
         </header>
         <ul class="categories-list">
             <!-- categories go here -->
             <i>No categories found.</i>
         </ul>
         <footer class="categories-dialog-actions">
-            <button type="submit">Filter</button>
-            <button type="reset">Reset</button>
+            <button type="submit">Apply filters</button>
+            <button type="button" class="categories-close">Cancel</button>
         </footer>
     </form>
 </dialog>
