@@ -205,15 +205,19 @@ const initItemToggle = () => {
     if (!moreButtons) throw new Error('".button-more" could not be found.');
 
     moreButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const item = button?.parentElement;
-            const activeItem = document.querySelector('.open');
+        button.addEventListener(
+            'click',
+            /** @type {Event} */
+            (event) => {
+                event.stopPropagation();
+                const item = button?.parentElement;
+                const activeItem = document.querySelector('.open');
 
-            if (activeItem !== item) {
-                activeItem?.classList.remove('open');
-            }
-            item?.classList.toggle('open');
-        });
+                if (activeItem !== item) {
+                    activeItem?.classList.remove('open');
+                }
+                item?.classList.toggle('open');
+            });
     });
 
 }
