@@ -13,6 +13,10 @@
  *  categories: Record<string, string>;
  * }} Login
  *
+ */
+
+
+/**
  * @type {Login[]}
  */
 let remoteLogins = [];
@@ -66,7 +70,7 @@ const createEntry = (login) => {
     }
 
     /** @type {HTMLElement} */
-    // @ts-ignore seems to not be solvable in ts-check
+        // @ts-ignore seems to not be solvable in ts-check
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
     /** @type {HTMLSpanElement | null} */
@@ -112,8 +116,7 @@ const isMatchingActiveFilters = (login) => {
     for (const [key, value] of activeFilters) {
         matches.push(login.categories?.[key] === value);
     }
-    const isMatch = !matches.includes(false);
-    return isMatch;
+    return !matches.includes(false);
 }
 
 /**
@@ -135,8 +138,17 @@ const updateDisplay = () => {
 
     // render predefined logins
     allLogins
-        .filter(login => login.username.includes(search) || login.description.includes(search))
-        .filter(isMatchingActiveFilters)
+        .filter(login =>
+            // check username
+            login.username.toLowerCase().includes(search.toLowerCase())
+            // check description
+            || login.description.toLowerCase().includes(search.toLowerCase())
+            // check if any of the category values matches the search
+            || (login.categories
+                && Object.values(login.categories)
+                    .some(catValue =>
+                        catValue.toLowerCase().includes(search.toLowerCase())))
+        ).filter(isMatchingActiveFilters)
         .forEach(login => {
             const clone = createEntry(login)
             if (clone) {
@@ -277,14 +289,14 @@ const saveOptions = async () => {
         }, () => {
             console.log('saved options')
         }
-        )
+    )
 }
 
 const loadOptions = async () => {
     // @ts-ignore-next-line
     const result = await chrome.storage.sync.get(['pwmLoginOptions']);
     if (result.pwmLoginOptions) {
-       options = result.pwmLoginOptions
+        options = result.pwmLoginOptions
     }
 }
 
@@ -309,7 +321,7 @@ const init = async () => {
     initNavigateButtons()
     initCategories()
     if (Math.random() < 0.1) {
-        addToastNotification(`Hi there, ${names[Math.floor(Math.random()*names.length)]}!`, "success")
+        addToastNotification(`Hi there, ${names[Math.floor(Math.random() * names.length)]}!`, "success")
     }
 }
 
@@ -341,10 +353,10 @@ const copyToClipboard = (text, itemText) => {
  * Trigger auto fill function in DOM.
  */
 const autoFillLogin = async ({
-    tab,
-    username,
-    password
-}) => {
+                                 tab,
+                                 username,
+                                 password
+                             }) => {
     // @ts-ignore-next-line
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -386,7 +398,7 @@ const attemptAutoFill = (username, password, opts) => {
     }
 
     if (opts.autoLogin) {
-    /** @type {HTMLButtonElement | null} */
+        /** @type {HTMLButtonElement | null} */
         const submitButton = document.querySelector("[type='submit']")
         if (submitButton) {
             submitButton.click()
@@ -397,7 +409,7 @@ const attemptAutoFill = (username, password, opts) => {
 // get active tab
 // @ts-ignore-next-line
 chrome.tabs
-    .query({ active: true, currentWindow: true })
+    .query({active: true, currentWindow: true})
     .then(tabs => {
         activeTab = tabs[0];
     });
@@ -412,7 +424,7 @@ const getCategories = () => {
 
     const allLogins = [...customLogins, ...remoteLogins];
 
-    allLogins.forEach(({ categories }) => {
+    allLogins.forEach(({categories}) => {
         Object.entries(categories).forEach(([key, value]) => {
             if (key in categoryCollection && !categoryCollection[key].includes(value)) {
                 categoryCollection[key].push(value);
@@ -436,7 +448,7 @@ const initCategories = () => {
 
     const categories = getCategories();
 
-    Object.entries(categories).forEach(([ key, value ]) => {
+    Object.entries(categories).forEach(([key, value]) => {
         const select = document.createElement('select');
         select.name = key;
 
@@ -453,7 +465,7 @@ const initCategories = () => {
         select.appendChild(label);
 
         select.addEventListener('change', (e) => {
-            const { name, value } = /** @type {HTMLSelectElement} */ (e.target);
+            const {name, value} = /** @type {HTMLSelectElement} */ (e.target);
             if (!value) activeFilters.delete(name)
             else activeFilters.set(name, value);
 
@@ -504,8 +516,7 @@ const initRemoteLogins = async () => {
 const syncFromRemoteUrl = async (url) => {
     try {
         const response = await fetch(url);
-        const json = await response.json();
-        remoteLogins = json;
+        remoteLogins = await response.json();
         updateDisplay();
     } catch (e) {
         addToastNotification("Remote sync failed!", "error")
@@ -528,7 +539,7 @@ const addToastNotification = (message, type) => {
     }
 
     /** @type {HTMLElement} */
-    // @ts-ignore seems to not be solvable in ts-check
+        // @ts-ignore seems to not be solvable in ts-check
     const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
     /** @type {HTMLOutputElement | null} */
