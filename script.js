@@ -422,10 +422,10 @@ const copyToClipboard = (text, itemText) => {
  * Trigger auto fill function in DOM.
  */
 const autoFillLogin = async ({
-                                 tab,
-                                 username,
-                                 password
-                             }) => {
+    tab,
+    username,
+    password
+}) => {
     // @ts-ignore-next-line
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -494,7 +494,9 @@ const getCategories = () => {
 
     allLogins.forEach(({categories}) => {
         Object.entries(categories).forEach(([key, value]) => {
-            if (key in categoryCollection && !categoryCollection[key].includes(value)) {
+            if (key in categoryCollection) {
+                if (categoryCollection[key].includes(value)) return;
+
                 categoryCollection[key].push(value);
                 return;
             }
