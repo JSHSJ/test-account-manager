@@ -78,7 +78,7 @@ const createEntry = (login) => {
     /** @type {HTMLButtonElement | null} */
     const copyPasswordButton = clone.querySelector(".copy-password")
     /** @type {HTMLButtonElement | null} */
-    const autoFillButton = clone.querySelector(".auto-fill")
+    const autoFillButton = clone.querySelector(".login-item")
 
     if (!tUsername || !tDescription || !copyUsernameButton || !copyPasswordButton || !autoFillButton) {
         return null;
@@ -184,6 +184,26 @@ const initNavigateButtons = () => {
     )
 
     navLinks[0].click()
+}
+
+const initItemToggle = () => {
+    /** @type {NodeListOf<HTMLButtonElement> | null} */
+    const moreButtons = document.querySelectorAll('.button-more');
+
+    if (!moreButtons) throw new Error('".button-more" could not be found.');
+
+    moreButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const item = button?.parentElement;
+            const activeItem = document.querySelector('.open');
+
+            if (activeItem !== item) {
+                activeItem?.classList.remove('open');
+            }
+            item?.classList.toggle('open');
+        });
+    });
+
 }
 
 const navigateToLogins = () => {
@@ -308,6 +328,7 @@ const init = async () => {
     initAutoLogin()
     initNavigateButtons()
     initCategories()
+    initItemToggle()
     if (Math.random() < 0.1) {
         addToastNotification(`Hi there, ${names[Math.floor(Math.random()*names.length)]}!`, "success")
     }
@@ -358,7 +379,6 @@ const autoFillLogin = async ({
  * @param {Login["username"]} username
  * @param {Login["password"]} password
  * @param {Options} opts
- * @returns {undefined}
  */
 const attemptAutoFill = (username, password, opts) => {
     /** @type {HTMLInputElement | null} */
