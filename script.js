@@ -414,7 +414,7 @@ const getCategories = () => {
 
     allLogins.forEach(({ categories }) => {
         Object.entries(categories).forEach(([key, value]) => {
-            if (key in categoryCollection) {
+            if (key in categoryCollection && !categoryCollection[key].includes(value)) {
                 categoryCollection[key].push(value);
                 return;
             }
@@ -422,7 +422,7 @@ const getCategories = () => {
         });
     });
 
-    return categoryCollection;
+    return categoryCollection
 };
 
 /**
