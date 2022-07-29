@@ -82,7 +82,7 @@ const createEntry = (login) => {
     /** @type {HTMLButtonElement | null} */
     const copyPasswordButton = clone.querySelector(".copy-password")
     /** @type {HTMLButtonElement | null} */
-    const autoFillButton = clone.querySelector(".login-item")
+    const autoFillButton = clone.querySelector(".auto-fill")
     /** @type {HTMLButtonElement | null} */
     const categories = clone.querySelector(".login-categories")
 
@@ -93,16 +93,8 @@ const createEntry = (login) => {
     tUsername.innerText = login.username;
     tDescription.innerText = login.description;
     tDescription.title = login.description;
-    /** @param {Event} event */
-    copyUsernameButton.onclick = (event) => {
-        event.stopPropagation();
-        copyToClipboard(login.username, 'Username');
-    };
-    /** @param {Event} event */
-    copyPasswordButton.onclick = (event) => {
-        event.stopPropagation();
-        copyToClipboard(login.password, 'Password');
-    };
+    copyUsernameButton.onclick = () => copyToClipboard(login.username, 'Username');
+    copyPasswordButton.onclick = () => copyToClipboard(login.password, 'Password');
     autoFillButton.onclick = () => autoFillLogin({
         tab: activeTab,
         username: login.username,
@@ -223,19 +215,15 @@ const initItemToggle = () => {
     if (!moreButtons) throw new Error('".button-more" could not be found.');
 
     moreButtons.forEach((button) => {
-        button.addEventListener(
-            'click',
-            /** @type {Event} */
-            (event) => {
-                event.stopPropagation();
-                const item = button?.parentElement;
-                const activeItem = document.querySelector('.open');
+        button.addEventListener('click', () => {
+            const item = button?.parentElement;
+            const activeItem = document.querySelector('.open');
 
-                if (activeItem !== item) {
-                    activeItem?.classList.remove('open');
-                }
-                item?.classList.toggle('open');
-            });
+            if (activeItem !== item) {
+                activeItem?.classList.remove('open');
+            }
+            item?.classList.toggle('open');
+        });
     });
 
 }
@@ -358,10 +346,8 @@ const loadFilters = async () => {
     // @ts-ignore-next-line
     const result = await chrome.storage.sync.get(['tamFilters']);
     if (result.tamFilters) {
-        console.log('loaded filters', result.tamFilters)
         Object.entries(result.tamFilters).forEach(([key, value]) => {
             activeFilters.set(key, value)
-            console.log(activeFilters)
         })
     }
 }
