@@ -91,8 +91,16 @@ const createEntry = (login) => {
     tUsername.innerText = login.username;
     tDescription.innerText = login.description;
     tDescription.title = login.description;
-    copyUsernameButton.onclick = () => copyToClipboard(login.username, 'Username')
-    copyPasswordButton.onclick = () => copyToClipboard(login.password, 'Password')
+    /** @param {Event} event */
+    copyUsernameButton.onclick = (event) => {
+        event.stopPropagation();
+        copyToClipboard(login.username, 'Username');
+    };
+    /** @param {Event} event */
+    copyPasswordButton.onclick = (event) => {
+        event.stopPropagation();
+        copyToClipboard(login.password, 'Password');
+    };
     autoFillButton.onclick = () => autoFillLogin({
         tab: activeTab,
         username: login.username,
