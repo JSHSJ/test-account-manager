@@ -83,8 +83,10 @@ const createEntry = (login) => {
     const copyPasswordButton = clone.querySelector(".copy-password")
     /** @type {HTMLButtonElement | null} */
     const autoFillButton = clone.querySelector(".login-item")
+    /** @type {HTMLButtonElement | null} */
+    const categories = clone.querySelector(".login-categories")
 
-    if (!tUsername || !tDescription || !copyUsernameButton || !copyPasswordButton || !autoFillButton) {
+    if (!tUsername || !tDescription || !copyUsernameButton || !copyPasswordButton || !autoFillButton || !categories) {
         return null;
     }
 
@@ -106,6 +108,14 @@ const createEntry = (login) => {
         username: login.username,
         password: login.password
     })
+
+    if (login.categories) {
+        for (const [key, value] of Object.entries(login.categories)) {
+            const category = document.createElement("li");
+            category.innerText = value;
+            categories.appendChild(category);
+        }
+    }
 
     return clone
 }
@@ -501,7 +511,7 @@ const initCategoryMenu = () => {
     /** @type {HTMLDialogElement | null} */
     const categoryDialog = document.querySelector(".categories-dialog");
     /** @type {HTMLButtonElement | null} */
-    const categoryClose = document.getElementById("categories-close");
+    const categoryClose = document.querySelector(".categories-close");
 
     if (!categoryToggle || !categoryClose || !categoryDialog) {
         return;
