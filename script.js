@@ -158,9 +158,9 @@ const updateDisplay = () => {
     allLogins
         .filter(login =>
             // check username
-            login.username.toLowerCase().includes(search.toLowerCase())
+            (login.username && login.username?.toLowerCase().includes(search.toLowerCase()))
             // check description
-            || login.description.toLowerCase().includes(search.toLowerCase())
+            || (login.description && login.description.toLowerCase().includes(search.toLowerCase()))
             // check if any of the category values matches the search
             || (login.categories
                 && Object.values(login.categories)
@@ -220,7 +220,9 @@ const initItemToggle = () => {
     /** @type {NodeListOf<HTMLButtonElement> | null} */
     const moreButtons = document.querySelectorAll('.button-more');
 
-    if (!moreButtons) throw new Error('".button-more" could not be found.');
+    if (!moreButtons) {
+        throw new Error('".button-more" could not be found.')
+    };
 
     moreButtons.forEach((button) => {
         button.addEventListener(
@@ -294,6 +296,7 @@ const initUpload = () => {
                         console.log('saved custom logins')
                     })
                     initCategories()
+                    initItemToggle()
                     updateDisplay()
                     navigateToLogins()
                 }
