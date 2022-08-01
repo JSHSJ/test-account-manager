@@ -214,7 +214,8 @@ const initItemToggle = () => {
 
     if (!moreButtons) {
         throw new Error('".button-more" could not be found.')
-    };
+    }
+    ;
 
     moreButtons.forEach((button) => {
         button.addEventListener('click', () => {
@@ -366,10 +367,18 @@ const loadCustomLogins = async () => {
 const names = ['handsome', 'friend', 'stranger', 'gorgeous']
 
 const init = async () => {
-    await loadCustomLogins()
-    await loadOptions()
-    await initRemoteLogins()
-    await loadFilters()
+    try {
+        await loadCustomLogins()
+        await loadOptions()
+        await initRemoteLogins()
+        await loadFilters()
+    } catch (e) {
+        console.error(e)
+    }
+
+}
+
+init().then(() => {
     updateDisplay()
     initUpload()
     initSearch()
@@ -378,12 +387,11 @@ const init = async () => {
     initCategoryMenu();
     initCategories()
     initItemToggle()
+    hideLoader()
     if (Math.random() < 0.1) {
         addToastNotification(`Hi there, ${names[Math.floor(Math.random() * names.length)]}!`, "success")
     }
-}
-
-init();
+})
 
 /**
  * Copy text to clipboard
@@ -411,10 +419,10 @@ const copyToClipboard = (text, itemText) => {
  * Trigger auto fill function in DOM.
  */
 const autoFillLogin = async ({
-    tab,
-    username,
-    password
-}) => {
+                                 tab,
+                                 username,
+                                 password
+                             }) => {
     // @ts-ignore-next-line
     chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -519,7 +527,8 @@ const initCategoryMenu = () => {
     /** @type {HTMLButtonElement | null} */
     const submitFilter = categoryDialog.querySelector("[type='submit']");
     /** @type {HTMLButtonElement | null} */
-    const resetFilter = categoryDialog.querySelector("[type='reset']");;
+    const resetFilter = categoryDialog.querySelector("[type='reset']");
+    ;
 
     if (!submitFilter || !resetFilter) {
         return;
@@ -547,7 +556,7 @@ const initCategoryMenu = () => {
  * @param values {string[]}
  */
 const createCategoryFilter = (filterName, values) => {
-        /** @type {HTMLTemplateElement | null} */
+    /** @type {HTMLTemplateElement | null} */
     const template = document.getElementById("category-filter-template");
 
     if (!template) {
@@ -556,38 +565,31 @@ const createCategoryFilter = (filterName, values) => {
 
     /** @type {HTMLElement} */
         // @ts-ignore seems to not be solvable in ts-check
-        const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
+    const clone = /** @type {HTMLTemplateElement} */ (template).content.cloneNode(true);
 
-        /** @type {HTMLSelectElement | null} */
-        const select = clone.querySelector("select")
-        /** @type {HTMLLabelElement | null} */
-        const label = clone.querySelector("label")
+    /** @type {HTMLSelectElement | null} */
+    const select = clone.querySelector("select")
+    /** @type {HTMLLabelElement | null} */
+    const label = clone.querySelector("label")
 
-        if (!select || !label) {
-            return null;
-        }
+    if (!select || !label) {
+        return null;
+    }
 
-        select.name = filterName;
-        select.id = `select-${filterName}`;
-        label.innerText = filterName;
-        label.htmlFor = `select-${filterName}`;;
+    select.name = filterName;
+    select.id = `select-${filterName}`;
+    label.innerText = filterName;
+    label.htmlFor = `select-${filterName}`;
+    ;
 
-        // select.addEventListener('change', (e) => {
-        //     const {name, value} = /** @type {HTMLSelectElement} */ (e.target);
-        //     if (!value) activeFilters.delete(name)
-        //     else activeFilters.set(name, value);
-        //
-        //     updateDisplay();
-        // });
+    values.forEach((value) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.text = value;
+        select.appendChild(option);
+    });
 
-        values.forEach((value) => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.text = value;
-            select.appendChild(option);
-        });
-
-        return clone;
+    return clone;
 }
 
 /**
@@ -660,23 +662,36 @@ const initRemoteLogins = async () => {
     if (input === null) throw new Error('Could not find selector \'#remote-url\'');
     if (syncButton === null) throw new Error('Could not find selector \'#sync-remote\'');
 
-    if (options.remoteUrl) {
-        input.value = options.remoteUrl;
-        await syncFromRemoteUrl(options.remoteUrl)
-    }
-
     syncButton.addEventListener('click', async () => {
         const url = input.value;
         if (!url) {
             return;
         }
 
-        options.remoteUrl = url;
-        saveOptions();
-        await syncFromRemoteUrl(url);
-        addToastNotification("Loaded accounts from remote URL!", "success");
-        navigateToLogins()
+        try {
+
+            showLoader()
+            options.remoteUrl = url;
+            saveOptions();
+            await syncFromRemoteUrl(url);
+            navigateToLogins()
+            hideLoader()
+            addToastNotification("Loaded accounts from remote URL!", "success");
+        } catch (e) {
+            hideLoader()
+        }
     })
+
+    try {
+
+        if (options.remoteUrl) {
+            input.value = options.remoteUrl;
+            await syncFromRemoteUrl(options.remoteUrl)
+        }
+    } catch (e) {
+        console.error(e);
+        addToastNotification("Failed to initialise remote logins", "error");
+    }
 
 }
 
@@ -691,6 +706,7 @@ const syncFromRemoteUrl = async (url) => {
         updateDisplay();
     } catch (e) {
         addToastNotification("Remote sync failed!", "error")
+        throw e
     }
 }
 
@@ -752,4 +768,30 @@ const addToastNotification = (message, type) => {
     }, 3000);
 
     root.appendChild(clone);
+}
+
+/**
+ * Show the loader.
+ */
+const showLoader = () => {
+    /** @type {HTMLDivElement | null} */
+    const loader = document.querySelector("#loader");
+    if (!loader) {
+        return;
+    }
+
+    loader.removeAttribute("hidden");
+}
+
+/**
+ * Hide the loader.
+ */
+const hideLoader = () => {
+    /** @type {HTMLDivElement | null} */
+    const loader = document.querySelector("#loader");
+    if (!loader) {
+        return;
+    }
+
+    loader.setAttribute("hidden", "");
 }
