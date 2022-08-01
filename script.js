@@ -701,7 +701,8 @@ const initRemoteLogins = async () => {
  */
 const syncFromRemoteUrl = async (url) => {
     try {
-        const response = await fetch(url);
+        // @todo: look up cache control headers
+        const response = await fetch(url, {cache: "no-cache"});
         remoteLogins = await response.json();
         updateDisplay();
     } catch (e) {
