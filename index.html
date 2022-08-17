@@ -1606,6 +1606,15 @@
             display: none;
         }
 
+        .buttons-aside {
+            display: flex;
+            gap: var(--size-xs);
+        }
+
+        #sync-remote {
+            flex-grow: 1;
+        }
+
     </style>
     <title>Testaccount Manager</title>
 </head>
@@ -1698,7 +1707,10 @@
                     <label for="remote-url">Upload from URL</label>
                     <input type="text" name="remote-url" id="remote-url" placeholder="https://...">
                 </div>
-                <button type="button" id="sync-remote">Sync</button>
+                <div class="buttons-aside">
+                    <button type="button" id="sync-remote">Sync</button>
+                    <button type="reset" id="delete-remote">Delete</button>
+                </div>
             </div>
         </div>
     </section>

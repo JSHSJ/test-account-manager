@@ -658,18 +658,30 @@ const initRemoteLogins = async () => {
     /** @type {HTMLInputElement | null} */
     const input = document.querySelector('#remote-url');
     const syncButton = document.querySelector('#sync-remote');
+    const syncDeleteButton = document.querySelector('#delete-remote');
 
     if (input === null) throw new Error('Could not find selector \'#remote-url\'');
     if (syncButton === null) throw new Error('Could not find selector \'#sync-remote\'');
+    if (syncDeleteButton === null) throw new Error('Could not find selector \'#delete-sync\'');
+
+    syncDeleteButton.addEventListener('click', async () => {
+            input.value = '';
+            options.remoteUrl = '';
+            await saveOptions();
+            addToastNotification("Removed remote sync!", "success");
+    })
 
     syncButton.addEventListener('click', async () => {
         const url = input.value;
+
         if (!url) {
-            return;
+            options.remoteUrl = '';
+            await saveOptions();
+            addToastNotification("Removed remote sync!", "success");
+            return
         }
 
         try {
-
             showLoader()
             options.remoteUrl = url;
             saveOptions();
