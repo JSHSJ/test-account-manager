@@ -32,5 +32,12 @@ Initial release
 - Fixed search breaking when description is undefined
 
 
+## [0.0.4] - 2022-08-17
 
+### Added
 
+- Add button to delete all remote logins
+
+### Fixed
+
+- Fix JSON uploaded not being synced, when file is too large (Now stored locally)

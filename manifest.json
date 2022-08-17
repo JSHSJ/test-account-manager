@@ -1,6 +1,6 @@
 {
     "name": "Testaccount Manager",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Simple testaccount manager or password manager for Chromium based browsers.",
     "manifest_version": 3,
     "author": "Joshua Stübner & Lukas Koeller",
