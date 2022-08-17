@@ -102,7 +102,7 @@ const createEntry = (login) => {
     })
 
     if (login.categories) {
-        for (const [key, value] of Object.entries(login.categories)) {
+        for (const [, value] of Object.entries(login.categories)) {
             const category = document.createElement("li");
             category.innerText = value;
             categories.appendChild(category);
@@ -215,7 +215,6 @@ const initItemToggle = () => {
     if (!moreButtons) {
         throw new Error('".button-more" could not be found.')
     }
-    ;
 
     moreButtons.forEach((button) => {
         button.addEventListener('click', () => {
@@ -270,20 +269,17 @@ const initUpload = () => {
     uploadInput.onchange = () => {
         try {
             const reader = new FileReader();
-            reader.addEventListener('load', (event) => {
+            reader.addEventListener('load', async (event) => {
                 if (!event || !event.target || !event.target.result) {
                     return;
                 }
                 const json = JSON.parse(event.target.result.toString())
                 if (json && Array.isArray(json)) {
                     customLogins = [...customLogins, ...json];
-                    // upload for persistence
-                    // @ts-ignore-next-line
-                    chrome.storage.sync.set({
-                        tamLoginCreds: customLogins
-                    }, () => {
-                        console.log('saved custom logins')
-                    })
+
+                    await saveCustomLogins()
+                    addToastNotification("Successfully synced new logins!", "success")
+
                     initCategories()
                     initItemToggle()
                     updateDisplay()
@@ -336,14 +332,18 @@ const loadOptions = async () => {
 }
 
 const saveFilters = async () => {
-    const filterValues = Object.fromEntries(activeFilters)
-    // @ts-ignore-next-line
-    await chrome.storage.sync.set({
-            tamFilters: filterValues
-        }, () => {
-            console.log('saved filters', filterValues)
-        }
-    )
+    try {
+        const filterValues = Object.fromEntries(activeFilters)
+        // @ts-ignore-next-line
+        await chrome.storage.sync.set({
+                tamFilters: filterValues
+            }, () => {
+                console.log('saved filters', filterValues)
+            }
+        )
+    } catch (e) {
+        console.log("ERROR", e)
+    }
 }
 
 const loadFilters = async () => {
@@ -356,12 +356,40 @@ const loadFilters = async () => {
     }
 }
 
-const loadCustomLogins = async () => {
-    // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['tamLoginCreds']);
-    if (result.tamLoginCreds) {
-        customLogins = result.tamLoginCreds
+const saveCustomLogins = async () => {
+    try {
+        // @ts-ignore-next-line
+        await chrome.storage.sync.set({
+                tamLoginCreds: customLogins
+            }, async () => {
+                if (chrome.runtime.lastError) {
+                    if (chrome.runtime.lastError.message.startsWith("QUOTA_BYTES_PER_ITEM")
+                        || chrome.runtime.lastError.message.startsWith("QUOTA_BYTES")
+                        || chrome.runtime.lastError.message.startsWith("MAX_ITEMS")
+                    ) {
+                        addToastNotification("Your uploaded account-file is too big. We will only save it locally!", "error");
+                        await chrome.storage.local.set({
+                            tamLoginCreds: customLogins
+                        })
+                    }
+                }
+            }
+        )
+    } catch (e) {
+        console.log("ERROR", e)
     }
+}
+
+
+const loadCustomLogins = async () => {
+        // @ts-ignore-next-line
+        const resultsFromSync = await chrome.storage.sync.get(['tamLoginCreds']);
+        const resultsFromLocal = await chrome.storage.local.get(['tamLoginCreds']);
+
+        customLogins = [
+            ...resultsFromSync.tamLoginCreds ? resultsFromSync.tamLoginCreds : [],
+            ...resultsFromLocal.tamLoginCreds ? resultsFromLocal.tamLoginCreds : [],
+        ]
 }
 
 const names = ['handsome', 'friend', 'stranger', 'gorgeous']
@@ -528,7 +556,6 @@ const initCategoryMenu = () => {
     const submitFilter = categoryDialog.querySelector("[type='submit']");
     /** @type {HTMLButtonElement | null} */
     const resetFilter = categoryDialog.querySelector("[type='reset']");
-    ;
 
     if (!submitFilter || !resetFilter) {
         return;
@@ -580,7 +607,6 @@ const createCategoryFilter = (filterName, values) => {
     select.id = `select-${filterName}`;
     label.innerText = filterName;
     label.htmlFor = `select-${filterName}`;
-    ;
 
     values.forEach((value) => {
         const option = document.createElement('option');
@@ -627,7 +653,7 @@ const syncActiveFiltersToSelects = () => {
     }
 
     categorySelects.forEach((select) => {
-        const {name, value} = /** @type {HTMLSelectElement} */ (select);
+        const {name} = /** @type {HTMLSelectElement} */ (select);
         if (activeFilters.has(name)) {
             select.value = activeFilters.get(name);
         }

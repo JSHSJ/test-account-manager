@@ -15,7 +15,7 @@
         }
     },
     "options_page": "index.html#options",
-    "permissions": ["activeTab", "scripting", "storage"],
+    "permissions": ["activeTab", "scripting", "storage", "unlimitedStorage"],
     "host_permissions": [
       "https://*/"
     ]
