@@ -176,6 +176,7 @@ const updateDisplay = () => {
         })
 
     initItemToggle()
+
 }
 
 /**
@@ -289,7 +290,6 @@ const initUpload = () => {
                     addToastNotification("Successfully synced new logins!", "success")
 
                     initCategories()
-                    initItemToggle()
                     updateDisplay()
                     navigateToLogins()
                 }
@@ -454,7 +454,6 @@ init().then(() => {
     initNavigateButtons()
     initCategoryMenu();
     initCategories()
-    initItemToggle()
     hideLoader()
     if (Math.random() < 0.1) {
         addToastNotification(`Hi there, ${names[Math.floor(Math.random() * names.length)]}!`, "success")

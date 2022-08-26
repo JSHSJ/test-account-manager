@@ -54,3 +54,7 @@ Initial release
 - Go back to Manifest v2 to support Firefox
 - Use content script instead of scripting API
 - Only request access to URLs that are actually fetched
+
+### Fixed
+
+- Fix item toggle after search
