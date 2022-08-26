@@ -1,13 +1,13 @@
 ![TestAccountManager header image](tam-logo.png)
 # Testaccount Manager
 
-Simple testaccount manager or password manager (like the ones you already use) for Chromium based browsers.
+Simple testaccount manager or password manager (like the ones you already use).
 
 ## Features
 
 - Allows uploading passwords in JSON format (format further below)
 - Allows adding a remote URL (JSON data), which will be automatically downloaded and added to the list of passwords
-- Syncs settings and uploaded passwords to your Chromium browser / profile
+- Syncs settings and uploaded passwords to your browser's profile
 - Otherwise the same functionality:
     - Allows searching for passwords
     - Categories for helping find specific password
@@ -48,8 +48,6 @@ This allows us to keep a centralised JSON up to date / fill it with specific cre
 sending the JSON around or sending specific login details to multiple people.
 
 Our usecase also shaped the structure of the JSON file / login. We hope it will be useful for other people as well.
-
-Oh yeah, also we wanted to try creating an extension for Chromium.
 
 ### Credits
 

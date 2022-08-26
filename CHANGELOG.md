@@ -41,3 +41,16 @@ Initial release
 ### Fixed
 
 - Fix JSON uploaded not being synced, when file is too large (Now stored locally)
+
+## [1.0.0] - 2022-08-26
+
+### Added 
+
+- Now also supports Firefox (and maybe Safari?)
+- Options are now opennable in a new tab
+
+### Changed
+
+- Go back to Manifest v2 to support Firefox
+- Use content script instead of scripting API
+- Only request access to URLs that are actually fetched

@@ -557,9 +557,7 @@
         }
 
         @media (dynamic-range: high) {
-            @supports (color(display-p3
-
-            0 .5 1)) {
+            @supports (color(display-p3 0 .5 1)) {
                 :where(html) {
                     --link: color(display-p3 0 .5 1);
                     --link-visited: color(display-p3 .6 .2 1)
@@ -1419,13 +1417,14 @@
             gap: 0;
         }
 
-        .categories-dialog header {
+        .dialog-header {
             display: grid;
             gap: var(--size-sm);
             grid-template: "title close" 1fr / 1fr auto;
             padding: var(--category-inline-padding);
             align-items: center;
             border-bottom: var(--border-size-1) solid var(--border-color);
+            background: var(--surface-2);
         }
 
         .categories-list {
@@ -1470,6 +1469,7 @@
         #options {
             display: grid;
             align-content: flex-start;
+            --category-inline-padding: var(--size-xs);
         }
 
         #options section {
@@ -1670,7 +1670,7 @@
 <!--Categories filter modal -->
 <dialog class="categories-dialog" aria-labelledby="category-label">
     <form method="dialog" class="categories-content">
-        <header>
+        <header class="dialog-header">
             <h3 id="category-label">Category filters</h3>
             <button type="reset">Reset</button>
         </header>
@@ -1687,6 +1687,12 @@
 
 <!-- Option page start -->
 <div class="page" id="options">
+    <header class="dialog-header">
+            <h3>Options</h3>
+            <button id="open-options" aria-label="Open options in new tab" title="Open options in new tab">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24"><path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h5v-2H4V7h16v12h-5v2h5c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2z"></path><path d="M13 21v-5h3l-4-5-4 5h3v5z"></path></svg>
+            </button>
+        </header>
     <section>
         <div class="options-section">
             <h4>Actions</h4>
@@ -1784,6 +1790,7 @@
         </select>
     </li>
 </template>
+<script async defer src="webextension-polyfill.js"></script>
 <script async defer src="script.js"></script>
 </body>
 </html>

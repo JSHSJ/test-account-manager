@@ -58,6 +58,15 @@ let options = {
 const activeFilters = new Map();
 
 /**
+ * Polyfill window browser for cross browser support.
+ */
+window.browser = (function () {
+    return window.msBrowser ||
+        window.browser ||
+        window.chrome;
+})();
+
+/**
  * Create a new entry for a login
  * @param {Login} login
  * @returns Returns a login entry row as HTMLElement
@@ -241,10 +250,6 @@ const navigateToLogins = () => {
 
 /**
  * Initialise the upload input.
- *
- * To be extended: improve design, maybe drop zone?
- * Also: Sync with Chrome settings for persistence.
- * https://developer.chrome.com/docs/extensions/reference/storage/
  */
 const initUpload = () => {
     /** @type {HTMLInputElement | null} */
@@ -258,7 +263,7 @@ const initUpload = () => {
 
     deleteCustomLogins.onclick = () => {
         // @ts-ignore-next-line
-        chrome.storage.sync.remove("tamLoginCreds")
+        browser.storage.sync.remove("tamLoginCreds")
         customLogins = []
         addToastNotification("Uploaded accounts deleted!", "success")
         updateDisplay()
@@ -291,7 +296,7 @@ const initUpload = () => {
             }
         } catch (e) {
             // @todo: improve error handling
-            console.log(e)
+            console.error("TAM: ", e)
         }
     }
 }
@@ -313,19 +318,33 @@ const initAutoLogin = () => {
     }
 }
 
+const initOpenNewTab = () => {
+    /** @type {HTMLInputElement | null} */
+    const openButton = document.querySelector("#open-options")
+
+    if (!openButton) {
+        return
+    }
+
+    openButton.onclick = () => {
+        browser.tabs.create({
+            url: browser.extension.getURL("index.html#option")
+        })
+    }
+}
+
 const saveOptions = async () => {
     // @ts-ignore-next-line
-    await chrome.storage.sync.set({
+    await browser.storage.sync.set({
             tamLoginOptions: options
-        }, () => {
-            console.log('saved options')
         }
     )
+    console.log('TAM: options saved')
 }
 
 const loadOptions = async () => {
     // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['tamLoginOptions']);
+    const result = await browser.storage.sync.get(['tamLoginOptions']);
     if (result.tamLoginOptions) {
         options = result.tamLoginOptions
     }
@@ -335,20 +354,18 @@ const saveFilters = async () => {
     try {
         const filterValues = Object.fromEntries(activeFilters)
         // @ts-ignore-next-line
-        await chrome.storage.sync.set({
-                tamFilters: filterValues
-            }, () => {
-                console.log('saved filters', filterValues)
-            }
-        )
+        await browser.storage.sync.set({
+            tamFilters: filterValues
+        })
+        console.log('TAM: Filters saved', filterValues)
     } catch (e) {
-        console.log("ERROR", e)
+        console.error("TAM: ", e)
     }
 }
 
 const loadFilters = async () => {
     // @ts-ignore-next-line
-    const result = await chrome.storage.sync.get(['tamFilters']);
+    const result = await browser.storage.sync.get(['tamFilters']);
     if (result.tamFilters) {
         Object.entries(result.tamFilters).forEach(([key, value]) => {
             activeFilters.set(key, value)
@@ -359,43 +376,63 @@ const loadFilters = async () => {
 const saveCustomLogins = async () => {
     try {
         // @ts-ignore-next-line
-        await chrome.storage.sync.set({
-                tamLoginCreds: customLogins
-            }, async () => {
-                if (chrome.runtime.lastError) {
-                    if (chrome.runtime.lastError.message.startsWith("QUOTA_BYTES_PER_ITEM")
-                        || chrome.runtime.lastError.message.startsWith("QUOTA_BYTES")
-                        || chrome.runtime.lastError.message.startsWith("MAX_ITEMS")
-                    ) {
-                        addToastNotification("Your uploaded account-file is too big. We will only save it locally!", "error");
-                        await chrome.storage.local.set({
-                            tamLoginCreds: customLogins
-                        })
-                    }
-                }
-            }
-        )
+        await browser.storage.sync.set({
+            tamLoginCreds: customLogins
+        })
+        // @todo: check
+        // if (browser.runtime.lastError) {
+        //     if (browser.runtime.lastError.message.startsWith("QUOTA_BYTES_PER_ITEM")
+        //         || browser.runtime.lastError.message.startsWith("QUOTA_BYTES")
+        //         || browser.runtime.lastError.message.startsWith("MAX_ITEMS")
+        //     ) {
+        //         addToastNotification("Your uploaded account-file is too big. We will only save it locally!", "error");
+        //         await browser.storage.local.set({
+        //             tamLoginCreds: customLogins
+        //         })
+        //     }
+        // }
     } catch (e) {
-        console.log("ERROR", e)
+        addToastNotification("Your uploaded account-file is too big. We will only save it locally!", "error");
+                await browser.storage.local.set({
+                    tamLoginCreds: customLogins
+                })
     }
 }
 
 
 const loadCustomLogins = async () => {
-        // @ts-ignore-next-line
-        const resultsFromSync = await chrome.storage.sync.get(['tamLoginCreds']);
-        const resultsFromLocal = await chrome.storage.local.get(['tamLoginCreds']);
+    // @ts-ignore-next-line
+    const resultsFromSync = await browser.storage.sync.get(['tamLoginCreds']);
+    const resultsFromLocal = await browser.storage.local.get(['tamLoginCreds']);
 
-        customLogins = [
-            ...resultsFromSync.tamLoginCreds ? resultsFromSync.tamLoginCreds : [],
-            ...resultsFromLocal.tamLoginCreds ? resultsFromLocal.tamLoginCreds : [],
-        ]
+    customLogins = [
+        ...resultsFromSync.tamLoginCreds ? resultsFromSync.tamLoginCreds : [],
+        ...resultsFromLocal.tamLoginCreds ? resultsFromLocal.tamLoginCreds : [],
+    ]
 }
 
 const names = ['handsome', 'friend', 'stranger', 'gorgeous']
 
+const registerContentScript = async () => {
+    try {
+        await browser.tabs.executeScript({
+            file: "/content_scripts/attemptAutoFill.js"
+        })
+    } catch (e) {
+        console.error("TAM: ", e)
+    }
+}
+
+const initialiseActiveTab = async () => {
+    const tabs = await browser.tabs
+        .query({active: true, currentWindow: true});
+    activeTab = tabs[0]
+}
+
 const init = async () => {
     try {
+        await registerContentScript()
+        await initialiseActiveTab()
         await loadCustomLogins()
         await loadOptions()
         await initRemoteLogins()
@@ -403,13 +440,13 @@ const init = async () => {
     } catch (e) {
         console.error(e)
     }
-
 }
 
 init().then(() => {
     updateDisplay()
     initUpload()
     initSearch()
+    initOpenNewTab()
     initAutoLogin()
     initNavigateButtons()
     initCategoryMenu();
@@ -427,11 +464,7 @@ init().then(() => {
  * @param {string} itemText
  */
 const copyToClipboard = (text, itemText) => {
-    const type = "text/plain";
-    const blob = new Blob([text], {type});
-    const data = [new ClipboardItem({[type]: blob})];
-
-    navigator.clipboard.write(data).then(
+    navigator.clipboard.writeText(text).then(
         function () {
             /* success */
             addToastNotification(`${itemText} copied to clipboard!`, "success")
@@ -452,60 +485,19 @@ const autoFillLogin = async ({
                                  password
                              }) => {
     // @ts-ignore-next-line
-    chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        func: attemptAutoFill,
-        args: [username, password, options]
-    })
-}
-
-/**
- *
- * @param {Login["username"]} username
- * @param {Login["password"]} password
- * @param {Options} opts
- */
-const attemptAutoFill = (username, password, opts) => {
-    /** @type {HTMLInputElement | null} */
-    const usernameInput = document.querySelector("[autocomplete='username']")
-    /** @type {HTMLInputElement | null} */
-    const passwordInput = document.querySelector("[autocomplete='current-password']")
-
-    /**
-     * Fill out the given field with the given value.
-     * @param input {HTMLInputElement}
-     * @param value {string}
-     */
-    const fillOutField = (input, value) => {
-        const inputEvent = new Event("input", {bubbles: true})
-        input.value = value
-        input.dispatchEvent(inputEvent)
-    }
-
-    if (usernameInput) {
-        fillOutField(usernameInput, username)
-    }
-
-    if (passwordInput) {
-        fillOutField(passwordInput, password)
-    }
-
-    if (opts.autoLogin) {
-        /** @type {HTMLButtonElement | null} */
-        const submitButton = document.querySelector("[type='submit']")
-        if (submitButton) {
-            submitButton.click()
-        }
-    }
-}
-
-// get active tab
-// @ts-ignore-next-line
-chrome.tabs
-    .query({active: true, currentWindow: true})
-    .then(tabs => {
-        activeTab = tabs[0];
+    // browser.tabs.executeScript({
+    //     target: {tabId: tab.id},
+    //     func: attemptAutoFill,
+    //     args: [username, password, options]
+    // })
+    browser.tabs.sendMessage(tab.id, {
+        command: "autofill",
+        username,
+        password,
+        useAutoLogin: options.autoLogin
     });
+}
+
 
 /**
  * Get all categories for a given set of logins.
@@ -691,10 +683,10 @@ const initRemoteLogins = async () => {
     if (syncDeleteButton === null) throw new Error('Could not find selector \'#delete-sync\'');
 
     syncDeleteButton.addEventListener('click', async () => {
-            input.value = '';
-            options.remoteUrl = '';
-            await saveOptions();
-            addToastNotification("Removed remote sync!", "success");
+        input.value = '';
+        options.remoteUrl = '';
+        await saveOptions();
+        addToastNotification("Removed remote sync!", "success");
     })
 
     syncButton.addEventListener('click', async () => {
@@ -708,6 +700,13 @@ const initRemoteLogins = async () => {
         }
 
         try {
+            const hasPermission = await browser.permissions.request({
+                origins: [url]
+            })
+            if (!hasPermission) {
+                addToastNotification("Need permission to access url: " + url, "error")
+                return
+            }
             showLoader()
             options.remoteUrl = url;
             saveOptions();
@@ -716,6 +715,7 @@ const initRemoteLogins = async () => {
             hideLoader()
             addToastNotification("Loaded accounts from remote URL!", "success");
         } catch (e) {
+            console.error("TAM: ", e)
             hideLoader()
         }
     })
@@ -739,6 +739,14 @@ const initRemoteLogins = async () => {
  */
 const syncFromRemoteUrl = async (url) => {
     try {
+        // Check if permission were granted (should be).
+        const hasPermission = await browser.permissions.contains({
+            origins: [url]
+        })
+        if (!hasPermission) {
+            addToastNotification(`Need permission to access url: ${url}. You can grant them when setting the url in the options.`, "error")
+            return
+        }
         // @todo: look up cache control headers
         const response = await fetch(url, {cache: "no-cache"});
         remoteLogins = await response.json();
