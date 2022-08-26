@@ -174,6 +174,8 @@ const updateDisplay = () => {
                 root.appendChild(clone);
             }
         })
+
+    initItemToggle()
 }
 
 /**
@@ -227,6 +229,7 @@ const initItemToggle = () => {
 
     moreButtons.forEach((button) => {
         button.addEventListener('click', () => {
+            console.log('click', button)
             const item = button?.parentElement;
             const activeItem = document.querySelector('.open');
 
