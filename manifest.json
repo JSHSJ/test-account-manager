@@ -1,6 +1,6 @@
 {
   "name": "Testaccount Manager",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Simple testaccount manager or password manager for browsers.",
   "homepage_url": "https://github.com/JSHSJ/test-account-manager",
   "manifest_version": 2,
