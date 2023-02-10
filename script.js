@@ -396,9 +396,9 @@ const saveCustomLogins = async () => {
         // }
     } catch (e) {
         addToastNotification("Your uploaded account-file is too big. We will only save it locally!", "error");
-                await browser.storage.local.set({
-                    tamLoginCreds: customLogins
-                })
+        await browser.storage.local.set({
+            tamLoginCreds: customLogins
+        })
     }
 }
 
@@ -452,7 +452,6 @@ init().then(() => {
     initOpenNewTab()
     initAutoLogin()
     initNavigateButtons()
-    initCategoryMenu();
     initCategories()
     hideLoader()
     if (Math.random() < 0.1) {
@@ -526,49 +525,6 @@ const getCategories = () => {
     return categoryCollection
 };
 
-const initCategoryMenu = () => {
-    /** @type {HTMLButtonElement | null} */
-    const categoryToggle = document.querySelector(".categories-toggle");
-    /** @type {HTMLDialogElement | null} */
-    const categoryDialog = document.querySelector(".categories-dialog");
-    /** @type {HTMLButtonElement | null} */
-    const categoryClose = document.querySelector(".categories-close");
-
-    if (!categoryToggle || !categoryClose || !categoryDialog) {
-        return;
-    }
-
-    categoryToggle.onclick = () => {
-        categoryDialog.showModal();
-    }
-
-    categoryClose.onclick = () => {
-        categoryDialog.close('')
-    }
-
-    /** @type {HTMLButtonElement | null} */
-    const submitFilter = categoryDialog.querySelector("[type='submit']");
-    /** @type {HTMLButtonElement | null} */
-    const resetFilter = categoryDialog.querySelector("[type='reset']");
-
-    if (!submitFilter || !resetFilter) {
-        return;
-    }
-
-    submitFilter.onclick = async () => {
-        await syncSelectsToActiveFilters();
-        updateDisplay();
-        categoryDialog.close('')
-    }
-
-    resetFilter.onclick = () => {
-        for (const key of activeFilters.keys()) {
-            activeFilters.delete(key)
-        }
-        syncActiveFiltersToSelects();
-        updateDisplay();
-    }
-}
 
 /**
  * Create a category filter node.
@@ -602,12 +558,32 @@ const createCategoryFilter = (filterName, values) => {
     label.innerText = filterName;
     label.htmlFor = `select-${filterName}`;
 
+    const option = document.createElement('option');
+    option.value = "SELECT_NONE";
+    option.text = "Select None";
+    select.appendChild(option);
+
+
     values.forEach((value) => {
         const option = document.createElement('option');
         option.value = value;
         option.text = value;
         select.appendChild(option);
     });
+
+
+    select.addEventListener('change', async (event) => {
+        const value = event.target.value === "SELECT_NONE" ? null : event.target.value;
+        if (value === null) {
+            activeFilters.delete(event.target.name)
+            select.removeAttribute('data-value')
+        } else {
+            activeFilters.set(event.target.name, value);
+            select.setAttribute('data-value', value)
+        }
+        await saveFilters()
+        updateDisplay()
+    })
 
     return clone;
 }
@@ -621,6 +597,16 @@ const createCategoryFilter = (filterName, values) => {
 const initCategories = () => {
     /** @type {HTMLUListElement | null} */
     const categoryList = document.querySelector(".categories-list");
+    /** @type {HTMLButtonElement | null} */
+    const resetFilter = document.querySelector("#category-reset");
+    resetFilter.onclick = () => {
+        for (const key of activeFilters.keys()) {
+            activeFilters.delete(key)
+        }
+        syncActiveFiltersToSelects();
+        updateDisplay();
+    }
+
 
     if (!categoryList) {
         return;
@@ -636,6 +622,7 @@ const initCategories = () => {
     syncActiveFiltersToSelects();
 }
 
+
 const syncActiveFiltersToSelects = () => {
     /** @type {HTMLUListElement | null} */
     const categoryList = document.querySelector(".categories-list");
@@ -650,29 +637,14 @@ const syncActiveFiltersToSelects = () => {
         const {name} = /** @type {HTMLSelectElement} */ (select);
         if (activeFilters.has(name)) {
             select.value = activeFilters.get(name);
+            select.setAttribute('data-value', activeFilters.get(name))
+        } else {
+            select.value = "";
+            select.removeAttribute('data-value')
         }
     });
 }
 
-const syncSelectsToActiveFilters = async () => {
-    /** @type {HTMLUListElement | null} */
-    const categoryList = document.querySelector(".categories-list");
-    /** @type {NodeListOf<HTMLSelectElement>} */
-    const categorySelects = categoryList.querySelectorAll("select");
-
-    if (!categorySelects.length) {
-        return;
-    }
-
-    categorySelects.forEach((select) => {
-        const {name, value} = /** @type {HTMLSelectElement} */ (select);
-        if (value) {
-            activeFilters.set(name, value);
-        }
-    });
-
-    await saveFilters();
-}
 
 const initRemoteLogins = async () => {
     /** @type {HTMLInputElement | null} */
