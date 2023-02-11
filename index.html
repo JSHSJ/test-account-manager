@@ -151,7 +151,7 @@
             --surface-4: var(--gray-4);
             --color-active-strong: var(--indigo-7);
             --color-active-weak: var(--indigo-5);
-            --color-selected: var(--pink-3);
+            --color-selected: var(--indigo-5);
             --color-reset: var(--red-7);
             --scrollthumb-color: var(--gray-6);
             --space-near: var(--size-2);
@@ -179,6 +179,11 @@
             scrollbar-color: var(--scrollthumb-color) transparent
         }
 
+        [data-density-shift] {
+            --space-near: var(--size-1);
+            --space-away: var(--size-2);   
+        }
+
         @media (dynamic-range: high) {
             @supports (color(display-p3 0 .5 1)) {
                 :where(html) {
@@ -200,7 +205,7 @@
                 --surface-4: var(--gray-6);
                 --color-active-strong: var(--indigo-5);
                 --color-active-weak: var(--indigo-3);
-                --color-selected: var(--pink-3);
+                --color-selected: var(--indigo-3);
                 --color-reset: var(--red-7);
 
                 color-scheme: dark
@@ -318,9 +323,8 @@
         }
 
         :where(select) {
-
-            padding-block: var(--space-near);
-            padding-inline: var(--space-near);
+            padding-block: 0.75ch;
+            padding-inline: 1.25ch 0;
         }
 
         :where(textarea,select,input:not(button,button[type],input[type=button],input[type=submit],input[type=reset])) {
@@ -523,7 +527,7 @@
         }
 
         body {
-            width: 800px !important;
+            width: 700px !important;
             height: 600px !important;
             position: relative;
             padding: 0;
@@ -584,7 +588,6 @@
             display: flex;
             grid-template-columns: repeat(auto-fit, 15%);
             border-top: var(--border-size-1) solid var(--border-color);
-            background: var(--surface-2);
             padding: 0 var(--space-near);
             gap: 0;
             inline-size: 100%;
@@ -630,7 +633,7 @@
             display: grid;
             grid-template:
                     "filters list" 1fr
-            / 320px 1fr;
+            / 200px 1fr;
             block-size: 100%;
 
         }
@@ -781,7 +784,6 @@
             align-items: flex-start;
             padding: var(--space-near);
             border-bottom: var(--border-size-1) solid var(--border-color);
-            background: var(--surface-2);
             height: var(--header-height);
         }
 
@@ -815,7 +817,6 @@
             padding: var(--space-near);
             align-items: center;
             border-bottom: var(--border-size-1) solid var(--border-color);
-            background: var(--surface-2);
             min-block-size: var(--header-height);
         }
 
@@ -833,8 +834,7 @@
 
         .categories-list {
             grid-area: list;
-            padding-block: var(--space-away);
-            padding-inline: var(--space-near);
+            padding: var(--space-away);
             display: grid;
             gap: var(--space-away);
             align-content: flex-start;
@@ -855,8 +855,15 @@
             border-bottom: none !important;
         }
 
+        .categories-filter-element > label {
+            font-weight: var(--font-weight-6);
+            font-size: var(--font-size-0);
+            color: var(--text-2);
+        }
+
         .categories-filter-element > select {
             inline-size: 100%;
+            color: var(--text-2);
         }
 
         select {
@@ -865,8 +872,12 @@
 
         select[data-value] {
             color: var(--color-selected);
+            border-color: var(--color-selected);
         }
 
+        select[selected] {
+            color: var(--surface-2);
+        }
 
         /**
          * Options
@@ -1051,8 +1062,8 @@
         <!--Categories filter -->
         <div class="list-container categories-filters">
             <div class="categories-header">
-            <button type="reset" id="category-reset">Reset filters</button>
-                </div>
+                <button type="reset" id="category-reset">Reset filters</button>
+            </div>
             <ul class="categories-list">
                 <!-- categories go here -->
                 <i>No categories found.</i>
@@ -1171,8 +1182,9 @@
             </div>
             <p>Categories</p>
             <ul class="login-categories">
-                <i>No categories for this login.</i>
-
+                <div class="nothing">
+                    <div>No accounts found.</div>
+                </div>
             </ul>
         </div>
     </li>
@@ -1195,10 +1207,10 @@
 
 <!--Template for category filters -->
 <template id="category-filter-template">
-    <li class="categories-filter-element">
+    <li class="categories-filter-element" data-density-shift>
         <label></label>
         <select>
-            <option selected value="">Select...</option>
+            <option selected value=" " disabled></option>
         </select>
     </li>
 </template>
