@@ -157,7 +157,9 @@
             --space-near: var(--size-2);
             --space-away: var(--size-3);
             --border-radius: var(--radius-2);
-            --border-color: var(--surface-3);
+            /* --border-color: #171a1c; */
+            --border-color: transparent;
+            --border-size: var(--border-size-2);
             --header-height: 3rem;
             --icon-size: 2ch;
             --font-size-small: var(--font-size-0);
@@ -587,7 +589,7 @@
             grid-area: nav;
             display: flex;
             grid-template-columns: repeat(auto-fit, 15%);
-            border-top: var(--border-size-1) solid var(--border-color);
+            border-top: var(--border-size) solid var(--border-color);
             padding: 0 var(--space-near);
             gap: 0;
             inline-size: 100%;
@@ -664,8 +666,8 @@
             block-size: 100%;
             overflow-y: auto;
             display: grid;
+            gap: var(--space-near);
             align-content: flex-start;
-            box-shadow: var(--inner-shadow-3);
         }
 
         #login-root:not(:empty) + .nothing {
@@ -673,7 +675,7 @@
         }
 
         .login-container li:not(:last-child) {
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: var(--border-size) solid var(--border-color);
         }
 
         /**
@@ -783,7 +785,7 @@
             display: grid;
             align-items: flex-start;
             padding: var(--space-near);
-            border-bottom: var(--border-size-1) solid var(--border-color);
+            border-bottom: var(--border-size) solid var(--border-color);
             height: var(--header-height);
         }
 
@@ -809,14 +811,14 @@
 
         .categories-filters {
             grid-area: filters;
-            border-right: var(--border-size-1) solid var(--border-color);
+            border-right: var(--border-size) solid var(--border-color);
         }
 
         .categories-header{
             grid-area: header;
             padding: var(--space-near);
             align-items: center;
-            border-bottom: var(--border-size-1) solid var(--border-color);
+            border-bottom: var(--border-size) solid var(--border-color);
             min-block-size: var(--header-height);
         }
 
@@ -826,7 +828,7 @@
             grid-template: "title close" 1fr / 1fr auto;
             padding: var(--category-inline-padding);
             align-items: center;
-            border-bottom: var(--border-size-1) solid var(--border-color);
+            border-bottom: var(--border-size) solid var(--border-color);
             background: var(--surface-2);
             min-block-size: var(--header-height);
 
@@ -867,12 +869,11 @@
         }
 
         select {
-            border: var(--border-size-1) solid var(--border-color);
+            border: var(--border-size) solid var(--border-color);
         }
 
         select[data-value] {
             color: var(--color-selected);
-            border-color: var(--color-selected);
         }
 
         select[selected] {
@@ -896,7 +897,7 @@
         }
 
         #options section:not(:last-child) {
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: var(--border-size) solid var(--border-color);
         }
 
         .checkbox {
@@ -919,7 +920,7 @@
         .options-section {
             display: grid;
             gap: var(--space-away);
-            border: var(--border-size-1) solid var(--border-color);
+            border: var(--border-size) solid var(--border-color);
             padding: var(--space-away);
             border-radius: var(--radius-2);
         }
@@ -956,7 +957,7 @@
         .toast {
             --timing-duration: 250ms;
 
-            border: var(--border-size-1) solid var(--border-color);
+            border: var(--border-size) solid var(--border-color);
             background: var(--surface-1);
             color: var(--text-1);
             padding: var(--space-near);
@@ -1153,7 +1154,7 @@
 <!-- Template for logins -->
 <template id="login-template">
     <li class="login-item">
-        <div class="login-details">
+        <div class="login-details" data-density-shift>
             <span><strong class="description"></strong></span>
             <span><small class="username"></small></span>
         </div>
