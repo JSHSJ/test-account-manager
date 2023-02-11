@@ -139,6 +139,22 @@ const isMatchingActiveFilters = (login) => {
 }
 
 /**
+ * Checks if a certain Login matches active filters.
+ * @param {number} amountVisible
+ * @param {number} amountTotal
+ */
+
+const updateAccountSum = (amountVisible, amountTotal) => {
+    /** @type {HTMLSpanElement | null} */
+    const accountSum = document.querySelector(".account-sum")
+    if (!accountSum) {
+        return;
+    }
+
+    accountSum.innerHTML = `<strong>${amountVisible}</strong>&nbsp;/&nbsp;${amountTotal} Accounts`;
+}
+
+/**
  * Main function to update the display.
  * Renders the list of logins.
  */
@@ -156,7 +172,7 @@ const updateDisplay = () => {
     const allLogins = [...remoteLogins, ...customLogins];
 
     // render predefined logins
-    allLogins
+    const visibleLogins = allLogins
         .filter(login =>
             // check username
             (login.username && login.username?.toLowerCase().includes(search.toLowerCase()))
@@ -167,14 +183,17 @@ const updateDisplay = () => {
                 && Object.values(login.categories)
                     .some(catValue =>
                         catValue.toLowerCase().includes(search.toLowerCase())))
-        ).filter(isMatchingActiveFilters)
-        .forEach(login => {
+        ).filter(isMatchingActiveFilters);
+
+
+    visibleLogins.forEach(login => {
             const clone = createEntry(login)
             if (clone) {
                 root.appendChild(clone);
             }
         })
 
+    updateAccountSum(visibleLogins.length, allLogins.length);
     initItemToggle()
 
 }
@@ -287,7 +306,7 @@ const initUpload = () => {
                     customLogins = [...customLogins, ...json];
 
                     await saveCustomLogins()
-                    addToastNotification("Successfully synced new logins!", "success")
+                    addToastNotification(`Successfully added ${json.length} new logins!`, "success")
 
                     initCategories()
                     updateDisplay()
