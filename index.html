@@ -10,7 +10,7 @@
             --font-serif: ui-serif, serif;
             --font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco, Droid Sans Mono, Source Code Pro, monospace;
             --font-weight-4: 400;
-            --font-weight-7: 700;
+            --font-weight-6: 600;
             --font-lineheight-00: .95;
             --font-lineheight-0: 1.1;
             --font-lineheight-1: 1.25;
@@ -74,9 +74,7 @@
             --ratio-square: 1;
             --ratio-landscape: 4/3;
             --ratio-portrait: 3/4;
-            --ratio-widescreen: 16/9;
-            --ratio-ultrawide: 18/5;
-            --ratio-golden: 1.6180/1;
+
             --gray-0: #f8f9fa;
             --gray-1: #f1f3f5;
             --gray-2: #e9ecef;
@@ -97,7 +95,7 @@
             --pink-7: #d6336c;
             --pink-8: #c2255c;
             --pink-9: #a61e4d;
-                        --red-7: #f03e3e;
+            --red-7: #f03e3e;
 
 
             --indigo-0: #edf2ff;
@@ -151,10 +149,24 @@
             --surface-2: var(--gray-2);
             --surface-3: var(--gray-3);
             --surface-4: var(--gray-4);
+            --color-active-strong: var(--indigo-7);
+            --color-active-weak: var(--indigo-5);
             --color-selected: var(--pink-3);
+            --color-reset: var(--red-7);
             --scrollthumb-color: var(--gray-6);
             --space-near: var(--size-2);
             --space-away: var(--size-3);
+            --border-radius: var(--radius-2);
+            --border-color: var(--surface-3);
+            --header-height: 3rem;
+            --icon-size: 2ch;
+            --font-size-small: var(--font-size-0);
+            --font-size-medium: var(--font-size-1);
+            --font-size-big: var(--font-size-2);
+            --font-weight-default: var(--font-weight-4);
+            --font-weight-bold: var(--font-weight-6);
+
+
             -webkit-text-size-adjust: none;
             accent-color: var(--link);
             background-color: var(--surface-1);
@@ -186,6 +198,11 @@
                 --surface-2: var(--gray-8);
                 --surface-3: var(--gray-7);
                 --surface-4: var(--gray-6);
+                --color-active-strong: var(--indigo-5);
+                --color-active-weak: var(--indigo-3);
+                --color-selected: var(--pink-3);
+                --color-reset: var(--red-7);
+
                 color-scheme: dark
             }
         }
@@ -252,61 +269,63 @@
         }
 
         :where(h1,h2,h3,h4,h5,h6) {
-            font-weight: var(--font-weight-7);
-            line-height: var(--font-lineheight-1)
+            font-weight: var(--font-weight-bold);
+            line-height: var(--font-lineheight-1);
         }
 
 
         :where(p,ul,ol,dl,h6) {
-            font-size: var(--font-size-2)
+            font-size: var(--font-size-medium);
         }
 
         :where(a,u,ins,abbr) {
-            text-underline-offset: 1px
+            text-underline-offset: 1px;
         }
 
         @supports (-moz-appearance:none) {
             :where(a,u,ins,abbr) {
-                text-underline-offset: 2px
+                text-underline-offset: 2px;
             }
         }
 
         :where(a):where([href]) {
-            text-decoration-color: var(--indigo-2)
+            text-decoration-color: var(--color-active-weak);
         }
 
         :where(a):where([href]):where(:visited) {
-            text-decoration-color: var(--pink-2)
+            text-decoration-color: var(--color-selected);
         }
 
         :where(a):where(:not(:hover)) {
-            text-decoration: inherit
+            text-decoration: inherit;
         }
 
         :where(img,svg,video,canvas,audio,iframe,embed,object) {
-            display: block
+            display: block;
         }
 
         :where(input,button,textarea,select), :where(input[type=file])::-webkit-file-upload-button {
             color: inherit;
             font: inherit;
-            font-size: inherit;
-            letter-spacing: inherit
+            font-size: var(--font-size-small);
+            letter-spacing: var(--font-letterspacing-2);
+            line-height: 1;
         }
 
         :where(input,textarea) {
-            padding-block: var(--size-1);
-            padding-inline: var(--size-2)
+            padding-block: var(--space-near);
+            padding-inline: var(--space-near);
         }
 
         :where(select) {
-            padding-block: .75ch;
-            padding-inline: 1.25ch 0
+
+            padding-block: var(--space-near);
+            padding-inline: var(--space-near);
         }
 
         :where(textarea,select,input:not(button,button[type],input[type=button],input[type=submit],input[type=reset])) {
             background-color: var(--surface-2);
-            border-radius: var(--radius-2)
+            border-radius: var(--border-radius);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -316,118 +335,46 @@
         }
 
         :where(textarea) {
-            resize: block
+            resize: block;
         }
 
         :where(input[type=checkbox],input[type=radio]) {
             block-size: var(--size-3);
-            inline-size: var(--size-3)
+            inline-size: var(--size-3);
         }
 
         :where(svg) {
             stroke: none;
-            fill: currentColor
+            fill: currentColor;
         }
 
         :where(svg):where(:not([fill])) {
             stroke: currentColor;
             fill: none;
             stroke-linecap: round;
-            stroke-linejoin: round
+            stroke-linejoin: round;
         }
 
         :where(svg):where(:not([width])) {
-            inline-size: var(--size-10)
+            height: 100%;
+            max-inline-size: 100%;
         }
 
-        :where(code,kbd,samp,pre) {
-            font-family: var(--font-mono)
-        }
-
-        :where(:not(pre)>code,kbd) {
-            white-space: nowrap
-        }
-
-        :where(pre) {
-            max-inline-size: max-content;
-            min-inline-size: 0;
-            white-space: pre
-        }
-
-        :where(:not(pre)>code) {
-            background: var(--surface-2);
-            border-radius: var(--radius-2);
-            padding: var(--size-1) var(--size-2)
-        }
-
-        :where(kbd,var) {
-            border-color: var(--surface-4);
-            border-radius: var(--radius-2);
-            border-width: var(--border-size-1);
-            padding: var(--size-1) var(--size-2)
-        }
-
-        :where(mark) {
-            border-radius: var(--radius-2);
-            padding-inline: var(--size-1)
-        }
 
         :where(ol,ul) {
-            padding-inline-start: var(--size-8)
+            padding-inline-start: var(--space-away);
         }
 
         :where(li) {
-            padding-inline-start: var(--size-2)
+            padding-inline-start: var(--space-near)
         }
 
-
-        :where(dt,summary) {
-            font-weight: var(--font-weight-7)
-        }
-
-        :where(dt:not(:first-of-type)) {
-            margin-block-start: var(--size-5)
-        }
-
-
-        :where(figure) {
-            display: grid;
-            gap: var(--size-2);
-            place-items: center
-        }
-
-        :where(figure) > :where(figcaption) {
-            font-size: var(--font-size-1)
-        }
-
-        :where(blockquote,:not(blockquote)>cite) {
-            border-inline-start-width: var(--border-size-3)
-        }
 
 
         :where(fieldset) {
             border: var(--border-size-1) solid var(--surface-4);
-            border-radius: var(--radius-2)
+            border-radius: var(--border-radius)
         }
-
-        :where(abbr) {
-            text-decoration-color: var(--blue-5)
-        }
-
-        :where(dialog) {
-            background-color: var(--surface-1);
-            border-radius: var(--radius-3);
-            box-shadow: var(--shadow-6);
-            color: inherit
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :where(dialog) {
-                background-color: var(--surface-2)
-            }
-        }
-
-
 
         :where(button,button[type],input[type=button],input[type=submit],input[type=reset]), :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
             --_accent: initial;
@@ -450,17 +397,16 @@
             -webkit-touch-callout: none;
             align-items: center;
             background: var(--_bg);
-            border: var(--border-size-2) solid var(--_border);
+            border: var(--border-size-1) solid var(--_border);
             border-radius: var(--radius-2);
             box-shadow: var(--shadow-2), 0 1px var(--surface-3), 0 0 0 var(--_highlight-size) var(--_highlight);
             color: var(--_text);
             display: inline-flex;
             font-size: var(--_size);
-            font-weight: var(--font-weight-7);
+            font-weight: var(--font-weight-bold);
             gap: var(--size-2);
             justify-content: center;
-            padding-block: .75ch;
-            padding-inline: 1.75ch;
+            padding: var(--space-near);
             text-align: center;
             text-shadow: var(--_ink-shadow);
             transition: border-color .5s var(--ease-3) 3s;
@@ -471,13 +417,13 @@
             :where(button,button[type],input[type=button],input[type=submit],input[type=reset]), :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
                 --_highlight: var(--_highlight-dark);
                 --_bg: var(--_bg-dark);
-                --_ink-shadow: var(--_ink-shadow-dark)
+                --_ink-shadow: var(--_ink-shadow-dark);
             }
         }
 
         @media (prefers-reduced-motion: no-preference) {
             :where(button,button[type],input[type=button],input[type=submit],input[type=reset]), :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
-                transition: border-color .5s var(--ease-3) 3s, box-shadow 145ms var(--ease-4)
+                transition: border-color .5s var(--ease-3) 3s, box-shadow 145ms var(--ease-4);
             }
         }
 
@@ -485,88 +431,83 @@
             --_bg: none;
             --_text: var(--gray-6);
             box-shadow: var(--shadow-1);
-            cursor: not-allowed
+            cursor: not-allowed;
         }
 
         @media (prefers-color-scheme: dark) {
             :where(button,button[type],input[type=button],input[type=submit],input[type=reset])[disabled] {
-                --_text: var(--gray-5)
+                --_text: var(--gray-5);
             }
         }
 
         :where(button,button[type],input[type=button],input[type=submit],input[type=reset]):where(:not(:active):hover) {
             --_highlight-size: var(--size-2);
             transition-delay: 0s;
-            transition-duration: .25s
+            transition-duration: .25s;
         }
 
         :where(button,button[type],input[type=button],input[type=submit],input[type=reset]) > :where(svg) {
             block-size: var(--_icon-size);
             filter: drop-shadow(var(--_ink-shadow));
             flex-shrink: 0;
-            inline-size: var(--_icon-size)
+            inline-size: var(--_icon-size);
         }
 
         :where(button,button[type],input[type=button],input[type=submit],input[type=reset]) > :where(svg>*) {
             stroke: var(--_icon-color);
-            stroke-width: var(--border-size-2)
+            stroke-width: var(--border-size-2);
         }
 
         :where([type=submit],form button:not([type],[disabled])) {
-            --_text: var(--_accent, var(--link))
+            --_text: var(--_accent, var(--link));
         }
 
         :where([type=reset]) {
-            --_text: var(--red-6);
-            --_border: var(--red-3)
+            --_text: var(--color-reset);
+            --_border: var(--color-reset);
         }
 
         :where([type=reset]):focus-visible {
-            outline-color: var(--red-6)
+            outline-color: var(--color-reset);
         }
 
         @media (prefers-color-scheme: dark) {
             :where([type=reset]) {
-                --_text: var(--red-2);
-                --_border: var(--surface-3)
+                --_text: var(--color-reset);
+                --_border: var(--surface-3);
             }
         }
 
         :where([type=submit],[type=reset],form button:not([type])):is(:hover,:focus-visible):not([disabled]) {
-            --_border: currentColor
+            --_border: currentColor;
         }
 
         :where(input[type=file]) {
             align-self: flex-start;
             border: var(--border-size-1) solid var(--surface-2);
             border-radius: var(--radius-2);
-            box-shadow: var(--inner-shadow-4);
             color: var(--text-2);
+            box-shadow: var(--inner-shadow-4);
             cursor: auto;
             max-inline-size: 100%;
-            padding: 0
+            padding: 0;
         }
 
         :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
             cursor: pointer;
-            margin-inline-end: 1.75ch
+            margin-inline-end: 1.75ch;
         }
 
         @media (prefers-color-scheme: dark) {
             :where([disabled]), :where([type=reset]), :where([type=submit]), :where(form button:not([type=button])) {
-                --_bg: var(--surface-1)
+                --_bg: var(--surface-1);
             }
         }
 
     </style>
     <style>
-        html {
-            --size-lg: var(--size-8);
-            --size-md: var(--size-5);
-            --size-xxs: var(--size-1);
-            --border-color: var(--surface-3);
-            --icon-size: var(--size-md);
-        }
+
+
 
         :is(h1, h2, h3) {
             margin: 0;
@@ -574,11 +515,11 @@
         }
 
         h2 {
-            font-size: var(--font-size-3);
+            font-size: var(--font-size-big);
         }
 
         h3 {
-            font-size: var(--font-size-3);
+            font-size: var(--font-size-big);
         }
 
         body {
@@ -590,7 +531,6 @@
             gap: 0;
             overflow: hidden;
             display: grid;
-            overflow-y: hidden;
             grid-template:
                     "page" 1fr
                     "nav" auto
@@ -632,7 +572,7 @@
         }
 
         :where(p,ul,ol,dl,h6) {
-            font-size: var(--font-size-1);
+            font-size: var(--font-size-medium);
         }
 
         /**
@@ -641,12 +581,13 @@
 
         nav {
             grid-area: nav;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, 25%);
+            display: flex;
+            grid-template-columns: repeat(auto-fit, 15%);
             border-top: var(--border-size-1) solid var(--border-color);
             background: var(--surface-2);
-            padding: 0;
+            padding: 0 var(--space-near);
             gap: 0;
+            inline-size: 100%;
         }
 
         .navlink {
@@ -667,6 +608,16 @@
 
         .navlink[data-active="true"] {
             color: var(--link-visited);
+        }
+
+        .account-sum {
+            display: flex;
+            align-items: center;
+            margin-inline-start: auto;
+        }
+
+        .account-sum strong {
+            font-weight: var(--font-weight-bold);
         }
 
         /**
@@ -711,6 +662,7 @@
             overflow-y: auto;
             display: grid;
             align-content: flex-start;
+            box-shadow: var(--inner-shadow-3);
         }
 
         #login-root:not(:empty) + .nothing {
@@ -743,12 +695,12 @@
 
         .auto-fill {
             grid-area: auto;
-            color: var(--blue-6);
-            text-shadow: 0 1px 0 var(--blue-2);
+            color: var(--color-active-strong);
+            text-shadow: 0 1px 0 var(--color-active-weak);
         }
 
         .auto-fill:hover {
-            background-color: var(--blue-1);
+            background-color: var(--color-active-weak);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -778,7 +730,7 @@
 
         .description {
             color: var(--text-1);
-            font-size: var(--font-size-0);
+            font-size: var(--font-size-small);
         }
 
         .login-footer {
@@ -791,8 +743,8 @@
 
         .login-footer p {
             margin-block: var(--space-near) 0;
-            font-weight: var(--font-weight-7);
-            font-size: var(--font-size-0);
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-small);
         }
 
         .login-categories:not(:empty) > i {
@@ -800,15 +752,15 @@
         }
 
         .copy-username, .copy-password {
-            block-size: var(--size-lg);
-            min-inline-size: var(--size-lg);
+            block-size: calc(var(--icon-size) + 2 * var(--space-near));
+            min-inline-size:calc(var(--icon-size) + 2 * var(--space-near));
         }
 
         .login-categories {
             display: flex;
             flex-flow: row wrap;
             gap: var(--space-near);
-            padding: var(--space-near);
+            padding-block-start: var(--space-near);
         }
 
         .login-categories li {
@@ -817,7 +769,7 @@
             padding: 0.5ch 0.75ch;
             border-radius: 999px;
             background: var(--surface-3);
-            font-size: var(--font-size-0);
+            font-size: var(--font-size-small);
         }
 
         /**
@@ -829,8 +781,8 @@
             align-items: flex-start;
             padding: var(--space-near);
             border-bottom: var(--border-size-1) solid var(--border-color);
-            box-shadow: var(--shadow-2);
             background: var(--surface-2);
+            height: var(--header-height);
         }
 
         .search-container label {
@@ -841,7 +793,7 @@
 
         .search-container input {
             width: 100%;
-            padding-block: 0.75ch;
+            padding-block: var(--space-near);
             height: 100%;
         }
 
@@ -855,15 +807,16 @@
 
         .categories-filters {
             grid-area: filters;
-            display: grid;
-            block-size: 100%;
-            gap: 0;
             border-right: var(--border-size-1) solid var(--border-color);
-            padding: var(--category-inline-padding);
-            grid-template:
-                    "header"auto
-                    "content" 1fr
-                    / 1fr;
+        }
+
+        .categories-header{
+            grid-area: header;
+            padding: var(--space-near);
+            align-items: center;
+            border-bottom: var(--border-size-1) solid var(--border-color);
+            background: var(--surface-2);
+            min-block-size: var(--header-height);
         }
 
         .dialog-header {
@@ -874,11 +827,14 @@
             align-items: center;
             border-bottom: var(--border-size-1) solid var(--border-color);
             background: var(--surface-2);
+            min-block-size: var(--header-height);
+
         }
 
         .categories-list {
-            grid-area: content;
-            padding: var(--space-away);
+            grid-area: list;
+            padding-block: var(--space-away);
+            padding-inline: var(--space-near);
             display: grid;
             gap: var(--space-away);
             align-content: flex-start;
@@ -910,7 +866,6 @@
         select[data-value] {
             color: var(--color-selected);
         }
-
 
 
         /**
@@ -952,25 +907,25 @@
 
         .options-section {
             display: grid;
-            gap: var(--size-sm);
+            gap: var(--space-away);
             border: var(--border-size-1) solid var(--border-color);
-            padding: var(--size-sm);
+            padding: var(--space-away);
             border-radius: var(--radius-2);
         }
 
         .options-section > :is(h1,h2,h3,h4,h5,h6) {
-            font-weight: var(--font-weight-6);
-            font-size: var(--font-size-1);
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-medium);
         }
 
         .options-box {
             display: grid;
-            gap: var(--size-xs);
+            gap: var(--space-near);
         }
 
         .input-field {
             display: grid;
-            gap: var(--size-xxs);
+            gap: var(--space-near);
         }
 
         /**
@@ -979,11 +934,11 @@
 
         #toast-root {
             position: fixed;
-            bottom: calc(var(--size-xl) + var(--size-sm));
+            bottom: calc(60px + var(--space-away));
             inset-inline: 0;
-            padding: 0 var(--size-xs);
+            padding: 0 var(--space-near);
             display: grid;
-            gap: var(--size-xs);
+            gap: var(--space-near);
             z-index: 2;
         }
 
@@ -993,14 +948,15 @@
             border: var(--border-size-1) solid var(--border-color);
             background: var(--surface-1);
             color: var(--text-1);
-            padding: var(--size-xs);
-            border-radius: var(--radius-2);
+            padding: var(--space-near);
+            border-radius: var(--border-radius);
             display: grid;
             grid-template: "icon message" 1fr / var(--icon-size) 1fr;
-            gap: var(--size-xs);
-            animation: animate-toast-in forwards var(--timing-duration) var(--ease-squish-3);
+            gap: var(--space-near);
+            animation: animate-toast-in forwards var(--timing-duration) var(--ease-3);
             cursor: pointer;
             will-change: transform;
+            box-shadow: var(--shadow-3);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1010,20 +966,20 @@
         }
 
         .toast.--animate-out {
-            animation: animate-toast-out forwards var(--timing-duration) var(--ease-squish-3);
+            animation: animate-toast-out forwards var(--timing-duration) var(--ease-3);
         }
 
         .toast-text {
             display: flex;
             align-items: center;
             min-block-size: var(--icon-size);
-            font-weight: var(--font-weight-6);
+            font-weight: var(--font-weight-bold);
         }
 
         @keyframes animate-toast-in {
             0% {
                 opacity: 0;
-                transform: translateY(var(--size-sm));
+                transform: translateY(var(--space-away));
             }
             100% {
                 opacity: 1;
@@ -1038,7 +994,7 @@
             }
             100% {
                 opacity: 0;
-                transform: translateY(calc(var(--size-sm) * -1));;
+                transform: translateY(calc(var(--space-away) * -1));;
             }
         }
 
@@ -1059,7 +1015,7 @@
 
         .buttons-aside {
             display: flex;
-            gap: var(--size-xs);
+            gap: var(--space-near);
         }
 
         #sync-remote {
@@ -1088,12 +1044,15 @@
         </svg>
         <small>Options</small>
     </a>
+    <span class="account-sum"></span>
 </nav>
 <div class="page" id="logins">
     <section class="login-container">
         <!--Categories filter -->
-        <div class="categories-filters">
-            <button type="reset" id="category-reset">Reset</button>
+        <div class="list-container categories-filters">
+            <div class="categories-header">
+            <button type="reset" id="category-reset">Reset filters</button>
+                </div>
             <ul class="categories-list">
                 <!-- categories go here -->
                 <i>No categories found.</i>
@@ -1222,14 +1181,14 @@
 <!-- Template for toast notifications -->
 <template id="toast-template">
     <output class="toast">
-        <div class="toast-icon">
+        <span class="toast-icon">
             <svg class="toast-icon--success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"/>
             </svg>
             <svg class="toast-icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM13 17h-2v-2h2v2zm0-4h-2V7h2v6z"/>
             </svg>
-        </div>
+        </span>
         <span class="toast-text"></span>
     </output>
 </template>
