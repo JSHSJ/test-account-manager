@@ -58,3 +58,14 @@ Initial release
 ### Fixed
 
 - Fix item toggle after search
+
+## [1.1.0] - 2023-02-12
+
+### Changed
+
+- Change the filter layout to a more compact one
+- Apply filters eagerly
+
+### Fixed
+
+- Fix error where opening extensions would sometimes not show the logins
