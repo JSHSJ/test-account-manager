@@ -456,8 +456,8 @@ const init = async () => {
         await registerContentScript()
         await initialiseActiveTab()
         await loadCustomLogins()
-        await loadOptions()
         await initRemoteLogins()
+        await loadOptions()
         await loadFilters()
     } catch (e) {
         console.error(e)
@@ -465,12 +465,12 @@ const init = async () => {
 }
 
 init().then(() => {
-    updateDisplay()
     initUpload()
     initSearch()
     initOpenNewTab()
     initAutoLogin()
     initNavigateButtons()
+    updateDisplay()
     initCategories()
     hideLoader()
     if (Math.random() < 0.1) {
@@ -623,6 +623,7 @@ const initCategories = () => {
             activeFilters.delete(key)
         }
         syncActiveFiltersToSelects();
+        saveFilters();
         updateDisplay();
     }
 
