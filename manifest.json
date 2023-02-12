@@ -24,12 +24,6 @@
   "options_ui": {
     "page": "index.html#options"
   },
-  "permissions": [
-    "activeTab",
-    "storage",
-    "unlimitedStorage"
-  ],
-  "optional_permissions": [
-    "https://*/"
-  ]
+  "permissions": ["activeTab", "storage", "unlimitedStorage"],
+  "optional_permissions": ["https://*/"]
 }

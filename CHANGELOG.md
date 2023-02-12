@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release
 
-## [0.0.2] 
+## [0.0.2]
 
 ### Added
+
 - Include categories in search
 - Persist filters across sessions by syncing them to the storage
 
@@ -31,7 +32,6 @@ Initial release
 - Fixed categories not updating when a remote list is used
 - Fixed search breaking when description is undefined
 
-
 ## [0.0.4] - 2022-08-17
 
 ### Added
@@ -44,7 +44,7 @@ Initial release
 
 ## [1.0.0] - 2022-08-26
 
-### Added 
+### Added
 
 - Now also supports Firefox (and maybe Safari?)
 - Options are now opennable in a new tab
@@ -58,3 +58,14 @@ Initial release
 ### Fixed
 
 - Fix item toggle after search
+
+## [1.1.0] - 2023-02-12
+
+### Changed
+
+- Change the filter layout to a more compact one
+- Apply filters eagerly
+
+### Fixed
+
+- Fix error where opening extensions would sometimes not show the logins
