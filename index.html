@@ -183,7 +183,7 @@
 
         [data-density-shift] {
             --space-near: var(--size-1);
-            --space-away: var(--size-2);   
+            --space-away: var(--size-2);
         }
 
         @media (dynamic-range: high) {
@@ -591,6 +591,7 @@
             grid-template-columns: repeat(auto-fit, 15%);
             border-top: var(--border-size) solid var(--border-color);
             padding: 0 var(--space-near);
+            padding-inline-end: calc(var(--space-near) * 2);
             gap: 0;
             inline-size: 100%;
         }
@@ -668,6 +669,7 @@
             display: grid;
             gap: var(--space-near);
             align-content: flex-start;
+            padding-inline-end: var(--space-near);
         }
 
         #login-root:not(:empty) + .nothing {
@@ -789,6 +791,7 @@
             padding: var(--space-near);
             border-bottom: var(--border-size) solid var(--border-color);
             height: var(--header-height);
+            padding-inline-end: calc(var(--space-near) * 2);
         }
 
         .search-container label {
@@ -818,7 +821,8 @@
 
         .categories-header{
             grid-area: header;
-            padding: var(--space-near);
+            padding-block: var(--space-near);
+            padding-inline: var(--space-away);
             align-items: center;
             border-bottom: var(--border-size) solid var(--border-color);
             min-block-size: var(--header-height);
@@ -951,6 +955,7 @@
             bottom: calc(60px + var(--space-away));
             inset-inline: 0;
             padding: 0 var(--space-near);
+            padding-inline-end: calc(var(--space-near) * 2);
             display: grid;
             gap: var(--space-near);
             z-index: 2;
