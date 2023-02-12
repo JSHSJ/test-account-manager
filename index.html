@@ -1,1224 +1,1440 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      :where(html) {
+        --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+          Cantarell, Noto Sans, sans-serif, Segoe UI, Roboto, Ubuntu, Cantarell,
+          Noto Sans, sans-serif;
+        --font-serif: ui-serif, serif;
+        --font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono,
+          ui-monospace, SF Mono, Monaco, Droid Sans Mono, Source Code Pro,
+          monospace;
+        --font-weight-4: 400;
+        --font-weight-6: 600;
+        --font-lineheight-00: 0.95;
+        --font-lineheight-0: 1.1;
+        --font-lineheight-1: 1.25;
+        --font-lineheight-2: 1.375;
+        --font-lineheight-3: 1.5;
+        --font-lineheight-4: 1.75;
+        --font-lineheight-5: 2;
+        --font-letterspacing-0: -0.05em;
+        --font-letterspacing-1: 0.025em;
+        --font-letterspacing-2: 0.05em;
+        --font-letterspacing-3: 0.075em;
+        --font-letterspacing-4: 0.15em;
+        --font-letterspacing-5: 0.5em;
+        --font-letterspacing-6: 0.75em;
+        --font-letterspacing-7: 1em;
+        --font-size-00: 0.5rem;
+        --font-size-0: 0.75rem;
+        --font-size-1: 1rem;
+        --font-size-2: 1.1rem;
+        --font-size-3: 1.25rem;
+        --font-size-4: 1.5rem;
+        --font-size-5: 2rem;
+        --size-000: -0.5rem;
+        --size-00: -0.25rem;
+        --size-1: 0.25rem;
+        --size-2: 0.5rem;
+        --size-3: 1rem;
+        --size-4: 1.25rem;
+        --size-5: 1.5rem;
+        --size-6: 1.75rem;
+        --size-7: 2rem;
+        --size-8: 3rem;
+        --size-9: 4rem;
+        --size-10: 5rem;
+        --size-11: 7.5rem;
+
+        --ease-1: cubic-bezier(0.25, 0, 0.5, 1);
+        --ease-2: cubic-bezier(0.25, 0, 0.4, 1);
+        --ease-3: cubic-bezier(0.25, 0, 0.3, 1);
+        --ease-4: cubic-bezier(0.25, 0, 0.2, 1);
+        --ease-5: cubic-bezier(0.25, 0, 0.1, 1);
+        --layer-1: 1;
+        --layer-2: 2;
+        --layer-3: 3;
+        --layer-4: 4;
+        --layer-5: 5;
+        --layer-important: 2147483647;
+        --shadow-color: 220 3% 15%;
+        --shadow-strength: 1%;
+        --shadow-1: 0 1px 2px -1px hsl(var(--shadow-color) /
+              calc(var(--shadow-strength) + 9%));
+        --shadow-2: 0 3px 5px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 7px 14px -5px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 5%));
+        --shadow-3: 0 -1px 3px 0 hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 2%)),
+          0 1px 2px -5px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 2%)),
+          0 2px 5px -5px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 4%)),
+          0 4px 12px -5px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 5%)),
+          0 12px 15px -5px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 7%));
+        --shadow-4: 0 -2px 5px 0 hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 2%)),
+          0 1px 1px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 2px 2px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 5px 5px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 4%)),
+          0 9px 9px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 5%)),
+          0 16px 16px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 6%));
+        --shadow-5: 0 -1px 2px 0 hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 2%)),
+          0 2px 1px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 5px 5px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 10px 10px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 4%)),
+          0 20px 20px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 5%)),
+          0 40px 40px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 7%));
+        --shadow-6: 0 -1px 2px 0 hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 2%)),
+          0 3px 2px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 7px 5px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 3%)),
+          0 12px 10px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 4%)),
+          0 22px 18px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 5%)),
+          0 41px 33px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 6%)),
+          0 100px 80px -2px hsl(var(--shadow-color) /
+                calc(var(--shadow-strength) + 7%));
+        --inner-shadow-0: inset 0 0 0 1px
+          hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+        --inner-shadow-1: inset 0 1px 2px 0
+          hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+        --inner-shadow-2: inset 0 1px 4px 0
+          hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+        --inner-shadow-3: inset 0 2px 8px 0
+          hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+        --inner-shadow-4: inset 0 2px 14px 0
+          hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+        --ratio-square: 1;
+        --ratio-landscape: 4/3;
+        --ratio-portrait: 3/4;
+
+        --gray-0: #f8f9fa;
+        --gray-1: #f1f3f5;
+        --gray-2: #e9ecef;
+        --gray-3: #dee2e6;
+        --gray-4: #ced4da;
+        --gray-5: #adb5bd;
+        --gray-6: #868e96;
+        --gray-7: #495057;
+        --gray-8: #343a40;
+        --gray-9: #212529;
+        --pink-0: #fff0f6;
+        --pink-1: #ffdeeb;
+        --pink-2: #fcc2d7;
+        --pink-3: #faa2c1;
+        --pink-4: #f783ac;
+        --pink-5: #f06595;
+        --pink-6: #e64980;
+        --pink-7: #d6336c;
+        --pink-8: #c2255c;
+        --pink-9: #a61e4d;
+        --red-7: #f03e3e;
+
+        --indigo-0: #edf2ff;
+        --indigo-1: #dbe4ff;
+        --indigo-2: #bac8ff;
+        --indigo-3: #91a7ff;
+        --indigo-4: #748ffc;
+        --indigo-5: #5c7cfa;
+        --indigo-6: #4c6ef5;
+        --indigo-7: #4263eb;
+        --indigo-8: #3b5bdb;
+        --indigo-9: #364fc7;
+        --blue-0: #e7f5ff;
+        --blue-1: #d0ebff;
+        --blue-2: #a5d8ff;
+        --blue-3: #74c0fc;
+        --blue-4: #4dabf7;
+        --blue-5: #339af0;
+        --blue-6: #228be6;
+        --blue-7: #1c7ed6;
+        --blue-8: #1971c2;
+        --blue-9: #1864ab;
+
+        --border-size-1: 1px;
+        --border-size-2: 2px;
+        --border-size-3: 5px;
+        --border-size-4: 10px;
+        --border-size-5: 25px;
+        --radius-1: 2px;
+        --radius-2: 5px;
+        --radius-3: 1rem;
+        --radius-4: 2rem;
+        --radius-5: 4rem;
+        --radius-6: 8rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
         :where(html) {
-            --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
-            --font-serif: ui-serif, serif;
-            --font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco, Droid Sans Mono, Source Code Pro, monospace;
-            --font-weight-4: 400;
-            --font-weight-6: 600;
-            --font-lineheight-00: .95;
-            --font-lineheight-0: 1.1;
-            --font-lineheight-1: 1.25;
-            --font-lineheight-2: 1.375;
-            --font-lineheight-3: 1.5;
-            --font-lineheight-4: 1.75;
-            --font-lineheight-5: 2;
-            --font-letterspacing-0: -.05em;
-            --font-letterspacing-1: .025em;
-            --font-letterspacing-2: .050em;
-            --font-letterspacing-3: .075em;
-            --font-letterspacing-4: .150em;
-            --font-letterspacing-5: .500em;
-            --font-letterspacing-6: .750em;
-            --font-letterspacing-7: 1em;
-            --font-size-00: .5rem;
-            --font-size-0: .75rem;
-            --font-size-1: 1rem;
-            --font-size-2: 1.1rem;
-            --font-size-3: 1.25rem;
-            --font-size-4: 1.5rem;
-            --font-size-5: 2rem;
-            --size-000: -.5rem;
-            --size-00: -.25rem;
-            --size-1: .25rem;
-            --size-2: .5rem;
-            --size-3: 1rem;
-            --size-4: 1.25rem;
-            --size-5: 1.5rem;
-            --size-6: 1.75rem;
-            --size-7: 2rem;
-            --size-8: 3rem;
-            --size-9: 4rem;
-            --size-10: 5rem;
-            --size-11: 7.5rem;
-
-            --ease-1: cubic-bezier(.25, 0, .5, 1);
-            --ease-2: cubic-bezier(.25, 0, .4, 1);
-            --ease-3: cubic-bezier(.25, 0, .3, 1);
-            --ease-4: cubic-bezier(.25, 0, .2, 1);
-            --ease-5: cubic-bezier(.25, 0, .1, 1);
-            --layer-1: 1;
-            --layer-2: 2;
-            --layer-3: 3;
-            --layer-4: 4;
-            --layer-5: 5;
-            --layer-important: 2147483647;
-            --shadow-color: 220 3% 15%;
-            --shadow-strength: 1%;
-            --shadow-1: 0 1px 2px -1px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 9%));
-            --shadow-2: 0 3px 5px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 7px 14px -5px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 5%));
-            --shadow-3: 0 -1px 3px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 2%)), 0 1px 2px -5px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 2%)), 0 2px 5px -5px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 4%)), 0 4px 12px -5px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 5%)), 0 12px 15px -5px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 7%));
-            --shadow-4: 0 -2px 5px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 2%)), 0 1px 1px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 2px 2px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 5px 5px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 4%)), 0 9px 9px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 5%)), 0 16px 16px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 6%));
-            --shadow-5: 0 -1px 2px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 2%)), 0 2px 1px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 5px 5px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 10px 10px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 4%)), 0 20px 20px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 5%)), 0 40px 40px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 7%));
-            --shadow-6: 0 -1px 2px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 2%)), 0 3px 2px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 7px 5px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 3%)), 0 12px 10px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 4%)), 0 22px 18px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 5%)), 0 41px 33px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 6%)), 0 100px 80px -2px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 7%));
-            --inner-shadow-0: inset 0 0 0 1px hsl(var(--shadow-color)/calc(var(--shadow-strength) + 9%));
-            --inner-shadow-1: inset 0 1px 2px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 9%));
-            --inner-shadow-2: inset 0 1px 4px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 9%));
-            --inner-shadow-3: inset 0 2px 8px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 9%));
-            --inner-shadow-4: inset 0 2px 14px 0 hsl(var(--shadow-color)/calc(var(--shadow-strength) + 9%));
-            --ratio-square: 1;
-            --ratio-landscape: 4/3;
-            --ratio-portrait: 3/4;
-
-            --gray-0: #f8f9fa;
-            --gray-1: #f1f3f5;
-            --gray-2: #e9ecef;
-            --gray-3: #dee2e6;
-            --gray-4: #ced4da;
-            --gray-5: #adb5bd;
-            --gray-6: #868e96;
-            --gray-7: #495057;
-            --gray-8: #343a40;
-            --gray-9: #212529;
-            --pink-0: #fff0f6;
-            --pink-1: #ffdeeb;
-            --pink-2: #fcc2d7;
-            --pink-3: #faa2c1;
-            --pink-4: #f783ac;
-            --pink-5: #f06595;
-            --pink-6: #e64980;
-            --pink-7: #d6336c;
-            --pink-8: #c2255c;
-            --pink-9: #a61e4d;
-            --red-7: #f03e3e;
-
-
-            --indigo-0: #edf2ff;
-            --indigo-1: #dbe4ff;
-            --indigo-2: #bac8ff;
-            --indigo-3: #91a7ff;
-            --indigo-4: #748ffc;
-            --indigo-5: #5c7cfa;
-            --indigo-6: #4c6ef5;
-            --indigo-7: #4263eb;
-            --indigo-8: #3b5bdb;
-            --indigo-9: #364fc7;
-            --blue-0: #e7f5ff;
-            --blue-1: #d0ebff;
-            --blue-2: #a5d8ff;
-            --blue-3: #74c0fc;
-            --blue-4: #4dabf7;
-            --blue-5: #339af0;
-            --blue-6: #228be6;
-            --blue-7: #1c7ed6;
-            --blue-8: #1971c2;
-            --blue-9: #1864ab;
-
-            --border-size-1: 1px;
-            --border-size-2: 2px;
-            --border-size-3: 5px;
-            --border-size-4: 10px;
-            --border-size-5: 25px;
-            --radius-1: 2px;
-            --radius-2: 5px;
-            --radius-3: 1rem;
-            --radius-4: 2rem;
-            --radius-5: 4rem;
-            --radius-6: 8rem;
+          --shadow-color: 220 40% 2%;
+          --shadow-strength: 25%;
         }
+      }
 
-        @media (prefers-color-scheme: dark) {
-            :where(html) {
-                --shadow-color: 220 40% 2%;
-                --shadow-strength: 25%
-            }
+      :where(html) {
+        --link: var(--indigo-7);
+        --link-visited: var(--pink-7);
+        --text-1: var(--gray-9);
+        --text-2: var(--gray-7);
+        --surface-1: var(--gray-0);
+        --surface-2: var(--gray-2);
+        --surface-3: var(--gray-3);
+        --surface-4: var(--gray-4);
+        --color-active-strong: var(--indigo-7);
+        --color-active-weak: var(--indigo-5);
+        --color-selected: var(--indigo-5);
+        --color-reset: var(--red-7);
+        --scrollthumb-color: var(--gray-6);
+        --space-near: var(--size-2);
+        --space-away: var(--size-3);
+        --border-radius: var(--radius-2);
+        /* --border-color: #171a1c; */
+        --border-color: transparent;
+        --border-size: var(--border-size-2);
+        --header-height: 3rem;
+        --icon-size: 2ch;
+        --font-size-small: var(--font-size-0);
+        --font-size-medium: var(--font-size-1);
+        --font-size-big: var(--font-size-2);
+        --font-weight-default: var(--font-weight-4);
+        --font-weight-bold: var(--font-weight-6);
+
+        -webkit-text-size-adjust: none;
+        accent-color: var(--link);
+        background-color: var(--surface-1);
+        block-size: 100%;
+        caret-color: var(--link);
+        color: var(--text-2);
+        color-scheme: light;
+        font-family: var(--font-sans);
+        line-height: var(--font-lineheight-3);
+        scrollbar-color: var(--scrollthumb-color) transparent;
+      }
+
+      [data-density-shift] {
+        --space-near: var(--size-1);
+        --space-away: var(--size-2);
+      }
+
+      @media (dynamic-range: high) {
+        @supports (color(display-p3 0 0.5 1)) {
+          :where(html) {
+            --link: color(display-p3 0 0.5 1);
+            --link-visited: color(display-p3 0.6 0.2 1);
+          }
         }
+      }
 
-
+      @media (prefers-color-scheme: dark) {
         :where(html) {
-            --link: var(--indigo-7);
-            --link-visited: var(--pink-7);
-            --text-1: var(--gray-9);
-            --text-2: var(--gray-7);
-            --surface-1: var(--gray-0);
-            --surface-2: var(--gray-2);
-            --surface-3: var(--gray-3);
-            --surface-4: var(--gray-4);
-            --color-active-strong: var(--indigo-7);
-            --color-active-weak: var(--indigo-5);
-            --color-selected: var(--indigo-5);
-            --color-reset: var(--red-7);
-            --scrollthumb-color: var(--gray-6);
-            --space-near: var(--size-2);
-            --space-away: var(--size-3);
-            --border-radius: var(--radius-2);
-            /* --border-color: #171a1c; */
-            --border-color: transparent;
-            --border-size: var(--border-size-2);
-            --header-height: 3rem;
-            --icon-size: 2ch;
-            --font-size-small: var(--font-size-0);
-            --font-size-medium: var(--font-size-1);
-            --font-size-big: var(--font-size-2);
-            --font-weight-default: var(--font-weight-4);
-            --font-weight-bold: var(--font-weight-6);
+          --link: var(--indigo-3);
+          --link-visited: var(--pink-3);
+          --text-1: var(--gray-1);
+          --text-2: var(--gray-4);
+          --surface-1: var(--gray-9);
+          --surface-2: var(--gray-8);
+          --surface-3: var(--gray-7);
+          --surface-4: var(--gray-6);
+          --color-active-strong: var(--indigo-5);
+          --color-active-weak: var(--indigo-3);
+          --color-selected: var(--indigo-3);
+          --color-reset: var(--red-7);
 
-
-            -webkit-text-size-adjust: none;
-            accent-color: var(--link);
-            background-color: var(--surface-1);
-            block-size: 100%;
-            caret-color: var(--link);
-            color: var(--text-2);
-            color-scheme: light;
-            font-family: var(--font-sans);
-            line-height: var(--font-lineheight-3);
-            scrollbar-color: var(--scrollthumb-color) transparent
+          color-scheme: dark;
         }
+      }
 
-        [data-density-shift] {
-            --space-near: var(--size-1);
-            --space-away: var(--size-2);
+      :where(h1, h2, h3, h4, h5, h6, dt) {
+        color: var(--text-1);
+      }
+
+      :where(a[href]) {
+        color: var(--link);
+      }
+
+      :where(a[href]):visited {
+        color: var(--link-visited);
+      }
+
+      :focus-visible {
+        outline-color: var(--link);
+      }
+
+      @media (prefers-color-scheme: light) {
+        :where(html) {
+          --scrollthumb-color: var(--gray-7);
         }
+      }
 
-        @media (dynamic-range: high) {
-            @supports (color(display-p3 0 .5 1)) {
-                :where(html) {
-                    --link: color(display-p3 0 .5 1);
-                    --link-visited: color(display-p3 .6 .2 1)
-                }
-            }
+      *,
+      :after,
+      :before {
+        box-sizing: border-box;
+      }
+
+      :where(:not(dialog)) {
+        margin: 0;
+      }
+
+      :where(:not(fieldset, progress, meter)) {
+        background-origin: border-box;
+        background-repeat: no-repeat;
+        border-style: solid;
+        border-width: 0;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        :where(html) {
+          scroll-behavior: smooth;
         }
+      }
 
-        @media (prefers-color-scheme: dark) {
-            :where(html) {
-                --link: var(--indigo-3);
-                --link-visited: var(--pink-3);
-                --text-1: var(--gray-1);
-                --text-2: var(--gray-4);
-                --surface-1: var(--gray-9);
-                --surface-2: var(--gray-8);
-                --surface-3: var(--gray-7);
-                --surface-4: var(--gray-6);
-                --color-active-strong: var(--indigo-5);
-                --color-active-weak: var(--indigo-3);
-                --color-selected: var(--indigo-3);
-                --color-reset: var(--red-7);
-
-                color-scheme: dark
-            }
-        }
-
-        :where(h1,h2,h3,h4,h5,h6,dt) {
-            color: var(--text-1)
-        }
-
-        :where(a[href]) {
-            color: var(--link)
-        }
-
-        :where(a[href]):visited {
-            color: var(--link-visited)
-        }
-
+      @media (prefers-reduced-motion: no-preference) {
         :focus-visible {
-            outline-color: var(--link)
-        }
-
-        @media (prefers-color-scheme: light) {
-            :where(html) {
-                --scrollthumb-color: var(--gray-7)
-            }
-        }
-
-        *, :after, :before {
-            box-sizing: border-box
-        }
-
-        :where(:not(dialog)) {
-            margin: 0
-        }
-
-        :where(:not(fieldset,progress,meter)) {
-            background-origin: border-box;
-            background-repeat: no-repeat;
-            border-style: solid;
-            border-width: 0
-        }
-
-        @media (prefers-reduced-motion: no-preference) {
-            :where(html) {
-                scroll-behavior: smooth
-            }
-        }
-
-        @media (prefers-reduced-motion: no-preference) {
-            :focus-visible {
-                transition: outline-offset 145ms var(--ease-2)
-            }
-
-            :where(:not(:active)):focus-visible {
-                transition-duration: .25s
-            }
+          transition: outline-offset 145ms var(--ease-2);
         }
 
         :where(:not(:active)):focus-visible {
-            outline-offset: 5px
+          transition-duration: 0.25s;
         }
+      }
 
-        :where(body) {
-            min-block-size: 100%
+      :where(:not(:active)):focus-visible {
+        outline-offset: 5px;
+      }
+
+      :where(body) {
+        min-block-size: 100%;
+      }
+
+      :where(h1, h2, h3, h4, h5, h6) {
+        font-weight: var(--font-weight-bold);
+        line-height: var(--font-lineheight-1);
+      }
+
+      :where(p, ul, ol, dl, h6) {
+        font-size: var(--font-size-medium);
+      }
+
+      :where(a, u, ins, abbr) {
+        text-underline-offset: 1px;
+      }
+
+      @supports (-moz-appearance: none) {
+        :where(a, u, ins, abbr) {
+          text-underline-offset: 2px;
         }
+      }
 
-        :where(h1,h2,h3,h4,h5,h6) {
-            font-weight: var(--font-weight-bold);
-            line-height: var(--font-lineheight-1);
+      :where(a):where([href]) {
+        text-decoration-color: var(--color-active-weak);
+      }
+
+      :where(a):where([href]):where(:visited) {
+        text-decoration-color: var(--color-selected);
+      }
+
+      :where(a):where(:not(:hover)) {
+        text-decoration: inherit;
+      }
+
+      :where(img, svg, video, canvas, audio, iframe, embed, object) {
+        display: block;
+      }
+
+      :where(input, button, textarea, select),
+      :where(input[type="file"])::-webkit-file-upload-button {
+        color: inherit;
+        font: inherit;
+        font-size: var(--font-size-small);
+        letter-spacing: var(--font-letterspacing-2);
+        line-height: 1;
+      }
+
+      :where(input, textarea) {
+        padding-block: var(--space-near);
+        padding-inline: var(--space-near);
+      }
+
+      :where(select) {
+        padding-block: 0.75ch;
+        padding-inline: 1.25ch 0;
+      }
+
+      :where(
+          textarea,
+          select,
+          input:not(
+              button,
+              button[type],
+              input[type="button"],
+              input[type="submit"],
+              input[type="reset"]
+            )
+        ) {
+        background-color: var(--surface-2);
+        border-radius: var(--border-radius);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :where(
+            textarea,
+            select,
+            input:not(
+                button,
+                button[type],
+                input[type="button"],
+                input[type="submit"],
+                input[type="reset"]
+              )
+          ) {
+          background-color: #171a1c;
         }
+      }
 
+      :where(textarea) {
+        resize: block;
+      }
 
-        :where(p,ul,ol,dl,h6) {
-            font-size: var(--font-size-medium);
+      :where(input[type="checkbox"], input[type="radio"]) {
+        block-size: var(--size-3);
+        inline-size: var(--size-3);
+      }
+
+      :where(svg) {
+        stroke: none;
+        fill: currentColor;
+      }
+
+      :where(svg):where(:not([fill])) {
+        stroke: currentColor;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      :where(svg):where(:not([width])) {
+        height: 100%;
+        max-inline-size: 100%;
+      }
+
+      :where(ol, ul) {
+        padding-inline-start: var(--space-away);
+      }
+
+      :where(li) {
+        padding-inline-start: var(--space-near);
+      }
+
+      :where(fieldset) {
+        border: var(--border-size-1) solid var(--surface-4);
+        border-radius: var(--border-radius);
+      }
+
+      :where(
+          button,
+          button[type],
+          input[type="button"],
+          input[type="submit"],
+          input[type="reset"]
+        ),
+      :where(input[type="file"])::-webkit-file-upload-button,
+      :where(input[type="file"])::file-selector-button {
+        --_accent: initial;
+        --_text: initial;
+        --_size: initial;
+        --_bg-light: #fff;
+        --_bg-dark: var(--surface-3);
+        --_bg: var(--_bg-light);
+        --_border: var(--surface-3);
+        --_highlight-size: 0;
+        --_highlight-light: rgba(174, 181, 188, 0.25);
+        --_highlight-dark: rgba(11, 13, 14, 0.25);
+        --_highlight: var(--_highlight-light);
+        --_ink-shadow-light: 0 1px 0 var(--gray-3);
+        --_ink-shadow-dark: 0 1px 0 var(--surface-1);
+        --_ink-shadow: var(--_ink-shadow-light);
+        --_icon-size: 2ch;
+        --_icon-color: var(--_accent, var(--link));
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        align-items: center;
+        background: var(--_bg);
+        border: var(--border-size-1) solid var(--_border);
+        border-radius: var(--radius-2);
+        box-shadow: var(--shadow-2), 0 1px var(--surface-3),
+          0 0 0 var(--_highlight-size) var(--_highlight);
+        color: var(--_text);
+        display: inline-flex;
+        font-size: var(--_size);
+        font-weight: var(--font-weight-bold);
+        gap: var(--size-2);
+        justify-content: center;
+        padding: var(--space-near);
+        text-align: center;
+        text-shadow: var(--_ink-shadow);
+        transition: border-color 0.5s var(--ease-3) 3s;
+        user-select: none;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :where(
+            button,
+            button[type],
+            input[type="button"],
+            input[type="submit"],
+            input[type="reset"]
+          ),
+        :where(input[type="file"])::-webkit-file-upload-button,
+        :where(input[type="file"])::file-selector-button {
+          --_highlight: var(--_highlight-dark);
+          --_bg: var(--_bg-dark);
+          --_ink-shadow: var(--_ink-shadow-dark);
         }
+      }
 
-        :where(a,u,ins,abbr) {
-            text-underline-offset: 1px;
+      @media (prefers-reduced-motion: no-preference) {
+        :where(
+            button,
+            button[type],
+            input[type="button"],
+            input[type="submit"],
+            input[type="reset"]
+          ),
+        :where(input[type="file"])::-webkit-file-upload-button,
+        :where(input[type="file"])::file-selector-button {
+          transition: border-color 0.5s var(--ease-3) 3s,
+            box-shadow 145ms var(--ease-4);
         }
+      }
 
-        @supports (-moz-appearance:none) {
-            :where(a,u,ins,abbr) {
-                text-underline-offset: 2px;
-            }
+      :where(
+          button,
+          button[type],
+          input[type="button"],
+          input[type="submit"],
+          input[type="reset"]
+        )[disabled] {
+        --_bg: none;
+        --_text: var(--gray-6);
+        box-shadow: var(--shadow-1);
+        cursor: not-allowed;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :where(
+            button,
+            button[type],
+            input[type="button"],
+            input[type="submit"],
+            input[type="reset"]
+          )[disabled] {
+          --_text: var(--gray-5);
         }
+      }
 
-        :where(a):where([href]) {
-            text-decoration-color: var(--color-active-weak);
+      :where(
+          button,
+          button[type],
+          input[type="button"],
+          input[type="submit"],
+          input[type="reset"]
+        ):where(:not(:active):hover) {
+        --_highlight-size: var(--size-2);
+        transition-delay: 0s;
+        transition-duration: 0.25s;
+      }
+
+      :where(
+          button,
+          button[type],
+          input[type="button"],
+          input[type="submit"],
+          input[type="reset"]
+        )
+        > :where(svg) {
+        block-size: var(--_icon-size);
+        filter: drop-shadow(var(--_ink-shadow));
+        flex-shrink: 0;
+        inline-size: var(--_icon-size);
+      }
+
+      :where(
+          button,
+          button[type],
+          input[type="button"],
+          input[type="submit"],
+          input[type="reset"]
+        )
+        > :where(svg > *) {
+        stroke: var(--_icon-color);
+        stroke-width: var(--border-size-2);
+      }
+
+      :where([type="submit"], form button:not([type], [disabled])) {
+        --_text: var(--_accent, var(--link));
+      }
+
+      :where([type="reset"]) {
+        --_text: var(--color-reset);
+        --_border: var(--color-reset);
+      }
+
+      :where([type="reset"]):focus-visible {
+        outline-color: var(--color-reset);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :where([type="reset"]) {
+          --_text: var(--color-reset);
+          --_border: var(--surface-3);
         }
+      }
 
-        :where(a):where([href]):where(:visited) {
-            text-decoration-color: var(--color-selected);
+      :where([type="submit"], [type="reset"], form button:not([type])):is(
+          :hover,
+          :focus-visible
+        ):not([disabled]) {
+        --_border: currentColor;
+      }
+
+      :where(input[type="file"]) {
+        align-self: flex-start;
+        border: var(--border-size-1) solid var(--surface-2);
+        border-radius: var(--radius-2);
+        color: var(--text-2);
+        box-shadow: var(--inner-shadow-4);
+        cursor: auto;
+        max-inline-size: 100%;
+        padding: 0;
+      }
+
+      :where(input[type="file"])::-webkit-file-upload-button,
+      :where(input[type="file"])::file-selector-button {
+        cursor: pointer;
+        margin-inline-end: 1.75ch;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :where([disabled]),
+        :where([type="reset"]),
+        :where([type="submit"]),
+        :where(form button:not([type="button"])) {
+          --_bg: var(--surface-1);
         }
-
-        :where(a):where(:not(:hover)) {
-            text-decoration: inherit;
-        }
-
-        :where(img,svg,video,canvas,audio,iframe,embed,object) {
-            display: block;
-        }
-
-        :where(input,button,textarea,select), :where(input[type=file])::-webkit-file-upload-button {
-            color: inherit;
-            font: inherit;
-            font-size: var(--font-size-small);
-            letter-spacing: var(--font-letterspacing-2);
-            line-height: 1;
-        }
-
-        :where(input,textarea) {
-            padding-block: var(--space-near);
-            padding-inline: var(--space-near);
-        }
-
-        :where(select) {
-            padding-block: 0.75ch;
-            padding-inline: 1.25ch 0;
-        }
-
-        :where(textarea,select,input:not(button,button[type],input[type=button],input[type=submit],input[type=reset])) {
-            background-color: var(--surface-2);
-            border-radius: var(--border-radius);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :where(textarea,select,input:not(button,button[type],input[type=button],input[type=submit],input[type=reset])) {
-                background-color: #171a1c;
-            }
-        }
-
-        :where(textarea) {
-            resize: block;
-        }
-
-        :where(input[type=checkbox],input[type=radio]) {
-            block-size: var(--size-3);
-            inline-size: var(--size-3);
-        }
-
-        :where(svg) {
-            stroke: none;
-            fill: currentColor;
-        }
-
-        :where(svg):where(:not([fill])) {
-            stroke: currentColor;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        :where(svg):where(:not([width])) {
-            height: 100%;
-            max-inline-size: 100%;
-        }
-
-
-        :where(ol,ul) {
-            padding-inline-start: var(--space-away);
-        }
-
-        :where(li) {
-            padding-inline-start: var(--space-near)
-        }
-
-
-
-        :where(fieldset) {
-            border: var(--border-size-1) solid var(--surface-4);
-            border-radius: var(--border-radius)
-        }
-
-        :where(button,button[type],input[type=button],input[type=submit],input[type=reset]), :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
-            --_accent: initial;
-            --_text: initial;
-            --_size: initial;
-            --_bg-light: #fff;
-            --_bg-dark: var(--surface-3);
-            --_bg: var(--_bg-light);
-            --_border: var(--surface-3);
-            --_highlight-size: 0;
-            --_highlight-light: rgba(174, 181, 188, .25);
-            --_highlight-dark: rgba(11, 13, 14, .25);
-            --_highlight: var(--_highlight-light);
-            --_ink-shadow-light: 0 1px 0 var(--gray-3);
-            --_ink-shadow-dark: 0 1px 0 var(--surface-1);
-            --_ink-shadow: var(--_ink-shadow-light);
-            --_icon-size: 2ch;
-            --_icon-color: var(--_accent, var(--link));
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            align-items: center;
-            background: var(--_bg);
-            border: var(--border-size-1) solid var(--_border);
-            border-radius: var(--radius-2);
-            box-shadow: var(--shadow-2), 0 1px var(--surface-3), 0 0 0 var(--_highlight-size) var(--_highlight);
-            color: var(--_text);
-            display: inline-flex;
-            font-size: var(--_size);
-            font-weight: var(--font-weight-bold);
-            gap: var(--size-2);
-            justify-content: center;
-            padding: var(--space-near);
-            text-align: center;
-            text-shadow: var(--_ink-shadow);
-            transition: border-color .5s var(--ease-3) 3s;
-            user-select: none
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :where(button,button[type],input[type=button],input[type=submit],input[type=reset]), :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
-                --_highlight: var(--_highlight-dark);
-                --_bg: var(--_bg-dark);
-                --_ink-shadow: var(--_ink-shadow-dark);
-            }
-        }
-
-        @media (prefers-reduced-motion: no-preference) {
-            :where(button,button[type],input[type=button],input[type=submit],input[type=reset]), :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
-                transition: border-color .5s var(--ease-3) 3s, box-shadow 145ms var(--ease-4);
-            }
-        }
-
-        :where(button,button[type],input[type=button],input[type=submit],input[type=reset])[disabled] {
-            --_bg: none;
-            --_text: var(--gray-6);
-            box-shadow: var(--shadow-1);
-            cursor: not-allowed;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :where(button,button[type],input[type=button],input[type=submit],input[type=reset])[disabled] {
-                --_text: var(--gray-5);
-            }
-        }
-
-        :where(button,button[type],input[type=button],input[type=submit],input[type=reset]):where(:not(:active):hover) {
-            --_highlight-size: var(--size-2);
-            transition-delay: 0s;
-            transition-duration: .25s;
-        }
-
-        :where(button,button[type],input[type=button],input[type=submit],input[type=reset]) > :where(svg) {
-            block-size: var(--_icon-size);
-            filter: drop-shadow(var(--_ink-shadow));
-            flex-shrink: 0;
-            inline-size: var(--_icon-size);
-        }
-
-        :where(button,button[type],input[type=button],input[type=submit],input[type=reset]) > :where(svg>*) {
-            stroke: var(--_icon-color);
-            stroke-width: var(--border-size-2);
-        }
-
-        :where([type=submit],form button:not([type],[disabled])) {
-            --_text: var(--_accent, var(--link));
-        }
-
-        :where([type=reset]) {
-            --_text: var(--color-reset);
-            --_border: var(--color-reset);
-        }
-
-        :where([type=reset]):focus-visible {
-            outline-color: var(--color-reset);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :where([type=reset]) {
-                --_text: var(--color-reset);
-                --_border: var(--surface-3);
-            }
-        }
-
-        :where([type=submit],[type=reset],form button:not([type])):is(:hover,:focus-visible):not([disabled]) {
-            --_border: currentColor;
-        }
-
-        :where(input[type=file]) {
-            align-self: flex-start;
-            border: var(--border-size-1) solid var(--surface-2);
-            border-radius: var(--radius-2);
-            color: var(--text-2);
-            box-shadow: var(--inner-shadow-4);
-            cursor: auto;
-            max-inline-size: 100%;
-            padding: 0;
-        }
-
-        :where(input[type=file])::-webkit-file-upload-button, :where(input[type=file])::file-selector-button {
-            cursor: pointer;
-            margin-inline-end: 1.75ch;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :where([disabled]), :where([type=reset]), :where([type=submit]), :where(form button:not([type=button])) {
-                --_bg: var(--surface-1);
-            }
-        }
-
+      }
     </style>
     <style>
+      :is(h1, h2, h3) {
+        margin: 0;
+        padding: 0;
+      }
 
+      h2 {
+        font-size: var(--font-size-big);
+      }
 
+      h3 {
+        font-size: var(--font-size-big);
+      }
 
-        :is(h1, h2, h3) {
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        width: 700px !important;
+        height: 600px !important;
+        position: relative;
+        padding: 0;
+        margin: 0;
+        gap: 0;
+        overflow: hidden;
+        display: grid;
+        grid-template:
+          "page" 1fr
+          "nav" auto
+          / 1fr;
+      }
 
-        h2 {
-            font-size: var(--font-size-big);
-        }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+      }
 
-        h3 {
-            font-size: var(--font-size-big);
-        }
+      svg {
+        fill: currentColor;
+        stroke: none;
+      }
 
-        body {
-            width: 700px !important;
-            height: 600px !important;
-            position: relative;
-            padding: 0;
-            margin: 0;
-            gap: 0;
-            overflow: hidden;
-            display: grid;
-            grid-template:
-                    "page" 1fr
-                    "nav" auto
-            / 1fr;
-        }
-
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-        }
-
-        svg {
-            fill: currentColor;
-            stroke: none;
-        }
-
-
-        /**
+      /**
          * Page
          */
 
-        .page {
-            width: 100%;
-            height: 100%;
-            min-width: 0;
-            max-height: 100%;
-            overflow-y: auto;
-            grid-area: page;
-            visibility: hidden;
-            z-index: 0;
-            position: relative;
-        }
+      .page {
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        max-height: 100%;
+        overflow-y: auto;
+        grid-area: page;
+        visibility: hidden;
+        z-index: 0;
+        position: relative;
+      }
 
-        .page:target {
-            visibility: visible;
-            z-index: 1;
-        }
+      .page:target {
+        visibility: visible;
+        z-index: 1;
+      }
 
-        :where(p,ul,ol,dl,h6) {
-            font-size: var(--font-size-medium);
-        }
+      :where(p, ul, ol, dl, h6) {
+        font-size: var(--font-size-medium);
+      }
 
-        /**
+      /**
          * Navigation
          */
 
-        nav {
-            grid-area: nav;
-            display: flex;
-            grid-template-columns: repeat(auto-fit, 15%);
-            border-top: var(--border-size) solid var(--border-color);
-            padding: 0 var(--space-near);
-            padding-inline-end: calc(var(--space-near) * 2);
-            gap: 0;
-            inline-size: 100%;
-        }
+      nav {
+        grid-area: nav;
+        display: flex;
+        grid-template-columns: repeat(auto-fit, 15%);
+        border-top: var(--border-size) solid var(--border-color);
+        padding: 0 var(--space-near);
+        padding-inline-end: calc(var(--space-near) * 2);
+        gap: 0;
+        inline-size: 100%;
+      }
 
-        .navlink {
-            display: flex;
-            place-content: center;
-            place-items: center;
-            gap: 0.5ch;
-            text-decoration: none;
-            padding: var(--space-near);
-            margin: 0;
-            color: var(--text-2);
-            position: relative;
-        }
+      .navlink {
+        display: flex;
+        place-content: center;
+        place-items: center;
+        gap: 0.5ch;
+        text-decoration: none;
+        padding: var(--space-near);
+        margin: 0;
+        color: var(--text-2);
+        position: relative;
+      }
 
-        .navlink:hover {
-            color: var(--text-1);
-        }
+      .navlink:hover {
+        color: var(--text-1);
+      }
 
-        .navlink[data-active="true"] {
-            color: var(--link-visited);
-        }
+      .navlink[data-active="true"] {
+        color: var(--link-visited);
+      }
 
-        .account-sum {
-            display: flex;
-            align-items: center;
-            margin-inline-start: auto;
-        }
+      .account-sum {
+        display: flex;
+        align-items: center;
+        margin-inline-start: auto;
+      }
 
-        .account-sum strong {
-            font-weight: var(--font-weight-bold);
-        }
+      .account-sum strong {
+        font-weight: var(--font-weight-bold);
+      }
 
-        /**
+      /**
          * Login Page
          */
 
-        .login-container {
-            overflow-y: hidden;
-            overflow-x: hidden;
-            display: grid;
-            grid-template:
-                    "filters list" 1fr
-            / 200px 1fr;
-            block-size: 100%;
+      .login-container {
+        overflow-y: hidden;
+        overflow-x: hidden;
+        display: grid;
+        grid-template:
+          "filters list" 1fr
+          / 200px 1fr;
+        block-size: 100%;
+      }
 
-        }
+      .list-container {
+        grid-area: list;
+        display: grid;
+        grid-template:
+          "header" auto
+          "list" 1fr
+          / 1fr;
+        block-size: 100%;
+        overflow-y: hidden;
+      }
 
-        .list-container {
-            grid-area: list;
-            display: grid;
-            grid-template:
-                    "header" auto
-                    "list" 1fr
-            / 1fr;
-            block-size: 100%;
-            overflow-y: hidden;
-        }
+      .nothing {
+        inline-size: 100%;
+        block-size: 100%;
+        padding: var(--space-away);
+        display: grid;
+        place-items: center;
+        grid-area: list;
+      }
 
+      #login-root {
+        grid-area: list;
+        block-size: 100%;
+        overflow-y: auto;
+        display: grid;
+        gap: var(--space-near);
+        align-content: flex-start;
+        padding-inline-end: var(--space-near);
+      }
 
-        .nothing {
-            inline-size: 100%;
-            block-size: 100%;
-            padding: var(--space-away);
-            display: grid;
-            place-items: center;
-            grid-area: list;
-        }
+      #login-root:not(:empty) + .nothing {
+        display: none;
+      }
 
-        #login-root {
-            grid-area: list;
-            block-size: 100%;
-            overflow-y: auto;
-            display: grid;
-            gap: var(--space-near);
-            align-content: flex-start;
-            padding-inline-end: var(--space-near);
-        }
+      .login-container li:not(:last-child) {
+        border-bottom: var(--border-size) solid var(--border-color);
+      }
 
-        #login-root:not(:empty) + .nothing {
-            display: none;
-        }
-
-        .login-container li:not(:last-child) {
-            border-bottom: var(--border-size) solid var(--border-color);
-        }
-
-        /**
+      /**
          * Login Item
          */
 
-        .login-item {
-            padding: var(--space-near);
-            display: grid;
-            grid:
-                "details auto more" auto
-                / 1fr auto;
-            grid-column-gap: var(--space-near);
-            grid-row-gap: var(--space-near);
-            align-items: start;
-        }
+      .login-item {
+        padding: var(--space-near);
+        display: grid;
+        grid:
+          "details auto more" auto
+          / 1fr auto;
+        grid-column-gap: var(--space-near);
+        grid-row-gap: var(--space-near);
+        align-items: start;
+      }
 
-        .button-more {
-            grid-area: more;
-            padding-inline: 0;
-        }
+      .button-more {
+        grid-area: more;
+        padding-inline: 0;
+      }
 
-        .auto-fill {
-            grid-area: auto;
-            color: var(--color-active-strong);
-            text-shadow: 0 1px 0 var(--color-active-weak);
-        }
+      .auto-fill {
+        grid-area: auto;
+        color: var(--color-active-strong);
+        text-shadow: 0 1px 0 var(--color-active-weak);
+      }
 
+      .auto-fill:hover {
+        background-color: var(--color-active-weak);
+      }
+
+      @media (prefers-color-scheme: dark) {
         .auto-fill:hover {
-            background-color: var(--color-active-weak);
+          background-color: var(--gray-8);
         }
+      }
 
-        @media (prefers-color-scheme: dark) {
-            .auto-fill:hover {
-                background-color: var(--gray-8);
-            }
-        }
+      .login-details {
+        grid-area: details;
+        display: flex;
+        flex-flow: column nowrap;
+        gap: var(--space-near);
+        align-items: flex-start;
+        justify-content: center;
+        overflow: hidden;
+      }
 
-        .login-details {
-            grid-area: details;
-            display: flex;
-            flex-flow: column nowrap;
-            gap: var(--space-near);
-            align-items: flex-start;
-            justify-content: center;
-            overflow: hidden;
-        }
+      .login-details > span {
+        line-height: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+        max-width: 100%;
+      }
 
-        .login-details > span {
-            line-height: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-width: 0;
-            max-width: 100%;
-        }
+      .description {
+        color: var(--text-1);
+        font-size: var(--font-size-small);
+      }
 
-        .description {
-            color: var(--text-1);
-            font-size: var(--font-size-small);
-        }
+      .login-footer {
+        display: none;
+      }
 
-        .login-footer {
-            display: none;
-        }
+      .open .login-footer {
+        display: block;
+      }
 
-        .open .login-footer {
-            display: block;
-        }
+      .login-footer p {
+        margin-block: var(--space-near) 0;
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-small);
+      }
 
-        .login-footer p {
-            margin-block: var(--space-near) 0;
-            font-weight: var(--font-weight-bold);
-            font-size: var(--font-size-small);
-        }
+      .login-categories:not(:empty) > i {
+        display: none;
+      }
 
-        .login-categories:not(:empty) > i {
-            display: none;
-        }
+      .copy-username,
+      .copy-password {
+        block-size: calc(var(--icon-size) + 2 * var(--space-near));
+        min-inline-size: calc(var(--icon-size) + 2 * var(--space-near));
+      }
 
-        .copy-username, .copy-password {
-            block-size: calc(var(--icon-size) + 2 * var(--space-near));
-            min-inline-size:calc(var(--icon-size) + 2 * var(--space-near));
-        }
+      .login-categories {
+        display: flex;
+        flex-flow: row wrap;
+        gap: var(--space-near);
+        padding-block-start: var(--space-near);
+      }
 
-        .login-categories {
-            display: flex;
-            flex-flow: row wrap;
-            gap: var(--space-near);
-            padding-block-start: var(--space-near);
-        }
+      .login-categories li {
+        display: grid;
+        place-content: center;
+        padding: 0.5ch 0.75ch;
+        border-radius: var(--radius-2);
+        background: var(--surface-3);
+        font-size: var(--font-size-small);
+        pointer-events: none;
+        user-select: none;
+      }
 
-        .login-categories li {
-            display: grid;
-            place-content: center;
-            padding: 0.5ch 0.75ch;
-            border-radius: var(--radius-2);
-            background: var(--surface-3);
-            font-size: var(--font-size-small);
-            pointer-events: none;
-            user-select: none;
-        }
-
-        /**
+      /**
          * Search
          */
 
-        .search-container {
-            display: grid;
-            align-items: flex-start;
-            padding: var(--space-near);
-            border-bottom: var(--border-size) solid var(--border-color);
-            height: var(--header-height);
-            padding-inline-end: calc(var(--space-near) * 2);
-        }
+      .search-container {
+        display: grid;
+        align-items: flex-start;
+        padding: var(--space-near);
+        border-bottom: var(--border-size) solid var(--border-color);
+        height: var(--header-height);
+        padding-inline-end: calc(var(--space-near) * 2);
+      }
 
-        .search-container label {
-            width: 100%;
-            min-width: 0;
-            height: 100%;
-        }
+      .search-container label {
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+      }
 
-        .search-container input {
-            width: 100%;
-            padding-block: var(--space-near);
-            height: 100%;
-        }
+      .search-container input {
+        width: 100%;
+        padding-block: var(--space-near);
+        height: 100%;
+      }
 
-        /**
+      /**
          * Filter
          */
 
-        #category-label {
-            margin-inline-start: var(--category-inline-padding);
-        }
+      #category-label {
+        margin-inline-start: var(--category-inline-padding);
+      }
 
-        .categories-filters {
-            grid-area: filters;
-            border-right: var(--border-size) solid var(--border-color);
-        }
+      .categories-filters {
+        grid-area: filters;
+        border-right: var(--border-size) solid var(--border-color);
+      }
 
-        .categories-header{
-            grid-area: header;
-            padding-block: var(--space-near);
-            padding-inline: var(--space-away);
-            align-items: center;
-            border-bottom: var(--border-size) solid var(--border-color);
-            min-block-size: var(--header-height);
-        }
+      .categories-header {
+        grid-area: header;
+        padding-block: var(--space-near);
+        padding-inline: var(--space-away);
+        align-items: center;
+        border-bottom: var(--border-size) solid var(--border-color);
+        min-block-size: var(--header-height);
+      }
 
-        .dialog-header {
-            display: grid;
-            gap: var(--space-near);
-            grid-template: "title close" 1fr / 1fr auto;
-            padding: var(--category-inline-padding);
-            align-items: center;
-            border-bottom: var(--border-size) solid var(--border-color);
-            background: var(--surface-2);
-            min-block-size: var(--header-height);
+      .dialog-header {
+        display: grid;
+        gap: var(--space-near);
+        grid-template: "title close" 1fr / 1fr auto;
+        padding: var(--category-inline-padding);
+        align-items: center;
+        border-bottom: var(--border-size) solid var(--border-color);
+        background: var(--surface-2);
+        min-block-size: var(--header-height);
+      }
 
-        }
+      .categories-list {
+        grid-area: list;
+        padding: var(--space-away);
+        display: grid;
+        gap: var(--space-away);
+        align-content: flex-start;
+        max-block-size: 100%;
+        overflow-y: auto;
+        background: var(--surface-1);
+      }
 
-        .categories-list {
-            grid-area: list;
-            padding: var(--space-away);
-            display: grid;
-            gap: var(--space-away);
-            align-content: flex-start;
-            max-block-size: 100%;
-            overflow-y: auto;
-            background: var(--surface-1);
-        }
+      .categories-list > i:not(:only-child) {
+        display: none;
+      }
 
-        .categories-list > i:not(:only-child) {
-            display: none;
-        }
+      .categories-filter-element {
+        display: grid;
+        gap: var(--space-near);
+        align-content: flex-start;
+        padding: 0;
+        border-bottom: none !important;
+      }
 
-        .categories-filter-element {
-            display: grid;
-            gap: var(--space-near);
-            align-content: flex-start;
-            padding: 0;
-            border-bottom: none !important;
-        }
+      .categories-filter-element > label {
+        font-weight: var(--font-weight-6);
+        font-size: var(--font-size-0);
+        color: var(--text-2);
+      }
 
-        .categories-filter-element > label {
-            font-weight: var(--font-weight-6);
-            font-size: var(--font-size-0);
-            color: var(--text-2);
-        }
+      .categories-filter-element > select {
+        inline-size: 100%;
+        color: var(--text-2);
+      }
 
-        .categories-filter-element > select {
-            inline-size: 100%;
-            color: var(--text-2);
-        }
+      select {
+        border: var(--border-size) solid var(--border-color);
+      }
 
-        select {
-            border: var(--border-size) solid var(--border-color);
-        }
+      select[data-value] {
+        color: var(--color-selected);
+      }
 
-        select[data-value] {
-            color: var(--color-selected);
-        }
+      select[selected] {
+        color: var(--surface-2);
+      }
 
-        select[selected] {
-            color: var(--surface-2);
-        }
-
-        /**
+      /**
          * Options
          */
 
-        #options {
-            display: grid;
-            align-content: flex-start;
-            --category-inline-padding: var(--space-near);
-        }
+      #options {
+        display: grid;
+        align-content: flex-start;
+        --category-inline-padding: var(--space-near);
+      }
 
-        #options section {
-            padding: var(--space-away) var(--space-near);
-            display: grid;
-            gap: var(--space-near);
-        }
+      #options section {
+        padding: var(--space-away) var(--space-near);
+        display: grid;
+        gap: var(--space-near);
+      }
 
-        #options section:not(:last-child) {
-            border-bottom: var(--border-size) solid var(--border-color);
-        }
+      #options section:not(:last-child) {
+        border-bottom: var(--border-size) solid var(--border-color);
+      }
 
-        .checkbox {
-            display: grid;
-            grid-template: "label check" 1fr / 1fr auto;
-            cursor: pointer;
-            gap: var(--space-near);
-            align-items: center;
-        }
+      .checkbox {
+        display: grid;
+        grid-template: "label check" 1fr / 1fr auto;
+        cursor: pointer;
+        gap: var(--space-near);
+        align-items: center;
+      }
 
-        .checkbox span {
-            grid-area: label;
-        }
+      .checkbox span {
+        grid-area: label;
+      }
 
-        .checkbox input {
-            grid-area: check;
-        }
+      .checkbox input {
+        grid-area: check;
+      }
 
+      .options-section {
+        display: grid;
+        gap: var(--space-away);
+        border: var(--border-size) solid var(--border-color);
+        padding: var(--space-away);
+        border-radius: var(--radius-2);
+      }
 
-        .options-section {
-            display: grid;
-            gap: var(--space-away);
-            border: var(--border-size) solid var(--border-color);
-            padding: var(--space-away);
-            border-radius: var(--radius-2);
-        }
+      .options-section > :is(h1, h2, h3, h4, h5, h6) {
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-medium);
+      }
 
-        .options-section > :is(h1,h2,h3,h4,h5,h6) {
-            font-weight: var(--font-weight-bold);
-            font-size: var(--font-size-medium);
-        }
+      .options-box {
+        display: grid;
+        gap: var(--space-near);
+      }
 
-        .options-box {
-            display: grid;
-            gap: var(--space-near);
-        }
+      .input-field {
+        display: grid;
+        gap: var(--space-near);
+      }
 
-        .input-field {
-            display: grid;
-            gap: var(--space-near);
-        }
-
-        /**
+      /**
          * Toast
          */
 
-        #toast-root {
-            position: fixed;
-            bottom: calc(60px + var(--space-away));
-            inset-inline: 0;
-            padding: 0 var(--space-near);
-            padding-inline-end: calc(var(--space-near) * 2);
-            display: grid;
-            gap: var(--space-near);
-            z-index: 2;
-        }
+      #toast-root {
+        position: fixed;
+        bottom: calc(60px + var(--space-away));
+        inset-inline: 0;
+        padding: 0 var(--space-near);
+        padding-inline-end: calc(var(--space-near) * 2);
+        display: grid;
+        gap: var(--space-near);
+        z-index: 2;
+      }
 
+      .toast {
+        --timing-duration: 250ms;
+
+        border: var(--border-size) solid var(--border-color);
+        background: var(--surface-1);
+        color: var(--text-1);
+        padding: var(--space-near);
+        border-radius: var(--border-radius);
+        display: grid;
+        grid-template: "icon message" 1fr / var(--icon-size) 1fr;
+        gap: var(--space-near);
+        animation: animate-toast-in forwards var(--timing-duration)
+          var(--ease-3);
+        cursor: pointer;
+        will-change: transform;
+        box-shadow: var(--shadow-3);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
         .toast {
-            --timing-duration: 250ms;
-
-            border: var(--border-size) solid var(--border-color);
-            background: var(--surface-1);
-            color: var(--text-1);
-            padding: var(--space-near);
-            border-radius: var(--border-radius);
-            display: grid;
-            grid-template: "icon message" 1fr / var(--icon-size) 1fr;
-            gap: var(--space-near);
-            animation: animate-toast-in forwards var(--timing-duration) var(--ease-3);
-            cursor: pointer;
-            will-change: transform;
-            box-shadow: var(--shadow-3);
+          --timing-duration: 1ms;
         }
+      }
 
-        @media (prefers-reduced-motion: reduce) {
-            .toast {
-                --timing-duration: 1ms;
-            }
+      .toast.--animate-out {
+        animation: animate-toast-out forwards var(--timing-duration)
+          var(--ease-3);
+      }
+
+      .toast-text {
+        display: flex;
+        align-items: center;
+        min-block-size: var(--icon-size);
+        font-weight: var(--font-weight-bold);
+      }
+
+      @keyframes animate-toast-in {
+        0% {
+          opacity: 0;
+          transform: translateY(var(--space-away));
         }
-
-        .toast.--animate-out {
-            animation: animate-toast-out forwards var(--timing-duration) var(--ease-3);
+        100% {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .toast-text {
-            display: flex;
-            align-items: center;
-            min-block-size: var(--icon-size);
-            font-weight: var(--font-weight-bold);
+      @keyframes animate-toast-out {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
         }
-
-        @keyframes animate-toast-in {
-            0% {
-                opacity: 0;
-                transform: translateY(var(--space-away));
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        100% {
+          opacity: 0;
+          transform: translateY(calc(var(--space-away) * -1));
         }
+      }
 
-        @keyframes animate-toast-out {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(calc(var(--space-away) * -1));;
-            }
-        }
+      #loader {
+        display: grid;
+        position: fixed;
+        z-index: 10;
+        place-content: center;
+        inset: 0;
+        inline-size: 100%;
+        block-size: 100%;
+        background: var(--surface-2);
+      }
 
-        #loader {
-            display: grid;
-            position: fixed;
-            z-index: 10;
-            place-content: center;
-            inset: 0;
-            inline-size: 100%;
-            block-size: 100%;
-            background: var(--surface-2);
-        }
+      #loader[hidden] {
+        display: none;
+      }
 
-        #loader[hidden] {
-            display: none;
-        }
+      .buttons-aside {
+        display: flex;
+        gap: var(--space-near);
+      }
 
-        .buttons-aside {
-            display: flex;
-            gap: var(--space-near);
-        }
-
-        #sync-remote {
-            flex-grow: 1;
-        }
-
+      #sync-remote {
+        flex-grow: 1;
+      }
     </style>
     <title>Testaccount Manager</title>
-</head>
-<body>
-<nav>
-    <a class="navlink" data-target="logins" href="#logins">
+  </head>
+  <body>
+    <nav>
+      <a class="navlink" data-target="logins" href="#logins">
         <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="2ch" height="2ch"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="2ch"
+          height="2ch"
         >
-            <path d="M12 2A10.13 10.13 0 0 0 2 12a10 10 0 0 0 4 7.92V20h.1a9.7 9.7 0 0 0 11.8 0h.1v-.08A10 10 0 0 0 22 12 10.13 10.13 0 0 0 12 2zM8.07 18.93A3 3 0 0 1 11 16.57h2a3 3 0 0 1 2.93 2.36 7.75 7.75 0 0 1-7.86 0zm9.54-1.29A5 5 0 0 0 13 14.57h-2a5 5 0 0 0-4.61 3.07A8 8 0 0 1 4 12a8.1 8.1 0 0 1 8-8 8.1 8.1 0 0 1 8 8 8 8 0 0 1-2.39 5.64z"/>
-            <path d="M12 6a3.91 3.91 0 0 0-4 4 3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4 3.91 3.91 0 0 0-4-4zm0 6a1.91 1.91 0 0 1-2-2 1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2 1.91 1.91 0 0 1-2 2z"/>
+          <path
+            d="M12 2A10.13 10.13 0 0 0 2 12a10 10 0 0 0 4 7.92V20h.1a9.7 9.7 0 0 0 11.8 0h.1v-.08A10 10 0 0 0 22 12 10.13 10.13 0 0 0 12 2zM8.07 18.93A3 3 0 0 1 11 16.57h2a3 3 0 0 1 2.93 2.36 7.75 7.75 0 0 1-7.86 0zm9.54-1.29A5 5 0 0 0 13 14.57h-2a5 5 0 0 0-4.61 3.07A8 8 0 0 1 4 12a8.1 8.1 0 0 1 8-8 8.1 8.1 0 0 1 8 8 8 8 0 0 1-2.39 5.64z"
+          />
+          <path
+            d="M12 6a3.91 3.91 0 0 0-4 4 3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4 3.91 3.91 0 0 0-4-4zm0 6a1.91 1.91 0 0 1-2-2 1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2 1.91 1.91 0 0 1-2 2z"
+          />
         </svg>
         <small>Logins</small>
-    </a>
-    <a class="navlink" data-target="options" href="#options">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="2ch" height="2ch">
-            <path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/>
+      </a>
+      <a class="navlink" data-target="options" href="#options">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="2ch"
+          height="2ch"
+        >
+          <path
+            d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"
+          />
         </svg>
         <small>Options</small>
-    </a>
-    <span class="account-sum"></span>
-</nav>
-<div class="page" id="logins">
-    <section class="login-container">
+      </a>
+      <span class="account-sum"></span>
+    </nav>
+    <div class="page" id="logins">
+      <section class="login-container">
         <!--Categories filter -->
         <div class="list-container categories-filters">
-            <div class="categories-header">
-                <button type="reset" id="category-reset">Reset filters</button>
-            </div>
-            <ul class="categories-list">
-                <!-- categories go here -->
-                <i>No categories found.</i>
-            </ul>
+          <div class="categories-header">
+            <button type="reset" id="category-reset">Reset filters</button>
+          </div>
+          <ul class="categories-list">
+            <!-- categories go here -->
+            <i>No categories found.</i>
+          </ul>
         </div>
         <div class="list-container">
-            <section class="search-container">
-                <label>
-                    <input type="text" id="search" placeholder="Search for a keyword..." aria-label="Search account">
-                </label>
-            </section>
-            <ul id="login-root">
-                <!-- logins are placed here -->
-            </ul>
-            <div class="nothing">
-                <div>No accounts found.</div>
-            </div>
-        </div>
-
-    </section>
-</div>
-
-
-<!-- Option page start -->
-<div class="page" id="options">
-    <header class="dialog-header">
-        <h3>Options</h3>
-        <button id="open-options" aria-label="Open options in new tab" title="Open options in new tab">
-            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
-                <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h5v-2H4V7h16v12h-5v2h5c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2z"></path>
-                <path d="M13 21v-5h3l-4-5-4 5h3v5z"></path>
-            </svg>
-        </button>
-    </header>
-    <section>
-        <div class="options-section">
-            <h4>Actions</h4>
-            <label class="checkbox">
-                <span>Log in automatically</span>
-                <input type="checkbox" id="auto-login">
+          <section class="search-container">
+            <label>
+              <input
+                type="text"
+                id="search"
+                placeholder="Search for a keyword..."
+                aria-label="Search account"
+              />
             </label>
+          </section>
+          <ul id="login-root">
+            <!-- logins are placed here -->
+          </ul>
+          <div class="nothing">
+            <div>No accounts found.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Option page start -->
+    <div class="page" id="options">
+      <header class="dialog-header">
+        <h3>Options</h3>
+        <button
+          id="open-options"
+          aria-label="Open options in new tab"
+          title="Open options in new tab"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
+            <path
+              d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h5v-2H4V7h16v12h-5v2h5c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2z"
+            ></path>
+            <path d="M13 21v-5h3l-4-5-4 5h3v5z"></path>
+          </svg>
+        </button>
+      </header>
+      <section>
+        <div class="options-section">
+          <h4>Actions</h4>
+          <label class="checkbox">
+            <span>Log in automatically</span>
+            <input type="checkbox" id="auto-login" />
+          </label>
         </div>
         <div class="options-section">
-            <h4>Accounts</h4>
-            <div class="options-box">
-                <label for="upload">Upload from file</label>
-                <input type="file" accept=".json" id="upload">
-                <button id="delete-custom-logins" type="reset">Delete uploaded accounts</button>
+          <h4>Accounts</h4>
+          <div class="options-box">
+            <label for="upload">Upload from file</label>
+            <input type="file" accept=".json" id="upload" />
+            <button id="delete-custom-logins" type="reset">
+              Delete uploaded accounts
+            </button>
+          </div>
+          <div class="options-box">
+            <div class="input-field">
+              <label for="remote-url">Upload from URL</label>
+              <input
+                type="text"
+                name="remote-url"
+                id="remote-url"
+                placeholder="https://..."
+              />
             </div>
-            <div class="options-box">
-                <div class="input-field">
-                    <label for="remote-url">Upload from URL</label>
-                    <input type="text" name="remote-url" id="remote-url" placeholder="https://...">
-                </div>
-                <div class="buttons-aside">
-                    <button type="button" id="sync-remote">Sync</button>
-                    <button type="reset" id="delete-remote">Delete</button>
-                </div>
+            <div class="buttons-aside">
+              <button type="button" id="sync-remote">Sync</button>
+              <button type="reset" id="delete-remote">Delete</button>
             </div>
+          </div>
         </div>
-    </section>
-</div>
-<!-- Option page end -->
+      </section>
+    </div>
+    <!-- Option page end -->
 
-<div id="toast-root">
-    <!-- Toast messages go here -->
-</div>
+    <div id="toast-root">
+      <!-- Toast messages go here -->
+    </div>
 
-<div id="loader">
-    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <div id="loader">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>Loading</title>
         <circle cx="4" cy="12" r="3">
-            <animate id="a" begin="0;b.end+0.25s" attributeName="cy" calcMode="spline" dur="0.6s" values="12;6;12"
-                     keySplines=".33,.66,.66,1;.33,0,.66,.33"/>
+          <animate
+            id="a"
+            begin="0;b.end+0.25s"
+            attributeName="cy"
+            calcMode="spline"
+            dur="0.6s"
+            values="12;6;12"
+            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+          />
         </circle>
         <circle cx="12" cy="12" r="3">
-            <animate begin="a.begin+0.1s" attributeName="cy" calcMode="spline" dur="0.6s" values="12;6;12"
-                     keySplines=".33,.66,.66,1;.33,0,.66,.33"/>
+          <animate
+            begin="a.begin+0.1s"
+            attributeName="cy"
+            calcMode="spline"
+            dur="0.6s"
+            values="12;6;12"
+            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+          />
         </circle>
         <circle cx="20" cy="12" r="3">
-            <animate id="b" begin="a.begin+0.2s" attributeName="cy" calcMode="spline" dur="0.6s" values="12;6;12"
-                     keySplines=".33,.66,.66,1;.33,0,.66,.33"/>
+          <animate
+            id="b"
+            begin="a.begin+0.2s"
+            attributeName="cy"
+            calcMode="spline"
+            dur="0.6s"
+            values="12;6;12"
+            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+          />
         </circle>
-    </svg>
-</div>
+      </svg>
+    </div>
 
-<!-- Template for logins -->
-<template id="login-template">
-    <li class="login-item">
+    <!-- Template for logins -->
+    <template id="login-template">
+      <li class="login-item">
         <div class="login-details" data-density-shift>
-            <span><strong class="description"></strong></span>
-            <span><small class="username"></small></span>
+          <span><strong class="description"></strong></span>
+          <span><small class="username"></small></span>
         </div>
-        <button class="auto-fill" aria-label="Autofill / Login" title="Autofill / Login">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 3c-4.625 0-8.442 3.507-8.941 8.001H10v-3l5 4-5 4v-3H3.06C3.56 17.494 7.376 21 12 21c4.963 0 9-4.037 9-9s-4.037-9-9-9z"/>
-            </svg>
+        <button
+          class="auto-fill"
+          aria-label="Autofill / Login"
+          title="Autofill / Login"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+              d="M12 3c-4.625 0-8.442 3.507-8.941 8.001H10v-3l5 4-5 4v-3H3.06C3.56 17.494 7.376 21 12 21c4.963 0 9-4.037 9-9s-4.037-9-9-9z"
+            />
+          </svg>
         </button>
         <button class="button-more" aria-label="More" title="Show More">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                <path d="M 16 6 C 14.894531 6 14 6.894531 14 8 C 14 9.105469 14.894531 10 16 10 C 17.105469 10 18 9.105469 18 8 C 18 6.894531 17.105469 6 16 6 Z M 16 14 C 14.894531 14 14 14.894531 14 16 C 14 17.105469 14.894531 18 16 18 C 17.105469 18 18 17.105469 18 16 C 18 14.894531 17.105469 14 16 14 Z M 16 22 C 14.894531 22 14 22.894531 14 24 C 14 25.105469 14.894531 26 16 26 C 17.105469 26 18 25.105469 18 24 C 18 22.894531 17.105469 22 16 22 Z"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            <path
+              d="M 16 6 C 14.894531 6 14 6.894531 14 8 C 14 9.105469 14.894531 10 16 10 C 17.105469 10 18 9.105469 18 8 C 18 6.894531 17.105469 6 16 6 Z M 16 14 C 14.894531 14 14 14.894531 14 16 C 14 17.105469 14.894531 18 16 18 C 17.105469 18 18 17.105469 18 16 C 18 14.894531 17.105469 14 16 14 Z M 16 22 C 14.894531 22 14 22.894531 14 24 C 14 25.105469 14.894531 26 16 26 C 17.105469 26 18 25.105469 18 24 C 18 22.894531 17.105469 22 16 22 Z"
+            />
+          </svg>
         </button>
         <div class="login-footer">
-            <div class="login-actions">
-                <button class="copy-username" aria-label="Copy username" title="Copy username">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"/>
-                    </svg>
-                </button>
-                <button class="copy-password" aria-label="Copy password" title="Copy password">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M3.433 17.325 3.079 19.8a1 1 0 0 0 1.131 1.131l2.475-.354C7.06 20.524 8 18 8 18s.472.405.665.466c.412.13.813-.274.948-.684L10 16.01s.577.292.786.335c.266.055.524-.109.707-.293a.988.988 0 0 0 .241-.391L12 14.01s.675.187.906.214c.263.03.519-.104.707-.293l1.138-1.137a5.502 5.502 0 0 0 5.581-1.338 5.507 5.507 0 0 0 0-7.778 5.507 5.507 0 0 0-7.778 0 5.5 5.5 0 0 0-1.338 5.581l-7.501 7.5a.994.994 0 0 0-.282.566zM18.504 5.506a2.919 2.919 0 0 1 0 4.122l-4.122-4.122a2.919 2.919 0 0 1 4.122 0z"/>
-                    </svg>
-                </button>
-            </div>
-            <p>Categories</p>
-            <ul class="login-categories"></ul>
+          <div class="login-actions">
+            <button
+              class="copy-username"
+              aria-label="Copy username"
+              title="Copy username"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"
+                />
+              </svg>
+            </button>
+            <button
+              class="copy-password"
+              aria-label="Copy password"
+              title="Copy password"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  d="M3.433 17.325 3.079 19.8a1 1 0 0 0 1.131 1.131l2.475-.354C7.06 20.524 8 18 8 18s.472.405.665.466c.412.13.813-.274.948-.684L10 16.01s.577.292.786.335c.266.055.524-.109.707-.293a.988.988 0 0 0 .241-.391L12 14.01s.675.187.906.214c.263.03.519-.104.707-.293l1.138-1.137a5.502 5.502 0 0 0 5.581-1.338 5.507 5.507 0 0 0 0-7.778 5.507 5.507 0 0 0-7.778 0 5.5 5.5 0 0 0-1.338 5.581l-7.501 7.5a.994.994 0 0 0-.282.566zM18.504 5.506a2.919 2.919 0 0 1 0 4.122l-4.122-4.122a2.919 2.919 0 0 1 4.122 0z"
+                />
+              </svg>
+            </button>
+          </div>
+          <p>Categories</p>
+          <ul class="login-categories"></ul>
         </div>
-    </li>
-</template>
+      </li>
+    </template>
 
-<!-- Template for toast notifications -->
-<template id="toast-template">
-    <output class="toast">
+    <!-- Template for toast notifications -->
+    <template id="toast-template">
+      <output class="toast">
         <span class="toast-icon">
-            <svg class="toast-icon--success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"/>
-            </svg>
-            <svg class="toast-icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM13 17h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-            </svg>
+          <svg
+            class="toast-icon--success"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"
+            />
+          </svg>
+          <svg
+            class="toast-icon--error"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM13 17h-2v-2h2v2zm0-4h-2V7h2v6z"
+            />
+          </svg>
         </span>
         <span class="toast-text"></span>
-    </output>
-</template>
+      </output>
+    </template>
 
-<!--Template for category filters -->
-<template id="category-filter-template">
-    <li class="categories-filter-element" data-density-shift>
+    <!--Template for category filters -->
+    <template id="category-filter-template">
+      <li class="categories-filter-element" data-density-shift>
         <label></label>
         <select>
-            <option selected value=" " disabled></option>
+          <option selected value=" " disabled></option>
         </select>
-    </li>
-</template>
-<script type="module" src="webextension-polyfill.js"></script>
-<script type="module" async defer src="script.js"></script>
-</body>
+      </li>
+    </template>
+    <script type="module" src="webextension-polyfill.js"></script>
+    <script type="module" async defer src="script.js"></script>
+  </body>
 </html>

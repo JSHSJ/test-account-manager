@@ -1,4 +1,5 @@
 ![TestAccountManager header image](tam-logo.png)
+
 # Testaccount Manager
 
 Simple testaccount manager or password manager (like the ones you already use).
@@ -9,10 +10,10 @@ Simple testaccount manager or password manager (like the ones you already use).
 - Allows adding a remote URL (JSON data), which will be automatically downloaded and added to the list of passwords
 - Syncs settings and uploaded passwords to your browser's profile
 - Otherwise the same functionality:
-    - Allows searching for passwords
-    - Categories for helping find specific password
-    - Copy credentials
-    - Autofill / Autologin
+  - Allows searching for passwords
+  - Categories for helping find specific password
+  - Copy credentials
+  - Autofill / Autologin
 
 ## Login Format
 
