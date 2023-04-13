@@ -540,6 +540,7 @@ const getCategories = () => {
   const allLogins = [...customLogins, ...remoteLogins];
 
   allLogins.forEach(({ categories }) => {
+    if (!categories) return;
     Object.entries(categories).forEach(([key, value]) => {
       if (key in categoryCollection) {
         if (categoryCollection[key].includes(value)) return;
