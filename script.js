@@ -209,6 +209,7 @@ const updateDisplay = () => {
   });
 
   updateAccountSum(visibleLogins.length, allLogins.length);
+  initCategories();
   initItemToggle();
 };
 
@@ -300,7 +301,6 @@ const initUpload = () => {
     browser.storage.sync.remove("tamLoginCreds");
     customLogins = [];
     addToastNotification("Uploaded accounts deleted!", "success");
-    initCategories();
     updateDisplay();
   };
 
