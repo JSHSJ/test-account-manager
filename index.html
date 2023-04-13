@@ -982,7 +982,7 @@
         background: var(--surface-1);
       }
 
-      .categories-list > i:not(:only-child) {
+      .categories-list:not(:empty) + .nothing {
         display: none;
       }
 
@@ -1217,8 +1217,10 @@
           </div>
           <ul class="categories-list">
             <!-- categories go here -->
-            <i>No categories found.</i>
           </ul>
+          <div class="nothing">
+            <div>No categories found.</div>
+          </div>
         </div>
         <div class="list-container">
           <section class="search-container">

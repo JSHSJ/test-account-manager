@@ -170,13 +170,16 @@ const updateAccountSum = (amountVisible, amountTotal) => {
 const updateDisplay = () => {
   /** @type {HTMLUListElement | null} */
   const root = document.querySelector("#login-root");
+  const categoriesList = document.querySelector('.categories-list');
 
-  if (!root) {
+  if (!root || !categoriesList) {
     return;
   }
 
   // clear inner HTML
   root.innerHTML = "";
+  categoriesList.innerHTML = "";
+
 
   const allLogins = [...remoteLogins, ...customLogins];
 
@@ -297,6 +300,7 @@ const initUpload = () => {
     browser.storage.sync.remove("tamLoginCreds");
     customLogins = [];
     addToastNotification("Uploaded accounts deleted!", "success");
+    initCategories();
     updateDisplay();
   };
 
@@ -538,6 +542,7 @@ const getCategories = () => {
   let categoryCollection = {};
 
   const allLogins = [...customLogins, ...remoteLogins];
+  console.log('allLogins', allLogins);
 
   allLogins.forEach(({ categories }) => {
     if (!categories) return;
